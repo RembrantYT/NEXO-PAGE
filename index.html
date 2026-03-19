@@ -3,229 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO | Bienestar Garantizado</title>
+    <title>NEXO | Seguridad Total</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s; }
-        .bg-nexo-gradient { background: linear-gradient(108deg, #f8fafc 0%, #f1f5f9 100%); }
-        .dark .bg-nexo-gradient { background: linear-gradient(108deg, #0f172a 0%, #020617 100%); }
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
-        .dark .glass { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.1); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
+        .dark .glass { background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.1); }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .error-shake { animation: shake 0.4s ease-in-out; border: 2px solid #ef4444 !important; }
+        .error-input { border: 2px solid #ef4444 !important; animation: shake 0.3s; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
     </style>
 </head>
-<body class="bg-nexo-gradient text-gray-900 dark:text-gray-100 antialiased overflow-x-hidden">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
 
-    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
         <div class="glass w-full max-w-md rounded-[40px] p-10 shadow-2xl relative">
             <button onclick="closeModal('login-modal')" class="absolute top-6 right-6 text-xl opacity-50 hover:opacity-100">✕</button>
             <div class="text-center mb-8">
-                <div class="inline-block p-4 bg-blue-600 rounded-3xl mb-4 shadow-lg shadow-blue-500/30">
-                    <span class="text-3xl">🛡️</span>
-                </div>
-                <h2 class="text-3xl font-black mb-2 tracking-tighter">Acceso Seguro</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Verifica tu identidad para continuar</p>
+                <h2 class="text-3xl font-black mb-2">Acceso Seguro</h2>
+                <p class="text-sm text-gray-500">Ingresa un número de celular real de 10 dígitos</p>
             </div>
-            
-            <form onsubmit="handleSecureLogin(event)" class="space-y-4">
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest ml-2 text-blue-600">Número de Celular Real</label>
-                    <input type="tel" id="user-phone" placeholder="Ej: 5512345678" required class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-2 border-transparent focus:bg-white transition-all outline-none mt-1">
-                    <p id="login-error" class="hidden text-red-500 text-[10px] mt-2 ml-2 font-bold uppercase"></p>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-black shadow-xl hover:bg-blue-700 transition-all active:scale-95">VERIFICAR Y ENTRAR</button>
+            <form onsubmit="validateRealPhone(event)" class="space-y-4">
+                <input type="tel" id="user-phone" placeholder="Ej: 5512345678" maxlength="10" required 
+                       class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-2 border-transparent outline-none font-bold text-center text-lg tracking-widest">
+                <p id="phone-error-msg" class="text-red-500 text-xs font-bold text-center hidden">⚠️ NÚMERO INVÁLIDO O SOSPECHOSO</p>
+                <button type="submit" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-black shadow-lg hover:bg-blue-700 transition active:scale-95">CONTINUAR</button>
             </form>
         </div>
     </div>
 
-    <div id="payment-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-lg">
+    <div id="payment-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
         <div class="glass w-full max-w-md rounded-[40px] p-10 shadow-2xl relative">
-            <button onclick="closeModal('payment-modal')" class="absolute top-6 right-6 text-2xl">✕</button>
-            <h2 class="text-2xl font-black mb-6 flex items-center gap-3">Pago Seguro <span class="text-sm font-normal px-2 py-1 bg-green-100 text-green-700 rounded-lg">SSL</span></h2>
-            <form onsubmit="processSecurePayment(event)" class="space-y-4">
-                <input type="email" required placeholder="Correo Electrónico de envío" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none border-2 border-transparent focus:border-blue-500">
-                <div class="space-y-1">
-                    <input type="text" id="card-num" required placeholder="Número de Tarjeta (16 dígitos)" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none">
-                </div>
+            <button onclick="closeModal('payment-modal')" class="absolute top-6 right-6 text-xl">✕</button>
+            <h2 class="text-2xl font-black mb-6 italic">Checkout Seguro</h2>
+            <form onsubmit="processRealPayment(event)" class="space-y-4">
+                <input type="text" id="card-name" required placeholder="Nombre del Titular" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none font-bold">
+                <input type="text" id="card-number" required placeholder="Tarjeta (16 dígitos reales)" maxlength="16" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none font-bold">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="text" required placeholder="MM/AA" maxlength="5" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none">
-                    <input type="password" required placeholder="CVV" maxlength="3" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none">
+                    <input type="text" placeholder="MM/AA" maxlength="5" required class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none font-bold">
+                    <input type="password" placeholder="CVV" maxlength="3" required class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none font-bold">
                 </div>
-                <button type="submit" id="pay-btn" class="w-full bg-green-600 text-white p-5 rounded-3xl font-black text-lg shadow-xl hover:bg-green-700 transition active:scale-95">CONFIRMAR PAGO</button>
+                <button type="submit" class="w-full bg-green-600 text-white p-5 rounded-3xl font-black text-lg shadow-xl hover:bg-green-700 transition">PAGAR AHORA</button>
             </form>
         </div>
     </div>
 
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-85 bg-white dark:bg-gray-950 shadow-2xl z-50 transform translate-x-full transition-transform duration-500 border-l border-gray-100 dark:border-gray-800 flex flex-col">
-        <div class="p-8 border-b dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
-            <div>
-                <h2 class="text-2xl font-black">Mi Orden</h2>
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Resumen de Bienestar</p>
-            </div>
-            <button onclick="toggleCart()" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-full transition">✕</button>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-950 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 border-l dark:border-gray-800 flex flex-col p-6">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-black italic underline decoration-blue-600">Tu Compra</h2>
+            <button onclick="toggleCart()" class="text-xl">✕</button>
         </div>
-        
-        <div id="cart-list" class="flex-1 overflow-y-auto p-6 space-y-4">
-            <div id="empty-msg" class="text-center py-20 opacity-30 font-bold italic">Tu carrito está vacío</div>
-        </div>
-
-        <div class="p-8 border-t dark:border-gray-800 bg-gray-50 dark:bg-gray-900 space-y-4">
-            <div class="flex justify-between items-end">
-                <span class="text-gray-400 font-bold text-sm uppercase">Total a pagar:</span>
-                <span id="cart-total-price" class="text-3xl font-black text-blue-600">$0.00</span>
+        <div id="cart-list" class="flex-1 overflow-y-auto space-y-4">
             </div>
-            <button onclick="openPayment()" class="w-full bg-blue-600 text-white py-5 rounded-3xl font-black shadow-2xl shadow-blue-500/20 hover:bg-blue-700 transition">PAGAR AHORA 💳</button>
+        <div class="border-t pt-6 space-y-4">
+            <div class="flex justify-between text-2xl font-black">
+                <span>Total:</span>
+                <span id="cart-total-display" class="text-blue-600">$0.00</span>
+            </div>
+            <button onclick="checkAuthAndPay()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-xl hover:bg-blue-700 transition">FINALIZAR COMPRA 🚀</button>
         </div>
     </div>
 
-    <nav class="flex justify-between items-center px-12 py-8 relative z-10">
-        <div class="text-3xl font-black tracking-tighter italic">NEXO<span class="text-blue-600">.</span></div>
-        <div class="flex items-center gap-4">
-            <button onclick="toggleCart()" class="relative p-4 bg-white dark:bg-gray-800 rounded-[24px] shadow-xl hover:scale-110 transition active:scale-90 border border-gray-100 dark:border-gray-700">
-                <span class="text-xl">🛒</span>
-                <span id="cart-count" class="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full font-black border-2 border-white dark:border-gray-900">0</span>
-            </button>
-        </div>
+    <nav class="flex justify-between items-center px-10 py-6 relative z-10">
+        <div class="text-3xl font-black italic tracking-tighter">NEXO<span class="text-blue-600">.</span></div>
+        <button onclick="toggleCart()" class="relative p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border dark:border-gray-700">
+            <span class="text-xl">🛒</span>
+            <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-2 py-1 rounded-full font-black border-2 border-white dark:border-gray-900">0</span>
+        </button>
     </nav>
 
-    <header class="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-20 items-center">
-        <div class="space-y-10">
-            <h1 class="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-gray-950 dark:text-white">REINICIA TU <span class="text-blue-600">PAZ</span> INTERIOR.</h1>
-            <div class="glass p-10 rounded-[50px] shadow-2xl space-y-8">
+    <header class="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-16 items-center">
+        <div class="space-y-8">
+            <h1 class="text-6xl md:text-8xl font-black leading-tight tracking-tighter">EL FUTURO DE TU <span class="text-blue-600 underline">CALMA</span>.</h1>
+            <div class="glass p-8 rounded-[40px] shadow-2xl space-y-6">
                 <div class="flex justify-between items-center">
-                    <div>
-                        <p class="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Precio por unidad</p>
-                        <span class="text-4xl font-black text-gray-950 dark:text-white">$250.00 <span class="text-sm font-normal text-gray-400">MXN</span></span>
-                    </div>
-                    <div class="flex items-center bg-gray-100 dark:bg-gray-900 rounded-3xl p-2 border dark:border-gray-700">
-                        <button onclick="updateQty(-1)" class="w-12 h-12 font-black text-2xl hover:text-blue-600">-</button>
-                        <input type="number" id="qty" value="1" class="w-12 text-center font-black text-xl bg-transparent outline-none" readonly>
-                        <button onclick="updateQty(1)" class="w-12 h-12 font-black text-2xl hover:text-blue-600">+</button>
+                    <span id="header-price" class="text-4xl font-black text-blue-600">$250.00 MXN</span>
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-2xl p-2">
+                        <button onclick="mainQty(-1)" class="w-10 h-10 font-black text-2xl">-</button>
+                        <input type="number" id="qty-main" value="1" class="w-10 text-center font-black text-xl bg-transparent" readonly>
+                        <button onclick="mainQty(1)" class="w-10 h-10 font-black text-2xl">+</button>
                     </div>
                 </div>
-                <button onclick="addToCart()" class="w-full bg-blue-600 text-white py-6 rounded-[30px] font-black text-xl shadow-2xl shadow-blue-500/40 hover:bg-blue-700 transition-all active:scale-95">AGREGAR AL CARRITO</button>
+                <button onclick="addToCart()" class="w-full bg-blue-600 text-white py-5 rounded-3xl font-black text-xl shadow-xl hover:scale-[1.02] transition active:scale-95">AGREGAR AL CARRITO</button>
             </div>
         </div>
         <div class="flex justify-center">
-            <div class="glass p-8 rounded-[60px] shadow-2xl relative">
-                <div class="absolute -top-6 -right-6 bg-green-500 text-white px-6 py-2 rounded-full font-black rotate-12 shadow-xl">¡NUEVO!</div>
-                <img src="NEXO PHOTO.jpeg" alt="NEXO" class="max-w-sm rounded-[45px] shadow-lg">
-            </div>
+            <img src="NEXO PHOTO.jpeg" class="max-w-sm rounded-[50px] shadow-2xl border-8 border-white dark:border-gray-800 rotate-2">
         </div>
     </header>
 
     <script>
-        const PRICE = 250;
-        let cartQty = 0;
-        let isLoggedIn = false;
+        const UNIT_PRICE = 250;
+        let cartItems = 0;
+        let auth = false;
 
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
 
-        // SEGURIDAD: Validación de teléfono real
-        function handleSecureLogin(e) {
+        // --- SEGURIDAD DE TELÉFONO ---
+        function validateRealPhone(e) {
             e.preventDefault();
             const phone = document.getElementById('user-phone').value;
-            const errorLabel = document.getElementById('login-error');
             const input = document.getElementById('user-phone');
+            const errorMsg = document.getElementById('phone-error-msg');
 
-            // Regex: Debe ser de 10 dígitos y no ser una secuencia obvia (1234, 0000, etc)
-            const isSequence = /^(?:0123456789|1234567890|0+ |1+ |2+ |3+ |4+ |5+ |6+ |7+ |8+ |9+)$/.test(phone);
-            
-            if(phone.length !== 10 || isSequence) {
-                input.classList.add('error-shake');
-                errorLabel.innerText = "Error: Ingresa un número de 10 dígitos real.";
-                errorLabel.classList.remove('hidden');
-                setTimeout(() => input.classList.remove('error-shake'), 400);
+            // Lista negra de números falsos comunes
+            const fakeNumbers = ["1234567890", "0123456789", "0000000000", "1111111111", "9876543210"];
+            // Detecta si todos los números son iguales
+            const isRepeating = /^(.)\1+$/.test(phone);
+
+            if (phone.length < 10 || fakeNumbers.includes(phone) || isRepeating) {
+                input.classList.add('error-input');
+                errorMsg.classList.remove('hidden');
+                setTimeout(() => input.classList.remove('error-input'), 400);
                 return;
             }
 
-            isLoggedIn = true;
-            alert("🔐 Identidad Verificada Correctamente");
+            auth = true;
+            alert("✅ Verificación Exitosa");
             closeModal('login-modal');
         }
 
-        function updateQty(val) {
-            const input = document.getElementById('qty');
+        // --- LÓGICA DEL CARRITO DINÁMICO ---
+        function mainQty(val) {
+            const input = document.getElementById('qty-main');
+            const price = document.getElementById('header-price');
             let newQty = parseInt(input.value) + val;
-            if (newQty >= 1) input.value = newQty;
+            if (newQty >= 1) {
+                input.value = newQty;
+                price.innerText = `$${(newQty * UNIT_PRICE).toFixed(2)} MXN`;
+            }
         }
 
         function addToCart() {
-            const qtyToAdd = parseInt(document.getElementById('qty').value);
-            cartQty += qtyToAdd;
+            const qtyToAdd = parseInt(document.getElementById('qty-main').value);
+            cartItems += qtyToAdd;
             renderCart();
             toggleCart();
         }
 
-        // Función para cambiar cantidades DENTRO del carrito o eliminar
-        function updateCartItem(val) {
-            cartQty += val;
-            if(cartQty < 0) cartQty = 0;
+        function changeCartQty(val) {
+            cartItems += val;
+            if (cartItems < 0) cartItems = 0;
             renderCart();
         }
 
         function renderCart() {
             const list = document.getElementById('cart-list');
-            const totalTxt = document.getElementById('cart-total-price');
-            const countTxt = document.getElementById('cart-count');
+            const totalDisplay = document.getElementById('cart-total-display');
+            const countDisplay = document.getElementById('cart-count');
             
-            countTxt.innerText = cartQty;
-            totalTxt.innerText = `$${(cartQty * PRICE).toFixed(2)}`;
+            countDisplay.innerText = cartItems;
+            totalDisplay.innerText = `$${(cartItems * UNIT_PRICE).toFixed(2)} MXN`;
 
-            if(cartQty === 0) {
-                list.innerHTML = `<div id="empty-msg" class="text-center py-20 opacity-30 font-bold italic">Tu carrito está vacío</div>`;
+            if (cartItems === 0) {
+                list.innerHTML = `<p class="text-center italic opacity-30 mt-10">Vacío</p>`;
                 return;
             }
 
             list.innerHTML = `
-                <div class="bg-white dark:bg-gray-900 p-6 rounded-[30px] shadow-sm border dark:border-gray-800 flex items-center gap-4 transition-all hover:shadow-md">
-                    <img src="NEXO PHOTO.jpeg" class="w-16 h-16 rounded-2xl object-cover shadow-md">
-                    <div class="flex-1">
-                        <h4 class="font-black text-sm">NEXO Relax Device</h4>
-                        <p class="text-[10px] text-blue-600 font-bold uppercase">$250.00 c/u</p>
-                        <div class="flex items-center gap-3 mt-2">
-                            <button onclick="updateCartItem(-1)" class="w-6 h-6 bg-gray-100 dark:bg-gray-800 rounded-lg font-bold hover:bg-red-100 hover:text-red-600 transition">-</button>
-                            <span class="font-black text-sm">${cartQty}</span>
-                            <button onclick="updateCartItem(1)" class="w-6 h-6 bg-gray-100 dark:bg-gray-800 rounded-lg font-bold hover:bg-green-100 hover:text-green-600 transition">+</button>
+                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-3xl border dark:border-gray-800 space-y-3">
+                    <div class="flex items-center gap-4">
+                        <img src="NEXO PHOTO.jpeg" class="w-12 h-12 rounded-xl">
+                        <div>
+                            <p class="font-black text-sm">NEXO Device</p>
+                            <p class="text-xs text-blue-600 font-bold">$250.00 c/u</p>
                         </div>
                     </div>
-                    <button onclick="cartQty=0; renderCart()" class="text-gray-300 hover:text-red-500 transition">🗑️</button>
+                    <div class="flex justify-between items-center bg-white dark:bg-gray-800 p-2 rounded-2xl border dark:border-gray-700">
+                        <button onclick="changeCartQty(-1)" class="w-8 h-8 font-black hover:text-red-500 transition">-</button>
+                        <span class="font-black">${cartItems}</span>
+                        <button onclick="changeCartQty(1)" class="w-8 h-8 font-black hover:text-green-500 transition">+</button>
+                    </div>
+                    <button onclick="cartItems=0; renderCart()" class="w-full text-[10px] font-black uppercase text-red-500 tracking-widest pt-2">Eliminar todo</button>
                 </div>
             `;
         }
 
-        function openPayment() {
-            if(!isLoggedIn) {
-                alert("⚠️ Por seguridad, debes iniciar sesión primero.");
+        function checkAuthAndPay() {
+            if (!auth) {
+                alert("⚠️ Por favor, inicia sesión para pagar.");
                 document.getElementById('login-modal').classList.remove('hidden');
                 return;
             }
-            if(cartQty === 0) return alert("Agrega al menos un NEXO a tu orden.");
+            if (cartItems === 0) return alert("Tu carrito está vacío.");
             document.getElementById('payment-modal').classList.remove('hidden');
         }
 
-        function processSecurePayment(e) {
+        function processRealPayment(e) {
             e.preventDefault();
-            const card = document.getElementById('card-num').value;
-            const btn = document.getElementById('pay-btn');
-
-            if(card.length < 16 || /^(.)\1+$/.test(card)) {
-                alert("❌ Número de tarjeta inválido o sospechoso.");
-                return;
+            const card = document.getElementById('card-number').value;
+            // Validación de tarjeta (no números repetidos tipo 111...)
+            if (card.length < 16 || /^(.)\1+$/.test(card)) {
+                return alert("❌ Error: Número de tarjeta inválido.");
             }
-
-            btn.innerText = "VERIFICANDO FONDOS... 🏦";
-            btn.classList.add('opacity-50', 'pointer-events-none');
-            
+            alert("🔒 Procesando Pago Seguro...");
             setTimeout(() => {
-                alert("✅ TRANSACCIÓN EXITOSA\nSu pedido #7742 está siendo preparado.");
+                alert("✅ COMPRA EXITOSA. ¡Gracias por elegir NEXO!");
                 location.reload();
-            }, 3000);
+            }, 2500);
         }
     </script>
 </body>
