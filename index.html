@@ -6,54 +6,87 @@
     <title>NEXO | Tu espacio de calma</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s; }
         .bg-nexo-gradient { background: linear-gradient(108deg, #eef2ff 0%, #f0fdf4 100%); }
         .dark .bg-nexo-gradient { background: linear-gradient(108deg, #1a202c 0%, #121f1a 100%); }
         .floating { animation: float 6s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.3); }
+        .dark .glass { background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255,255,255,0.1); }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3; z-index: -1; }
-        .blob-1 { background-color: #63b3ed; width: 400px; height: 400px; top: -100px; left: -100px; }
     </style>
 </head>
-<body class="bg-nexo-gradient text-gray-900 dark:text-gray-100 antialiased relative overflow-x-hidden">
+<body class="bg-nexo-gradient text-gray-900 dark:text-gray-100 antialiased overflow-x-hidden">
 
-    <div class="blob blob-1"></div>
-
-    <button onclick="document.documentElement.classList.toggle('dark')" class="fixed top-24 right-6 z-40 p-3 bg-white/40 dark:bg-black/40 backdrop-blur-md rounded-full border border-white/30 shadow-lg hover:scale-110 transition-all">
-        <span class="dark:hidden text-2xl">🌙</span>
-        <span class="hidden dark:inline text-2xl">☀️</span>
-    </button>
-
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-900 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 border-l border-gray-200 dark:border-gray-800">
-        <div class="p-6 h-full flex flex-col">
-            <div class="flex justify-between items-center mb-8 border-b pb-4 border-gray-100 dark:border-gray-800">
-                <h2 class="text-2xl font-black">Tu Carrito 🛒</h2>
-                <button onclick="toggleCart()" class="text-2xl hover:scale-125 transition-transform">✕</button>
+    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+        <div class="glass w-full max-w-md rounded-[40px] p-10 shadow-2xl relative">
+            <button onclick="closeModal('login-modal')" class="absolute top-6 right-6 text-2xl hover:scale-125 transition">✕</button>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-black mb-2">Bienvenido a NEXO</h2>
+                <p class="text-gray-500 dark:text-gray-400">Inicia sesión para una experiencia personalizada</p>
             </div>
-            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4">
-                <p id="empty-msg" class="text-gray-500 italic text-center mt-10">Tu carrito está vacío...</p>
-            </div>
-            <div class="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-4">
-                <div class="flex justify-between text-xl font-bold">
-                    <span>Total:</span>
-                    <span id="cart-total-price">$0.00 MXN</span>
+            
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <button type="button" class="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-2xl font-bold hover:bg-gray-50 transition shadow-sm text-sm">
+                    <img src="https://www.google.com/favicon.ico" class="w-4 h-4"> Continuar con Google
+                </button>
+                <div class="relative flex items-center py-2">
+                    <div class="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+                    <span class="flex-shrink mx-4 text-gray-400 text-xs uppercase font-bold">o con tu móvil</span>
+                    <div class="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
                 </div>
-                <button onclick="handleCheckout()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black shadow-lg hover:bg-green-700 active:scale-95 transition">FINALIZAR COMPRA 🚀</button>
+                <input type="tel" id="user-phone" placeholder="Número de teléfono (10 dígitos)" required pattern="[0-9]{10}" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-blue-500 outline-none">
+                <button type="submit" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-black shadow-lg hover:bg-blue-700 transition">ENTRAR</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="payment-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="glass w-full max-w-md rounded-[40px] p-10 shadow-2xl relative">
+            <button onclick="closeModal('payment-modal')" class="absolute top-6 right-6 text-2xl hover:scale-125 transition">✕</button>
+            <h2 class="text-2xl font-black mb-6">Método de Pago 💳</h2>
+            <form onsubmit="processPayment(event)" class="space-y-4">
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase ml-2 text-gray-400">Titular de la tarjeta</label>
+                    <input type="text" required placeholder="Nombre como aparece en la tarjeta" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase ml-2 text-gray-400">Número de tarjeta</label>
+                    <input type="text" required pattern="[0-9]{16}" placeholder="1234 5678 9012 3456" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" required placeholder="MM/AA" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none">
+                    <input type="password" required placeholder="CVV" pattern="[0-9]{3}" class="w-full p-4 rounded-2xl bg-gray-100 dark:bg-gray-800 outline-none">
+                </div>
+                <button type="submit" id="pay-btn" class="w-full bg-green-600 text-white p-5 rounded-3xl font-black text-lg shadow-xl hover:bg-green-700 transition">PAGAR AHORA</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-900 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 border-l border-gray-200 dark:border-gray-800 p-6 flex flex-col">
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <h2 class="text-2xl font-black">Carrito 🛒</h2>
+            <button onclick="toggleCart()" class="text-2xl">✕</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto space-y-4">
+            <p id="empty-msg" class="text-gray-500 italic text-center">Vacío...</p>
+        </div>
+        <div class="border-t pt-6 space-y-4">
+            <div class="flex justify-between text-xl font-bold">
+                <span>Total:</span><span id="cart-total-price">$0.00</span>
             </div>
+            <button onclick="openPayment()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg">FINALIZAR COMPRA</button>
         </div>
     </div>
 
     <nav class="flex justify-between items-center px-6 md:px-12 py-6 relative z-10">
         <div class="text-3xl font-extrabold tracking-tighter">NEXO<span class="text-blue-600">.</span></div>
         <div class="flex items-center gap-6">
-            <a href="#beneficios" class="hidden md:block hover:text-blue-600 transition font-bold">Beneficios</a>
-            <button onclick="toggleCart()" class="relative p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl hover:scale-105 transition active:scale-90">
-                <span class="text-xl">🛒</span>
+            <button onclick="document.getElementById('login-modal').classList.remove('hidden')" class="font-bold text-sm hover:text-blue-600 transition">Mi Cuenta</button>
+            <button onclick="toggleCart()" class="relative p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl">
+                <span>🛒</span>
                 <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
             </button>
         </div>
@@ -61,70 +94,34 @@
 
     <header class="py-12 md:py-20 px-6 md:px-12 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
         <div class="space-y-8">
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter leading-tight">Siente los pulsos de NEXO y <span class="text-blue-600 italic">deja ir</span> la tensión.</h1>
-            <p class="text-xl text-gray-700 dark:text-gray-300 font-light max-w-lg">La tecnología y la neurociencia se unen en un dispositivo táctil diseñado para reprogramar tu respuesta al estrés.</p>
-            
-            <div class="bg-white/50 dark:bg-white/10 backdrop-blur-xl p-8 rounded-[40px] border border-white/40 shadow-2xl space-y-6">
-                <div class="flex flex-wrap justify-between items-center gap-4">
-                    <span id="product-price" class="text-4xl font-black text-blue-600 dark:text-blue-400">$250.00 MXN</span>
-                    <div class="flex items-center bg-white dark:bg-gray-800 rounded-2xl p-2 border border-gray-200 dark:border-gray-700">
-                        <button onclick="updateQty(-1)" class="w-10 h-10 font-bold text-xl hover:text-blue-600">-</button>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter leading-tight">Tu espacio de calma, <span class="text-blue-600 italic">siempre</span> contigo.</h1>
+            <div class="glass p-8 rounded-[40px] shadow-2xl space-y-6">
+                <div class="flex justify-between items-center">
+                    <span id="product-price" class="text-4xl font-black text-blue-600">$250.00 MXN</span>
+                    <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-2xl p-2 border dark:border-gray-700">
+                        <button onclick="updateQty(-1)" class="w-10 h-10 font-bold">-</button>
                         <input type="number" id="qty" value="1" class="w-10 text-center font-bold bg-transparent outline-none" readonly>
-                        <button onclick="updateQty(1)" class="w-10 h-10 font-bold text-xl hover:text-blue-600">+</button>
+                        <button onclick="updateQty(1)" class="w-10 h-10 font-bold">+</button>
                     </div>
                 </div>
-                <button onclick="addToCart()" class="w-full bg-blue-600 text-white py-5 rounded-3xl font-black text-xl shadow-xl hover:bg-blue-700 transition-all active:scale-95">AGREGAR AL CARRITO 🛒</button>
+                <button onclick="addToCart()" class="w-full bg-blue-600 text-white py-5 rounded-3xl font-black text-xl shadow-xl hover:bg-blue-700 transition active:scale-95">AGREGAR AL CARRITO 🛒</button>
             </div>
         </div>
         <div class="flex justify-center">
-            <div class="bg-white/40 dark:bg-black/20 p-6 rounded-[50px] shadow-2xl floating border border-white/20">
+            <div class="glass p-6 rounded-[50px] shadow-2xl floating">
                 <img src="NEXO PHOTO.jpeg" alt="NEXO" class="max-w-xs rounded-[35px] shadow-lg">
             </div>
         </div>
     </header>
 
-    <section id="beneficios" class="py-24 px-6 md:px-12 bg-white dark:bg-gray-900 rounded-t-[60px] relative z-10">
-        <div class="max-w-6xl mx-auto text-center">
-            <h2 class="text-blue-600 font-black uppercase tracking-widest mb-4">La Ciencia de la Calma</h2>
-            <p class="text-4xl md:text-5xl font-extrabold mb-16">Diseñado para tu <span class="text-green-600 font-black italic underline">bienestar.</span></p>
-            <div class="grid md:grid-cols-3 gap-8 text-left">
-                <div class="bg-gray-50 dark:bg-gray-800 p-10 rounded-[40px] border border-transparent hover:border-blue-500 transition-all">
-                    <div class="text-5xl mb-6">🧘‍♂️</div>
-                    <h3 class="text-2xl font-bold mb-4">Relajación Profunda</h3>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Pulsos sincronizados que reducen el cortisol en minutos.</p>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-800 p-10 rounded-[40px] border border-transparent hover:border-blue-500 transition-all">
-                    <div class="text-5xl mb-6">🧠</div>
-                    <h3 class="text-2xl font-bold mb-4">Enfoque Total</h3>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Elimina la niebla mental para que seas más productivo.</p>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-800 p-10 rounded-[40px] border border-transparent hover:border-blue-500 transition-all">
-                    <div class="text-5xl mb-6">✨</div>
-                    <h3 class="text-2xl font-bold mb-4">Portátil</h3>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Lleva tu espacio de paz en el bolsillo a donde vayas.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-8">
-        <div class="bg-white/30 dark:bg-black/20 p-10 rounded-[40px] border border-white/40 shadow-xl">
-            <h3 class="text-2xl font-black text-blue-600 mb-4 uppercase tracking-tighter">Nuestra Misión</h3>
-            <p class="text-lg leading-relaxed">Brindar una solución práctica y accesible para reducir el estrés mediante tecnología que promueve la calma diaria.</p>
-        </div>
-        <div class="bg-white/30 dark:bg-black/20 p-10 rounded-[40px] border border-white/40 shadow-xl">
-            <h3 class="text-2xl font-black text-green-600 mb-4 uppercase tracking-tighter">Nuestra Visión</h3>
-            <p class="text-lg leading-relaxed">Ser la marca líder en bienestar facilitando el equilibrio y la tranquilidad en cualquier lugar.</p>
-        </div>
-    </section>
-
-    <footer class="py-12 text-center text-gray-400 font-bold uppercase tracking-widest border-t border-gray-200 dark:border-gray-800">
-        © 2026 NEXO • INNOVACIÓN PARA LA VIDA REAL
-    </footer>
-
     <script>
         const PRICE = 250;
         let cartItems = 0;
+        let isLoggedIn = false;
+
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
 
         function updateQty(val) {
             const input = document.getElementById('qty');
@@ -136,36 +133,46 @@
             }
         }
 
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+        function handleLogin(e) {
+            e.preventDefault();
+            const phone = document.getElementById('user-phone').value;
+            if(phone.length === 10) {
+                isLoggedIn = true;
+                alert(`✨ ¡Bienvenido! Has iniciado sesión con el número: ${phone}`);
+                closeModal('login-modal');
+            }
         }
 
         function addToCart() {
-            const qtyToAdd = parseInt(document.getElementById('qty').value);
-            cartItems += qtyToAdd;
-            let total = cartItems * PRICE;
-
+            const qty = parseInt(document.getElementById('qty').value);
+            cartItems += qty;
             document.getElementById('cart-count').innerText = cartItems;
-            document.getElementById('cart-total-price').innerText = `$${total.toFixed(2)} MXN`;
+            document.getElementById('cart-total-price').innerText = `$${(cartItems * PRICE).toFixed(2)}`;
             document.getElementById('empty-msg').style.display = 'none';
-            
-            const itemsContainer = document.getElementById('cart-items');
-            itemsContainer.innerHTML = `
-                <div class="flex items-center gap-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-3xl border border-gray-100 dark:border-gray-700">
-                    <img src="NEXO PHOTO.jpeg" class="w-14 h-14 rounded-xl object-cover">
-                    <div class="text-sm">
-                        <p class="font-black">NEXO Relax Device</p>
-                        <p class="text-gray-500">${cartItems} unidades</p>
-                        <p class="font-bold text-blue-600">$${total.toFixed(2)}</p>
-                    </div>
-                </div>
-            `;
-            toggleCart(); // Abre el carrito para mostrar el éxito
+            document.getElementById('cart-items').innerHTML = `<div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-2xl flex items-center gap-4 border border-gray-200 dark:border-gray-700"><img src="NEXO PHOTO.jpeg" class="w-12 h-12 rounded-lg"><div class="text-xs font-bold">NEXO Relax<br>${cartItems} unidades</div></div>`;
+            toggleCart();
         }
 
-        function handleCheckout() {
-            if(cartItems === 0) return alert("¡El carrito está vacío!");
-            alert(`🧘‍♂️ ¡Excelente elección!\nEstamos procesando tu pedido por ${cartItems} unidades.\n¡Gracias por elegir la calma con NEXO!`);
+        function openPayment() {
+            if(!isLoggedIn) {
+                alert("🧘‍♂️ Por favor, inicia sesión para continuar con tu compra.");
+                document.getElementById('login-modal').classList.remove('hidden');
+                return;
+            }
+            if(cartItems === 0) return alert("Tu carrito está vacío.");
+            toggleCart();
+            document.getElementById('payment-modal').classList.remove('hidden');
+        }
+
+        function processPayment(e) {
+            e.preventDefault();
+            const btn = document.getElementById('pay-btn');
+            btn.innerText = "PROCESANDO PAGO... 🔒";
+            btn.disabled = true;
+            setTimeout(() => {
+                alert("✅ ¡PAGO EXITOSO!\nTu pedido de NEXO está en camino. Revisa tu correo/SMS para el seguimiento.");
+                location.reload();
+            }, 3000);
         }
     </script>
 </body>
