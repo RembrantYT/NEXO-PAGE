@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXO Calma | Tu Pausa Instantánea en el Caos Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        
+        /* El Degradado de Fondo solicitado: Azul Izquierda, Verde Derecha */
+        .bg-nexo-gradient {
+            background: linear-gradient(108deg, rgba(235,248,255,1) 0%, rgba(230,255,243,1) 100%);
+        }
+
+        /* Animación suave para el dispositivo (flotante) */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating { animation: float 6s ease-in-out infinite; }
+
+        /* Efecto de Desenfoque para la tranquilidad visual */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: -1;
+        }
+        .blob-1 { background-color: #63b3ed; width: 400px; height: 400px; top: -100px; left: -100px; }
+        .blob-2 { background-color: #81e6d9; width: 350px; height: 350px; bottom: -50px; right: -100px; }
+
+        /* Estilo para el botón principal con degradado */
+        .btn-gradient {
+            background: linear-gradient(135deg, #4299e1 0%, #48bb78 100%);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(66, 153, 225, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-nexo-gradient text-gray-900 antialiased relative">
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <nav class="flex justify-between items-center px-6 md:px-12 py-6 relative z-10">
+        <div class="text-3xl font-extrabold tracking-tighter text-gray-950">
+            NEXO<span class="font-light text-blue-600">.</span>
+        </div>
+        <div class="space-x-4 md:space-x-8 text-sm font-medium text-gray-700">
+            <a href="#como-funciona" class="hover:text-blue-600 transition">Ciencia</a>
+            <a href="#beneficios" class="hover:text-blue-600 transition">Beneficios</a>
+            <a href="#" class="btn-gradient text-white px-6 py-2.5 rounded-full font-bold shadow-md">Comprar Ahora</a>
+        </div>
+    </nav>
+
+    <header class="py-16 md:py-28 px-6 md:px-12 max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
+        
+        <div class="text-left space-y-8">
+            <div class="inline-flex items-center bg-white border border-gray-200 px-4 py-1.5 rounded-full shadow-inner text-sm text-green-700 font-medium">
+                🌱 <span class="ml-2">Presentamos el nuevo estándar en bienestar mental</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter leading-tight text-gray-950">
+                Inhala paz.<br> Exhala ruido con <span class="text-blue-600">NEXO Calma</span>.
+            </h1>
+            <p class="text-xl text-gray-700 font-light max-w-lg">
+                La tecnología y la neurociencia se unen en un dispositivo táctil diseñado para reprogramar tu respuesta al estrés en segundos. Siente cómo tu pulso se desacelera. Siente cómo vuelves a ti.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                <button class="btn-gradient text-white px-10 py-4 rounded-xl font-extrabold text-lg shadow-lg">
+                    Quiero mi Pausa Instantánea
+                </button>
+                <div class="flex items-center gap-3 text-gray-600 px-4">
+                    <span class="text-2xl">✨</span>
+                    <span class="text-sm">Garantía de 30 días de pura tranquilidad.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative flex justify-center items-center">
+            <div class="floating bg-white/50 border border-white p-10 rounded-[40px] shadow-2xl backdrop-blur-sm">
+                <div class="w-72 h-72 bg-gradient-to-br from-blue-100 to-green-100 rounded-[30px] flex justify-center items-center shadow-inner">
+                    <div class="text-8xl">🌀</div> 
+                </div>
+            </div>
+            <div class="absolute w-96 h-96 rounded-full border-2 border-dashed border-gray-200 -z-10"></div>
+        </div>
+    </header>
+
+    <section id="beneficios" class="py-24 px-6 md:px-12 bg-white rounded-t-[50px] shadow-inner relative z-10">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-sm uppercase tracking-widest text-blue-600 font-bold mb-3">La ciencia de la calma</h2>
+            <p class="text-4xl md:text-5xl font-extrabold tracking-tighter text-gray-950 mb-16">Diseñado para que tu cuerpo diga: <span class="text-green-600">"Todo está bien"</span>.</p>
+            
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100 space-y-4 shadow-sm hover:shadow-lg transition">
+                    <div class="text-5xl">🧘‍♂️</div>
+                    <h3 class="text-2xl font-bold tracking-tight text-gray-950">Relajación Muscular Directa</h3>
+                    <p class="text-gray-600 font-light text-base">Utiliza micro-vibraciones hápticas sincronizadas que inducen un estado de relajación profunda en los puntos de tensión más comunes.</p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100 space-y-4 shadow-sm hover:shadow-lg transition">
+                    <div class="text-5xl">💓</div>
+                    <h3 class="text-2xl font-bold tracking-tight text-gray-950">Sincronización Cardíaca</h3>
+                    <p class="text-gray-600 font-light text-base">Guiado de respiración visual y táctil para alinear tu ritmo cardíaco con un estado de coherencia y enfoque mental.</p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100 space-y-4 shadow-sm hover:shadow-lg transition">
+                    <div class="text-5xl">🧠</div>
+                    <h3 class="text-2xl font-bold tracking-tight text-gray-950">Enfoque y Claridad</h3>
+                    <p class="text-gray-600 font-light text-base">Reduce la 'niebla mental' y el ruido del entorno digital, permitiéndote retomar tus tareas con energía renovada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 md:px-12 bg-gray-50 border-t border-gray-100 z-10 relative">
+        <div class="max-w-4xl mx-auto text-center bg-white p-12 md:p-16 rounded-[40px] shadow-xl border border-gray-100">
+            <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-gray-950 mb-6">Tu bienestar no puede esperar.</h3>
+            <p class="text-xl text-gray-700 font-light mb-10 max-w-2xl mx-auto">
+                Únete a miles de personas que ya han integrado **NEXO Calma** en su día a día. Recupera el control sobre tu estado emocional.
+            </p>
+            <button class="btn-gradient text-white px-12 py-5 rounded-2xl font-extrabold text-xl shadow-lg w-full sm:w-auto">
+                Comprar NEXO Calma por 149€
+            </button>
+            <p class="text-gray-400 text-xs uppercase tracking-widest mt-6">Envío gratuito a todo el mundo esta semana.</p>
+        </div>
+    </section>
+
+    <footer class="py-12 px-6 text-center text-gray-500 text-sm border-t border-gray-200">
+        <p>© 2026 NEXO TECHNOLOGIES. INNOVACIÓN PARA LA VIDA REAL.</p>
+    </footer>
+
+</body>
+</html>
