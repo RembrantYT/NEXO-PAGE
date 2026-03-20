@@ -1,221 +1,184 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXO</title>
-
-<style>
-:root{
-  --bg-dark:#0a0f1c;
-  --bg-light:#f4f7fb;
-  --text-dark:#fff;
-  --text-light:#111;
-  --primary:#0b3c5d;
-  --accent:#7ed957;
-}
-
-body{
-  margin:0;
-  font-family: 'Segoe UI', sans-serif;
-  transition:0.4s;
-}
-
-.dark{
-  background:linear-gradient(135deg,#0a0f1c,#0b3c5d);
-  color:var(--text-dark);
-}
-
-.light{
-  background:var(--bg-light);
-  color:var(--text-light);
-}
-
-/* NAV */
-nav{
-  display:flex;
-  justify-content:space-between;
-  padding:20px;
-  backdrop-filter:blur(15px);
-}
-
-/* BOTONES */
-.btn{
-  background:linear-gradient(45deg,#0b3c5d,#7ed957);
-  border:none;
-  padding:10px 20px;
-  border-radius:25px;
-  cursor:pointer;
-  color:white;
-  transition:0.3s;
-}
-.btn:hover{
-  transform:scale(1.08);
-}
-
-/* HERO */
-.hero{
-  text-align:center;
-  padding:60px 20px;
-}
-
-/* LOGO */
-.logo{
-  width:180px;
-  filter: drop-shadow(0 0 20px rgba(126,217,87,0.5));
-  mix-blend-mode:multiply;
-}
-
-/* PRODUCTO */
-.product{
-  text-align:center;
-  padding:40px;
-}
-
-.product img{
-  width:220px;
-  border-radius:20px;
-  box-shadow:0 0 30px rgba(0,0,0,0.5);
-}
-
-/* TARJETAS */
-.card{
-  backdrop-filter:blur(20px);
-  background:rgba(255,255,255,0.05);
-  padding:20px;
-  border-radius:20px;
-  margin:20px auto;
-  width:300px;
-}
-
-/* RELOJ */
-.time{
-  font-size:18px;
-  margin-top:10px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXO | Tu espacio de calma, Siempre contigo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
+        .nexo-gradient { background: linear-gradient(135deg, #0b3c5d 0%, #1d70a2 50%, #7ed957 100%); }
+        .product-card:hover { transform: translateY(-10px); transition: all 0.3s ease; }
+        /* Animación para el carrito */
+        #cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
 </head>
+<body class="nexo-gradient text-white min-h-screen">
 
-<body class="dark">
+    <nav class="flex justify-between items-center px-8 py-6 sticky top-0 z-50 glass shadow-2xl">
+        <h2 class="text-3xl font-extrabold tracking-tighter italic">NEXO<span class="text-[#7ed957]">.</span></h2>
+        <ul class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-widest">
+            <li><a href="#inicio" class="hover:text-[#7ed957] transition">Inicio</a></li>
+            <li><a href="#catalogo" class="hover:text-[#7ed957] transition">Catálogo</a></li>
+            <li><a href="#nosotros" class="hover:text-[#7ed957] transition">Nosotros</a></li>
+            <li><button onclick="toggleCart()" class="relative bg-[#7ed957] text-black px-4 py-2 rounded-full hover:scale-105 transition">
+                🛒 Carrito (<span id="cart-count">0</span>)
+            </button></li>
+        </ul>
+        <button onclick="openLogin()" class="border-2 border-white px-6 py-2 rounded-full font-bold hover:bg-white hover:text-[#0b3c5d] transition">
+            Ingresar
+        </button>
+    </nav>
 
-<nav>
-<h2>NEXO</h2>
+    <section id="inicio" class="flex flex-col items-center justify-center text-center py-32 px-6">
+        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none">EL FUTURO DE <br><span class="text-[#7ed957]">TU PAZ.</span></h1>
+        <p class="text-xl md:text-2xl font-light mb-10 max-w-2xl opacity-90">Ciencia y tecnología en la palma de tu mano para reprogramar tu bienestar.</p>
+        <a href="#catalogo" class="bg-[#7ed957] text-black text-xl font-black px-12 py-5 rounded-full shadow-2xl hover:scale-110 transition active:scale-95">
+            ORDENAR AHORA
+        </a>
+    </section>
 
-<div>
-<button class="btn" onclick="toggleTheme()">🌙 / ☀️</button>
-<button class="btn" onclick="login()">Login</button>
-</div>
-</nav>
+    <section id="catalogo" class="py-24 px-8 bg-white/5 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-5xl font-black mb-16 text-center italic tracking-tighter">NUESTRO CATÁLOGO</h2>
+            
+            <div class="grid lg:grid-cols-1 gap-12 items-center">
+                <div class="glass p-8 rounded-[40px] flex flex-col md:flex-row gap-12 items-center product-card border-white/20">
+                    <img src="NEXO PHOTO.jpeg" alt="NEXO Device" class="w-full md:w-1/2 rounded-[30px] shadow-2xl border-4 border-[#7ed957]/30">
+                    <div class="space-y-6">
+                        <div class="inline-block bg-[#7ed957]/20 text-[#7ed957] px-4 py-1 rounded-full text-xs font-black">VENTA LIMITADA</div>
+                        <h3 class="text-5xl font-black tracking-tight">Dispositivo NEXO</h3>
+                        <p class="text-gray-300 text-lg leading-relaxed">
+                            NEXO está diseñado para brindarte momentos de relajación y bienestar en cualquier lugar. 
+                            Incluye cable de carga USB-C para un uso práctico y continuo.
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-black/20 p-4 rounded-2xl">🔋 500 mAh</div>
+                            <div class="bg-black/20 p-4 rounded-2xl">⚡ Carga Rápida</div>
+                            <div class="bg-black/20 p-4 rounded-2xl">⏱️ 4h Autonomía</div>
+                            <div class="bg-black/20 p-4 rounded-2xl">📳 Haptic Pro</div>
+                        </div>
 
-<section class="hero">
-<img src="NEXO PHOTO.jpeg" class="logo">
+                        <div class="flex items-center justify-between pt-6 border-t border-white/10">
+                            <span class="text-4xl font-black">$250.00 <span class="text-sm font-normal opacity-50">MXN</span></span>
+                            <button onclick="addToCart('Dispositivo NEXO Gen 1', 250)" class="bg-[#7ed957] text-black font-black px-8 py-4 rounded-2xl hover:bg-white transition shadow-xl">
+                                AGREGAR AL CARRITO
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<h1>Tu espacio de calma, siempre contigo</h1>
-<p id="user">No conectado</p>
+    <section class="py-16 glass text-center border-y border-white/10">
+        <p class="text-xs font-black uppercase tracking-[0.4em] mb-8 opacity-60">Transacciones Seguras y Encriptadas</p>
+        <div class="flex flex-wrap justify-center gap-12 opacity-50 grayscale hover:grayscale-0 transition-all">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="h-8">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" class="h-8">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="h-8">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_Pay_logo.svg" class="h-8">
+        </div>
+    </section>
 
-<div class="time">
-<p id="fecha"></p>
-<p id="hora"></p>
-</div>
-</section>
+    <footer class="py-12 px-8 text-center opacity-60">
+        <p class="font-bold">© 2026 NEXO | Teziutlán, Puebla</p>
+        <div class="flex justify-center gap-6 mt-4 font-black text-[10px] uppercase">
+            <a href="#">Privacidad</a>
+            <a href="#">Términos</a>
+            <a href="#">Soporte</a>
+        </div>
+    </footer>
 
-<section class="product">
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white text-black z-[100] transform translate-x-full shadow-2xl flex flex-col">
+        <div class="p-8 border-b flex justify-between items-center bg-gray-50">
+            <h2 class="text-2xl font-black italic tracking-tighter">TU CARRITO</h2>
+            <button onclick="toggleCart()" class="text-2xl font-black">✕</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-6">
+            <p class="text-center text-gray-400 italic py-20">No hay productos seleccionados.</p>
+        </div>
+        <div class="p-8 bg-gray-50 border-t space-y-6">
+            <div class="flex justify-between text-2xl font-black tracking-tighter">
+                <span>TOTAL</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+            <button onclick="alert('Redirigiendo a pasarela segura...')" class="w-full bg-black text-white py-5 rounded-2xl font-black text-lg hover:bg-[#7ed957] hover:text-black transition">
+                PAGAR AHORA
+            </button>
+        </div>
+    </div>
 
-<div class="card">
+    <div id="loginModal" class="fixed inset-0 z-[200] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-6">
+        <div class="bg-white text-black w-full max-w-md rounded-[40px] p-12 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-[#7ed957]/20 rounded-full -mr-16 -mt-16"></div>
+            <button onclick="closeLogin()" class="absolute top-8 right-8 text-xl font-black">✕</button>
+            <h2 class="text-4xl font-black tracking-tighter mb-2 italic text-[#0b3c5d]">HOLA DE NUEVO.</h2>
+            <p class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-10">Ingresa a tu cuenta NEXO</p>
 
-<h2>Dispositivo NEXO</h2>
+            <div class="space-y-4">
+                <input type="email" placeholder="Correo electrónico" class="w-full bg-gray-100 p-5 rounded-2xl border-2 border-transparent focus:border-[#7ed957] outline-none font-bold">
+                <input type="password" placeholder="Contraseña" class="w-full bg-gray-100 p-5 rounded-2xl border-2 border-transparent focus:border-[#7ed957] outline-none font-bold">
+                <button class="w-full bg-[#0b3c5d] text-white py-5 rounded-2xl font-black text-lg hover:shadow-xl transition shadow-blue-900/20">INGRESAR</button>
+                
+                <div class="flex items-center gap-4 py-4">
+                    <hr class="flex-1"> <span class="text-[10px] font-black text-gray-300">O TAMBIÉN</span> <hr class="flex-1">
+                </div>
 
-<img src="NEXO PHOTO.jpeg">
+                <button onclick="alert('Firebase Google Auth Activando...')" class="w-full flex items-center justify-center gap-3 border-2 border-gray-200 py-4 rounded-2xl font-bold hover:bg-gray-50 transition">
+                    <img src="https://www.google.com/favicon.ico" class="w-4"> Continuar con Google
+                </button>
+            </div>
+        </div>
+    </div>
 
-<p>Stock disponible: <span id="stock">4</span></p>
+    <script>
+        let cart = [];
+        let total = 0;
 
-<select id="cantidad">
-<option value="1">1</option>
-<option value="2">2</option>
-</select>
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+        }
 
-<button class="btn" onclick="comprar()">Comprar</button>
+        function openLogin() { document.getElementById("loginModal").classList.remove('hidden'); }
+        function closeLogin() { document.getElementById("loginModal").classList.add('hidden'); }
 
-<p>Carrito: <span id="cart">0</span></p>
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            total += price;
+            updateUI();
+            if (window.innerWidth > 768) toggleCart();
+        }
 
-</div>
+        function updateUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+            
+            const list = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                list.innerHTML = `<p class="text-center text-gray-400 italic py-20">El carrito está vacío.</p>`;
+                return;
+            }
 
-</section>
+            list.innerHTML = cart.map((item, index) => `
+                <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-200">
+                    <div>
+                        <p class="font-black text-xs uppercase tracking-tighter text-[#0b3c5d]">${item.name}</p>
+                        <p class="font-bold text-gray-400">$${item.price.toFixed(2)}</p>
+                    </div>
+                    <button onclick="removeItem(${index})" class="text-red-500 font-black hover:scale-125 transition">✕</button>
+                </div>
+            `).join('');
+        }
 
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBcZD6ayN9cdYOgc6bpTLpj_dhN0oc5OjI",
-  authDomain: "nexo-1d9c2.firebaseapp.com",
-  projectId: "nexo-1d9c2"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-
-let user = null;
-let cart = 0;
-
-// LOGIN
-window.login = async ()=>{
-  const res = await signInWithPopup(auth,provider);
-  user = res.user;
-  document.getElementById("user").innerText = user.email;
-}
-
-// STOCK
-async function cargarStock(){
-  const ref = doc(db,"data","stock");
-  const snap = await getDoc(ref);
-
-  if(!snap.exists()){
-    await setDoc(ref,{cantidad:4});
-  }
-
-  document.getElementById("stock").innerText =
-    snap.exists() ? snap.data().cantidad : 4;
-}
-cargarStock();
-
-// COMPRAR
-window.comprar = async ()=>{
-  if(!user){
-    alert("Inicia sesión");
-    return;
-  }
-
-  let cant = parseInt(document.getElementById("cantidad").value);
-
-  const ref = doc(db,"data","stock");
-  const snap = await getDoc(ref);
-  let stock = snap.data().cantidad;
-
-  if(cant > stock){
-    alert("Sin stock");
-    return;
-  }
-
-  await updateDoc(ref,{cantidad: stock - cant});
-
-  cart += cant;
-  document.getElementById("cart").innerText = cart;
-
-  cargarStock();
-}
-
-// TEMA
-window.toggleTheme = ()=>{
-  const body = document.body;
-  body.classList.toggle("dark");
-  body.classList.toggle("light");
-}
-
-// RELOJ CDMX
-function actualizarHora(){
-  const opciones = { timeZone: "America/Mexico_City", hour12:false
+        function removeItem(index) {
+            total -= cart[index].price;
+            cart.splice(index, 1);
+            updateUI();
+        }
+    </script>
+</body>
+</html>
