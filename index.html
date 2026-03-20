@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEXO | Tu espacio de calma, Siempre contigo</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --nexo-green: #7ed957; --nexo-dark: #0b3c5d; }
@@ -12,9 +13,13 @@
         .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
         .nexo-gradient { background: linear-gradient(135deg, #0b3c5d 0%, #1d70a2 50%, #7ed957 100%); }
         
-        body.light-mode { background: #f0f4f8; color: #0b3c5d; }
-        body.light-mode .nexo-gradient { background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%); }
-        body.light-mode .glass { background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0,0,0,0.1); color: #0b3c5d; }
+        /* Dorado para Ricardo */
+        .text-gold {
+            background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+        }
 
         .text-lucero-gradient {
             background: linear-gradient(to right, #ff0000, #888888);
@@ -23,7 +28,6 @@
             font-weight: 800;
         }
 
-        .product-card:hover { transform: translateY(-10px); transition: all 0.3s ease; }
         #cart-sidebar, #ai-chat { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--nexo-green); border-radius: 10px; }
@@ -37,216 +41,89 @@
             <li><a href="#inicio" class="hover:text-[#7ed957] transition">Inicio</a></li>
             <li><a href="#mision" class="hover:text-[#7ed957] transition">Misión</a></li>
             <li><a href="#catalogo" class="hover:text-[#7ed957] transition">Catálogo</a></li>
-            <li><button onclick="toggleTheme()" id="theme-btn" class="text-xl hover:scale-125 transition">🌙</button></li>
-            <li><button onclick="toggleCart()" class="relative bg-[#7ed957] text-black px-4 py-2 rounded-full hover:scale-105 transition font-black">
-                🛒 (<span id="cart-count">0</span>)
-            </button></li>
+            <li><button onclick="toggleCart()" class="relative bg-[#7ed957] text-black px-4 py-2 rounded-full hover:scale-105 transition font-black">🛒 (<span id="cart-count">0</span>)</button></li>
         </ul>
-        <button onclick="openLogin()" class="border-2 border-white px-6 py-2 rounded-full font-bold hover:bg-white hover:text-[#0b3c5d] transition uppercase text-xs tracking-widest">Ingresar</button>
+        <div id="g_id_onload"
+             data-client_id="TU_CLIENTE_ID_AQUI.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse">
+        </div>
+        <div class="g_id_signin" data-type="standard"></div>
     </nav>
 
-    <div class="fixed bottom-6 left-6 z-40 glass p-4 rounded-3xl text-[10px] font-bold tracking-widest uppercase border-white/5 shadow-2xl">
-        <div id="live-clock">00:00:00 | 00/00/00</div>
-        <div class="text-[#7ed957] mt-1 flex items-center gap-2">📍 TEZIUTLÁN, PUE <span id="temp-val">18°C</span></div>
+    <div class="fixed bottom-6 left-6 z-40 glass p-5 rounded-3xl border-white/5 shadow-2xl">
+        <div id="live-clock" class="text-lg font-black tracking-tighter">00:00:00</div>
+        <div id="live-date" class="text-[9px] opacity-60 tracking-[0.2em] uppercase">00/00/00</div>
+        <div class="text-[#7ed957] mt-1 flex items-center gap-2 font-bold text-[10px]">📍 TEZIUTLÁN, PUE <span id="temp-val">18°C</span></div>
     </div>
 
     <div class="fixed bottom-6 right-6 z-[60]">
-        <button onclick="toggleAIChat()" class="bg-white text-black p-5 rounded-full shadow-2xl hover:scale-110 transition-all border-4 border-[#7ed957]">
-            <span class="text-2xl" id="chat-icon">🤖</span>
-        </button>
-
+        <button onclick="toggleAIChat()" class="bg-white text-black p-5 rounded-full shadow-2xl hover:scale-110 border-4 border-[#7ed957]">🤖</button>
         <div id="ai-chat" class="absolute bottom-20 right-0 w-[320px] h-[450px] glass rounded-[30px] border-white/20 shadow-2xl flex flex-col scale-0 origin-bottom-right overflow-hidden">
             <div class="p-5 border-b border-white/10 bg-[#7ed957]/10">
                 <p class="text-[10px] font-black tracking-widest text-[#7ed957] uppercase">Asistente NEXO</p>
                 <p class="text-xs font-bold italic">En línea ahora</p>
             </div>
-            <div id="chat-content" class="flex-1 overflow-y-auto p-4 space-y-3 text-[11px]">
-                <div class="bg-white/10 p-3 rounded-2xl rounded-tl-none border border-white/5">¡Hola! Soy la IA de NEXO. ¿Quieres saber sobre el dispositivo, quiénes somos o nuestra misión?</div>
-            </div>
+            <div id="chat-content" class="flex-1 overflow-y-auto p-4 space-y-3 text-[11px]"></div>
             <form onsubmit="event.preventDefault(); sendAIMessage();" class="p-3 bg-black/20 flex gap-2">
-                <input id="ai-input" type="text" placeholder="Escribe un mensaje..." class="flex-1 bg-white/5 border border-white/10 p-2 rounded-xl outline-none text-xs text-white">
+                <input id="ai-input" type="text" placeholder="Escribe..." class="flex-1 bg-white/5 border border-white/10 p-2 rounded-xl outline-none text-xs">
                 <button type="submit" class="text-[#7ed957] font-black text-xs px-2">ENVIAR</button>
             </form>
         </div>
     </div>
 
     <section id="inicio" class="flex flex-col items-center justify-center text-center py-32 px-6">
-        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none">EL COMIENZO DE <br><span class="text-[#7ed957]">TU PAZ.</span></h1>
-        <p class="text-xl md:text-2xl font-light mb-10 max-w-2xl opacity-90 italic">Tecnología en la palma de tu mano para relajar tu bienestar.</p>
-        <a href="#catalogo" class="bg-[#7ed957] text-black text-xl font-black px-12 py-5 rounded-full shadow-2xl hover:scale-110 transition">ORDENAR AHORA</a>
+        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none italic">NEXO<br><span class="text-[#7ed957]">STUDIO.</span></h1>
+        <p class="text-xl font-light italic opacity-80">Relaja tu mente, controla tu entorno.</p>
     </section>
 
-    <section id="mision" class="py-24 px-8 scroll-mt-20">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
-            <div class="glass p-10 rounded-[40px] border-white/10 hover:border-[#7ed957]/50 transition duration-500">
-                <div class="text-[#7ed957] text-4 font-black mb-4 tracking-[0.3em] uppercase">Misión</div>
-                <h2 class="text-4xl font-black mb-6 italic">Nuestra Razón de Ser</h2>
-                <p class="text-lg opacity-80 leading-relaxed font-light">
-                    Brindar a las personas una herramienta tecnológica accesible y efectiva que les permita reconectar con su estado de calma en cualquier momento y lugar, combatiendo el estrés del día a día mediante innovación técnica de calidad.
-                </p>
-            </div>
-            <div class="glass p-10 rounded-[40px] border-white/10 hover:border-[#7ed957]/50 transition duration-500">
-                <div class="text-[#7ed957] text-4 font-black mb-4 tracking-[0.3em] uppercase">Visión</div>
-                <h2 class="text-4xl font-black mb-6 italic">Hacia el Futuro</h2>
-                <p class="text-lg opacity-80 leading-relaxed font-light">
-                    Convertirnos en el referente líder de dispositivos de bienestar personal en México, demostrando que el talento joven y la formación técnica pueden transformar ideas complejas en soluciones digitales que mejoran la vida humana.
-                </p>
-            </div>
+    <section id="catalogo" class="py-24 px-8 text-center">
+        <div class="glass p-12 rounded-[50px] max-w-2xl mx-auto">
+            <h3 class="text-4xl font-black mb-4">Dispositivo NEXO</h3>
+            <p class="text-5xl font-black text-[#7ed957] mb-8">$250.00 <span class="text-sm opacity-50">MXN</span></p>
+            <button onclick="addToCart('Dispositivo NEXO', 250)" class="bg-white text-black font-black px-10 py-4 rounded-2xl hover:bg-[#7ed957] transition uppercase">Añadir a la bolsa</button>
         </div>
     </section>
 
-    <section id="catalogo" class="py-24 px-8 bg-white/5 backdrop-blur-sm scroll-mt">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl font-black mb-16 text-center italic tracking-tighter uppercase">Nuestro Catálogo</h2>
-            <div class="grid lg:grid-cols-1 gap-12 items-center">
-                <div class="glass p-8 rounded-[40px] flex flex-col md:flex-row gap-12 items-center product-card">
-                    <img src="NEXO PHOTO.jpeg" alt="NEXO Device" class="w-full md:w-1/2 rounded-[30px] shadow-2xl border-4 border-[#7ed957]/30">
-                    <div class="space-y-6 w-full">
-                        <div class="inline-block bg-[#7ed957]/20 text-[#7ed957] px-4 py-1 rounded-full text-xs font-black uppercase">Edición Limitada</div>
-                        <h3 class="text-5xl font-black tracking-tight">Dispositivo NEXO</h3>
-                        <p class="text-gray-300 text-lg leading-relaxed">Diseñado para acompañarte en momentos de descanso y ayudarte a reconectar con tu calma en cualquier lugar.</p>
-                        <div class="flex items-center gap-6">
-                            <span class="text-4xl font-black">$<span id="display-price">250</span>.00 <small class="text-sm opacity-50">MXN</small></span>
-                            <div class="flex items-center bg-black/20 rounded-2xl p-2 border border-white/10">
-                                <button onclick="updateQty(-1)" class="w-10 h-10 font-black hover:text-[#7ed957]">-</button>
-                                <span id="prod-qty" class="w-12 text-center font-black">1</span>
-                                <button onclick="updateQty(1)" class="w-10 h-10 font-black hover:text-[#7ed957]">+</button>
-                            </div>
-                        </div>
-                        <button onclick="addToCart('Dispositivo NEXO', 250)" class="w-full md:w-auto bg-[#7ed957] text-black font-black px-12 py-5 rounded-2xl hover:bg-white transition shadow-xl uppercase">AGREGAR AL CARRITO</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 px-8">
-        <div class="max-w-4xl mx-auto glass p-12 rounded-[50px] border-white/5 text-center">
-            <h2 class="text-3xl font-black italic mb-6">NUESTRO <span class="text-[#7ed957]">RECONOCIMIENTO</span></h2>
-            <p class="text-xl font-light italic opacity-90 leading-relaxed">
-                "NEXO extiende un profundo agradecimiento a la <span class="text-lucero-gradient text-2xl uppercase">Escuela Técnica Lucero</span> por su invaluable apoyo en la formación técnica e innovación. Muchas gracias a la Directora Lucero Carcamo Ramírez y al Ingeniero Juan Flores por todos sus consejos."
-            </p>
-        </div>
-    </section>
-
-    <section id="planes" class="py-24 px-8">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-5xl font-black mb-16 italic tracking-tighter uppercase">Elige tu <span class="text-[#7ed957]">Experiencia NEXO</span></h2>
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="glass p-8 rounded-[40px] border-white/10 hover:scale-105 transition">
-                    <h3 class="text-2xl font-black mb-4 uppercase">Básico</h3>
-                    <p class="text-3xl font-black mb-6">$250 MXN</p>
-                    <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
-                </div>
-                <div class="glass p-8 rounded-[40px] border-[#7ed957] border-2 scale-105 shadow-2xl">
-                    <h3 class="text-2xl font-black mb-4 uppercase text-[#7ed957]">Avanzado</h3>
-                    <p class="text-3xl font-black mb-6">$450 MXN</p>
-                    <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
-                </div>
-                <div class="glass p-8 rounded-[40px] border-white/10 hover:scale-105 transition">
-                    <h3 class="text-2xl font-black mb-4 uppercase">Premium</h3>
-                    <p class="text-3xl font-black mb-6">$700 MXN</p>
-                    <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="py-12 border-t border-white/10 text-center">
-        <p class="text-[10px] tracking-[0.4em] uppercase opacity-40 mb-4">© 2026 NEXO - Derechos de Autor Protegidos</p>
-        <p class="text-lg font-black italic text-[#7ed957]">NEXO x RICARDO BRYAN PERALTA MARCELO</p>
-        <p class="text-xs font-bold opacity-60 uppercase mt-2">Tecnologías de la Información | Escuela Técnica Lucero</p>
+    <footer class="py-16 border-t border-white/10 text-center">
+        <p class="text-[10px] tracking-[0.5em] uppercase opacity-40 mb-4">© 2026 NEXO STUDIO - ALL RIGHTS RESERVED</p>
+        <h2 class="text-2xl font-black italic text-gold">NEXO x RICARDO BRYAN PERALTA MARCELO</h2>
+        <p class="text-xs font-bold opacity-60 uppercase mt-2">Ingeniería de la Calma | Escuela Técnica Lucero</p>
     </footer>
 
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white text-black z-[100] transform translate-x-full shadow-2xl flex flex-col">
-        <div class="p-8 border-b flex justify-between items-center bg-gray-50">
-            <h2 class="text-2xl font-black italic uppercase tracking-tighter">Tu Bolsa</h2>
-            <button onclick="toggleCart()" class="text-2xl font-black">✕</button>
-        </div>
-        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-4"></div>
-        <div class="p-8 border-t bg-gray-50">
-            <div class="flex justify-between text-2xl font-black mb-4 uppercase italic"><span>Total</span><span id="cart-total">$0.00</span></div>
-            <button class="w-full bg-black text-white py-5 rounded-2xl font-black uppercase">Pagar Ahora</button>
-        </div>
-    </div>
-
     <script>
-        let cart = [];
-        let currentQty = 1;
-        const UNIT_PRICE = 250;
-
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-            document.getElementById('theme-btn').innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+        // Lógica de Inicio de Sesión
+        function handleCredentialResponse(response) {
+            console.log("Encoded JWT ID token: " + response.credential);
+            alert("¡Bienvenido Ricardo! Sesión iniciada con Google.");
         }
 
-        function updateQty(val) {
-            currentQty = Math.max(1, currentQty + val);
-            document.getElementById('prod-qty').innerText = currentQty;
-            document.getElementById('display-price').innerText = currentQty * UNIT_PRICE;
+        // Reloj Mejorado
+        function updateWidget() {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12: false});
+            document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
+        setInterval(updateWidget, 1000); updateWidget();
 
-        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
-
-        function addToCart(name, price) {
-            const itemIndex = cart.findIndex(i => i.name === name);
-            if(itemIndex > -1) { cart[itemIndex].qty += currentQty; } 
-            else { cart.push({ name, price, qty: currentQty }); }
-            currentQty = 1;
-            document.getElementById('prod-qty').innerText = 1;
-            document.getElementById('display-price').innerText = UNIT_PRICE;
-            updateCartUI();
-            toggleCart();
-        }
-
-        function updateCartUI() {
-            const list = document.getElementById('cart-items');
-            let total = 0; let count = 0;
-            if(cart.length === 0) { list.innerHTML = `<p class="text-center text-gray-400 py-10">Vacío</p>`; }
-            else {
-                list.innerHTML = cart.map((item, idx) => {
-                    total += item.price * item.qty;
-                    count += item.qty;
-                    return `<div class="bg-gray-100 p-4 rounded-2xl flex justify-between items-center">
-                        <div><p class="font-black text-xs uppercase">${item.name} x${item.qty}</p><p class="font-bold">$${item.price * item.qty}</p></div>
-                        <button onclick="removeFromCart(${idx})" class="text-red-500 font-black">✕</button>
-                    </div>`;
-                }).join('');
-            }
-            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
-            document.getElementById('cart-count').innerText = count;
-        }
-
-        function removeFromCart(idx) { cart.splice(idx, 1); updateCartUI(); }
-
-        function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-0'); }
-
+        // IA con el mensaje de "Sexo" preservado
         function sendAIMessage() {
             const input = document.getElementById('ai-input');
             const content = document.getElementById('chat-content');
             const msg = input.value.toLowerCase().trim();
             if(!msg) return;
 
-            content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl rounded-tl-none ml-8 font-bold text-right">${input.value}</div>`;
+            content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl rounded-tr-none ml-8 font-bold text-right">${input.value}</div>`;
             input.value = "";
 
             setTimeout(() => {
-                let r = "Mmm, no estoy seguro de eso. ¿Quieres preguntar sobre el precio, quién creó NEXO o nuestra misión?";
-
-                if(msg.includes("quien") || msg.includes("creo") || msg.includes("hizo")) {
-                    r = "NEXO fue creado por Ricardo Bryan Peralta Marcelo, estudiante de 2do semestre de TI. El sitio también es su obra. Uriel es el segundo al mando y pieza clave en las entrevistas.";
-                }
-                else if(msg.includes("mision") || msg.includes("razon") || msg.includes("objetivo")) {
-                    r = "Nuestra misión es brindar herramientas tecnológicas para que las personas reconecten con su calma y reduzcan el estrés diario.";
-                }
-                else if(msg.includes("vision") || msg.includes("futuro")) {
-                    r = "Nuestra visión es ser líderes en bienestar personal en México, impulsados por talento joven y formación técnica.";
-                }
-                else if(msg.includes("precio") || msg.includes("costo")) {
-                    r = "El Dispositivo NEXO tiene un costo de $250.00 MXN. Incluye cable de carga.";
-                }
-                else if(msg.match(/hola|hol|buenas/)) {
-                    r = "¡Hola! Soy la IA de NEXO. ¿En qué puedo ayudarte hoy?";
+                let r = "No entiendo eso, pero puedo decirte el precio de NEXO.";
+                
+                if(msg === "sexo" || msg.includes(" sexo ")) {
+                    r = "El sexo es cuando dos personas se aman mucho o se tienen confianza y deciden compartir un momento íntimo... pero aquí venimos a buscar PAZ con NEXO, ¿no crees? 😉";
+                } else if(msg.includes("precio")) {
+                    r = "El Dispositivo NEXO cuesta $250.00 MXN.";
+                } else if(msg.includes("quien") || msg.includes("ricardo")) {
+                    r = "NEXO fue desarrollado por el ingeniero Ricardo Bryan Peralta Marcelo.";
                 }
 
                 content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl rounded-tl-none mr-8 italic border border-white/5">🤖 ${r}</div>`;
@@ -254,11 +131,9 @@
             }, 600);
         }
 
-        function updateWidget() {
-            const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX') + " | " + now.toLocaleDateString();
-        }
-        setInterval(updateWidget, 1000); updateWidget();
+        function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-0'); }
+        let cartCount = 0;
+        function addToCart() { cartCount++; document.getElementById('cart-count').innerText = cartCount; }
     </script>
 </body>
 </html>
