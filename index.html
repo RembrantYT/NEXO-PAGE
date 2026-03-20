@@ -1,222 +1,239 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXO | MAX</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXO | MAX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #020617; 
+            color: white; 
+            overflow-x: hidden;
+        }
+        .glass { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .nexo-gradient { 
+            background: radial-gradient(circle at top right, #0b3c5d, #020617); 
+        }
+        .apple-btn {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #7ed957;
+            color: #052e16;
+        }
+        .apple-btn:hover { transform: scale(1.05); filter: brightness(1.1); box-shadow: 0 0 30px rgba(126, 217, 87, 0.4); }
+        
+        /* Animación de entrada */
+        .fade-up { animation: fadeUp 0.8s ease-out forwards; opacity: 0; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-<style>
-body{
-  margin:0;
-  font-family:sans-serif;
-  background:linear-gradient(135deg,#0b3c5d,#7ed957);
-  color:white;
-}
-
-/* NAV */
-nav{
-  display:flex;
-  justify-content:space-between;
-  padding:20px;
-  backdrop-filter:blur(10px);
-}
-
-/* HERO */
-.hero{
-  text-align:center;
-  padding:100px 20px;
-}
-
-/* BOTONES */
-.btn{
-  background:#7ed957;
-  border:none;
-  padding:10px 20px;
-  border-radius:20px;
-  cursor:pointer;
-}
-
-/* PRODUCTO */
-.product{
-  text-align:center;
-  padding:40px;
-}
-
-.product img{
-  width:200px;
-  border-radius:15px;
-}
-
-/* MODAL */
-.modal{
-  position:fixed;
-  top:0;left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,.7);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-
-.modal-box{
-  background:white;
-  color:black;
-  padding:20px;
-  border-radius:10px;
-  width:300px;
-}
-
-/* ADMIN */
-.admin{
-  display:none;
-  background:rgba(0,0,0,.3);
-  padding:20px;
-  margin:20px;
-  border-radius:10px;
-}
-</style>
+        /* Ocultar flechas de input number */
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
 </head>
+<body class="nexo-gradient min-h-screen">
 
-<body>
+    <nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center glass border-b border-white/5">
+        <h2 class="text-3xl font-black italic tracking-tighter">NEXO<span class="text-[#7ed957]">.</span></h2>
+        <div class="flex items-center gap-6">
+            <span id="user-display" class="text-[10px] font-bold uppercase tracking-widest opacity-50">Invitado</span>
+            <button class="apple-btn px-6 py-2 rounded-full font-black text-xs uppercase" onclick="login()">Login</button>
+        </div>
+    </nav>
 
-<nav>
-<h2>NEXO</h2>
-<button class="btn" onclick="login()">Login</button>
-</nav>
+    <section class="hero pt-48 pb-20 text-center px-6">
+        <h1 class="fade-up text-8xl md:text-[140px] font-black tracking-tighter leading-none mb-4">NEXO<span class="text-[#7ed957] italic">MAX</span></h1>
+        <p class="fade-up text-xl text-slate-400 font-light tracking-wide">La ingeniería del descanso, ahora en tus manos.</p>
+    </section>
 
-<section class="hero">
-<h1>NEXO</h1>
-<p id="user">No conectado</p>
-</section>
+    <section class="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center px-10 pb-32">
+        <div class="fade-up flex justify-center relative">
+            <div class="absolute inset-0 bg-[#7ed957]/10 blur-[120px] rounded-full scale-75"></div>
+            <img src="https://i.postimg.cc/0Q0zZxYw/nexo.jpg" class="w-full max-w-sm rounded-[60px] shadow-2xl border-8 border-white/5 relative z-10 transition-transform duration-700 hover:rotate-3">
+        </div>
 
-<section class="product">
-<h2>Producto</h2>
-<img src="https://i.postimg.cc/0Q0zZxYw/nexo.jpg">
+        <div class="fade-up space-y-10">
+            <div class="glass p-10 rounded-[50px] space-y-8 border-white/10">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h2 class="text-4xl font-black mb-1">Unidad Elite</h2>
+                        <p class="text-[#7ed957] font-bold text-sm tracking-widest">STOCK DISPONIBLE: <span id="stock">...</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-black">$250.00</p>
+                        <p class="text-[10px] opacity-40 uppercase font-bold">MXN + Envío Gratis</p>
+                    </div>
+                </div>
 
-<p>Stock: <span id="stock">...</span></p>
+                <div class="flex gap-4 items-center">
+                    <label class="text-xs font-black uppercase tracking-widest opacity-50">Cantidad:</label>
+                    <select id="cantidad" class="bg-white/10 p-3 rounded-2xl outline-none font-bold border border-white/10 focus:border-[#7ed957] transition-all flex-1">
+                        <option value="1" class="bg-slate-900 text-white">1 Unidad</option>
+                        <option value="2" class="bg-slate-900 text-white">2 Unidades</option>
+                        <option value="3" class="bg-slate-900 text-white">3 Unidades (Ahorro 5%)</option>
+                    </select>
+                </div>
 
-<select id="cantidad">
-<option value="1">1</option>
-<option value="2">2</option>
-</select>
+                <button class="apple-btn w-full py-6 rounded-3xl font-black text-xl shadow-2xl" onclick="abrirPago()">RESERVAR AHORA</button>
+                
+                <div class="flex justify-center gap-4 pt-4 border-t border-white/5 opacity-40">
+                    <span class="text-[10px] font-black tracking-widest">CARRITO: <span id="cart">0</span></span>
+                    <span class="text-[10px] font-black tracking-widest">|</span>
+                    <span class="text-[10px] font-black tracking-widest">ENTREGA ESTIMADA: 24H</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<button class="btn" onclick="abrirPago()">Comprar</button>
+    <section class="admin max-w-4xl mx-auto mb-32" id="admin">
+        <div class="glass p-10 rounded-[40px] border-[#7ed957]/20">
+            <h2 class="text-3xl font-black mb-8 italic tracking-tighter">Gestión de Pedidos <span class="text-[#7ed957]">NEXO</span></h2>
+            <div id="pedidos" class="space-y-4">
+                <p class="text-slate-500 italic text-center">Cargando datos de logística...</p>
+            </div>
+        </div>
+    </section>
 
-<p>Carrito: <span id="cart">0</span></p>
-</section>
+    <div class="modal fixed inset-0 z-[100] hidden items-center justify-center p-6 bg-black/90 backdrop-blur-md" id="modal">
+        <div class="glass w-full max-w-md rounded-[50px] p-12 relative overflow-hidden text-center border-[#7ed957]/30">
+            <button onclick="cerrarPago()" class="absolute top-8 right-8 text-xl font-bold opacity-40 hover:opacity-100 transition">✕</button>
+            <h3 class="text-4xl font-black mb-2 italic">Checkout</h3>
+            <p class="text-[10px] font-black uppercase text-slate-500 tracking-[0.3em] mb-10">Pasarela Encriptada</p>
+            
+            <div class="space-y-4 text-left">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black ml-4 uppercase opacity-40">Titular de la tarjeta</label>
+                    <input id="pago-nombre" placeholder="Nombre completo" class="w-full bg-white/5 p-5 rounded-3xl border border-white/10 outline-none focus:border-[#7ed957] font-bold transition-all">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black ml-4 uppercase opacity-40">Número de tarjeta</label>
+                    <input id="pago-tarjeta" placeholder="**** **** **** 4242" class="w-full bg-white/5 p-5 rounded-3xl border border-white/10 outline-none focus:border-[#7ed957] font-bold transition-all text-center tracking-widest">
+                </div>
+                <button class="apple-btn w-full py-6 rounded-3xl font-black text-xl mt-6 shadow-2xl" onclick="confirmarCompra()">FINALIZAR COMPRA</button>
+            </div>
+        </div>
+    </div>
 
-<!-- MODAL PAGO -->
-<div class="modal" id="modal">
-<div class="modal-box">
-<h3>Pago</h3>
-<input placeholder="Nombre tarjeta"><br><br>
-<input placeholder="** ** ** 4242"><br><br>
-<button class="btn" onclick="confirmarCompra()">Pagar</button>
-</div>
-</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<section class="admin" id="admin">
-<h2>Pedidos</h2>
-<div id="pedidos"></div>
-</section>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBcZD6...", // ASEGÚRATE DE USAR TU API KEY REAL
+            authDomain: "nexo-1d9c2.firebaseapp.com",
+            projectId: "nexo-1d9c2"
+        };
 
-<script type="module">
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, updateDoc as upd } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        let currentUser = null;
+        let localCart = 0;
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBcZD6...",
-  authDomain: "nexo-1d9c2.firebaseapp.com",
-  projectId: "nexo-1d9c2"
-};
+        // LOGIN GLOBAL
+        window.login = async () => {
+            try {
+                let res = await signInWithPopup(auth, provider);
+                currentUser = res.user;
+                updateAuthUI();
+            } catch (err) { console.error("Error login:", err); }
+        }
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
+        function updateAuthUI() {
+            if(currentUser) {
+                document.getElementById("user-display").innerText = currentUser.displayName || currentUser.email;
+                document.getElementById("admin").style.display = "block";
+                loadPedidos();
+            }
+        }
 
-let user=null;
-let cart=0;
+        // MONITOREO DE STOCK EN TIEMPO REAL
+        async function initStock() {
+            const ref = doc(db, "data", "stock");
+            onSnapshot(ref, (snap) => {
+                if(snap.exists()){
+                    document.getElementById("stock").innerText = snap.data().cantidad;
+                } else {
+                    setDoc(ref, { cantidad: 50 }); // Valor inicial si no existe
+                }
+            });
+        }
+        initStock();
 
-// LOGIN
-window.login = async ()=>{
-  let res = await signInWithPopup(auth,provider);
-  user = res.user;
-  document.getElementById("user").innerText = user.email;
+        // CONTROL DE MODAL
+        window.abrirPago = () => {
+            if(!currentUser) return alert("Por favor, inicia sesión para comprar.");
+            document.getElementById("modal").style.display = "flex";
+        }
+        window.cerrarPago = () => document.getElementById("modal").style.display = "none";
 
-  document.getElementById("admin").style.display="block";
-  loadPedidos();
-}
+        // COMPRA REAL CON FIREBASE
+        window.confirmarCompra = async () => {
+            const cant = parseInt(document.getElementById("cantidad").value);
+            const ref = doc(db, "data", "stock");
+            const snap = await getDoc(ref);
+            const stockActual = snap.data().cantidad;
 
-// STOCK
-async function stock(){
-  let ref = doc(db,"data","stock");
-  let snap = await getDoc(ref);
+            if (cant > stockActual) return alert("Lo sentimos, no hay suficiente stock.");
 
-  if(!snap.exists()){
-    await setDoc(ref,{cantidad:4});
-    document.getElementById("stock").innerText=4;
-  }else{
-    document.getElementById("stock").innerText=snap.data().cantidad;
-  }
-}
-stock();
+            // Actualizar stock y crear pedido
+            await updateDoc(ref, { cantidad: stockActual - cant });
+            const pedidoID = "ORD-" + Date.now();
+            
+            await setDoc(doc(db, "pedidos", pedidoID), {
+                user: currentUser.email,
+                userName: currentUser.displayName,
+                cantidad: cant,
+                fecha: new Date().toLocaleString(),
+                estado: "pendiente"
+            });
 
-// MODAL
-window.abrirPago=()=>{
-  document.getElementById("modal").style.display="flex";
-}
+            localCart += cant;
+            document.getElementById("cart").innerText = localCart;
+            cerrarPago();
+            alert("¡Pedido realizado con éxito!");
+        }
 
-// CONFIRMAR
-window.confirmarCompra = async ()=>{
-  let cant = parseInt(document.getElementById("cantidad").value);
+        // CARGA DINÁMICA DE PEDIDOS (ADMIN)
+        window.loadPedidos = async () => {
+            const q = collection(db, "pedidos");
+            onSnapshot(q, (snapshot) => {
+                let html = "";
+                snapshot.forEach(d => {
+                    const data = d.data();
+                    const badgeColor = data.estado === "pendiente" ? "text-yellow-500" : "text-[#7ed957]";
+                    html += `
+                    <div class="glass p-6 rounded-3xl flex justify-between items-center border-white/5 hover:bg-white/10 transition-all">
+                        <div>
+                            <p class="font-black text-xs opacity-40 uppercase tracking-tighter">${d.id}</p>
+                            <p class="font-bold text-sm">${data.userName || data.user} - <span class="text-[#7ed957]">${data.cantidad} un.</span></p>
+                            <p class="text-[9px] font-black uppercase tracking-widest ${badgeColor}">● ${data.estado}</p>
+                        </div>
+                        ${data.estado === "pendiente" ? 
+                        `<button onclick="marcarEnviado('${d.id}')" class="bg-white/10 p-4 rounded-2xl hover:bg-[#7ed957] hover:text-black transition-all">✔</button>` 
+                        : `<span class="p-4 opacity-20 italic text-xs uppercase font-black tracking-widest">Listo</span>`}
+                    </div>`;
+                });
+                document.getElementById("pedidos").innerHTML = html || '<p class="text-center opacity-30 italic">No hay pedidos registrados</p>';
+            });
+        }
 
-  let ref = doc(db,"data","stock");
-  let snap = await getDoc(ref);
-  let s = snap.data().cantidad;
+        window.marcarEnviado = async (id) => {
+            await updateDoc(doc(db, "pedidos", id), { estado: "enviado" });
+        }
 
-  if(cant > s) return alert("Sin stock");
-
-  await updateDoc(ref,{cantidad:s-cant});
-
-  await setDoc(doc(db,"pedidos",Date.now().toString()),{
-    user:user.email,
-    cantidad:cant,
-    estado:"pendiente"
-  });
-
-  cart+=cant;
-  document.getElementById("cart").innerText=cart;
-
-  document.getElementById("modal").style.display="none";
-  alert("Pago simulado exitoso");
-}
-
-// ADMIN
-async function loadPedidos(){
-  let q = await getDocs(collection(db,"pedidos"));
-  let html="";
-
-  q.forEach(d=>{
-    let data = d.data();
-    html+=`
-    <p>${data.user} - ${data.cantidad} 
-    <button onclick="cambiar('${d.id}')">✔</button></p>`;
-  });
-
-  document.getElementById("pedidos").innerHTML=html;
-}
-
-window.cambiar = async (id)=>{
-  let ref = doc(db,"pedidos",id);
-  await upd(ref,{estado:"enviado"});
-  loadPedidos();
-}
-
-</script>
-
+    </script>
 </body>
 </html>
