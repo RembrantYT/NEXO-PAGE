@@ -49,19 +49,6 @@
         <a href="#tienda" class="bg-nexoGreen text-black px-12 py-5 rounded-full font-black text-sm hover:scale-110 transition shadow-2xl uppercase tracking-widest">Comprar Ahora</a>
     </section>
 
-    <section id="mision" class="py-32 px-10 max-w-7xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-10">
-            <div class="glass p-12 rounded-[50px]">
-                <h3 class="text-nexoGreen font-black text-xs uppercase tracking-[0.4em] mb-6">Nuestra Misión</h3>
-                <p class="text-3xl font-light leading-snug tracking-tighter">Brindar una solución práctica y accesible para ayudar a las personas a reducir el estrés, mediante un dispositivo portátil que promueve momentos de calma.</p>
-            </div>
-            <div class="glass p-12 rounded-[50px] bg-white/5">
-                <h3 class="text-white/40 font-black text-xs uppercase tracking-[0.4em] mb-6">Nuestra Visión</h3>
-                <p class="text-3xl font-light leading-snug tracking-tighter">Ser una marca reconocida por mejorar el bienestar de las personas, ofreciendo productos que faciliten el equilibrio y la tranquilidad en cualquier lugar.</p>
-            </div>
-        </div>
-    </section>
-
     <section id="tienda" class="py-32 px-10">
         <div class="max-w-6xl mx-auto glass rounded-[60px] overflow-hidden grid md:grid-cols-2 items-center">
             <div class="p-4">
@@ -75,21 +62,20 @@
                 </div>
                 
                 <div class="space-y-4">
-                    <label class="text-[10px] font-black uppercase opacity-40 tracking-[0.3em]">Selecciona cantidad:</label>
-                    <select id="qty-select" class="w-full bg-white/5 p-5 rounded-3xl outline-none border border-white/10 font-bold text-lg" onchange="calcTotal()">
-                        <option value="1" class="text-black">1 Unidad</option>
-                        <option value="2" class="text-black">2 Unidades</option>
-                        <option value="3" class="text-black">3 Unidades</option>
-                        <option value="4" class="text-black">4 Unidades (Límite)</option>
-                    </select>
+                    <label class="text-[10px] font-black uppercase opacity-40 tracking-[0.3em]">Cantidad inicial:</label>
+                    <div class="flex items-center gap-4">
+                        <button onclick="changeMainQty(-1)" class="glass w-12 h-12 rounded-full font-bold text-xl">-</button>
+                        <span id="main-qty" class="text-3xl font-black w-10 text-center">1</span>
+                        <button onclick="changeMainQty(1)" class="glass w-12 h-12 rounded-full font-bold text-xl">+</button>
+                    </div>
                 </div>
 
                 <div class="flex justify-between items-center font-black text-2xl">
-                    <span class="opacity-50 text-sm italic uppercase tracking-widest">Total:</span>
+                    <span class="opacity-50 text-sm italic uppercase tracking-widest">Subtotal:</span>
                     <span id="total-val">$250.00</span>
                 </div>
 
-                <button onclick="buyNow()" class="w-full bg-white text-black py-6 rounded-3xl font-black text-xl hover:bg-nexoGreen transition shadow-2xl uppercase tracking-tighter active:scale-95">Agregar al Carrito</button>
+                <button onclick="addToCart()" class="w-full bg-white text-black py-6 rounded-3xl font-black text-xl hover:bg-nexoGreen transition shadow-2xl uppercase tracking-tighter active:scale-95">Añadir a la bolsa</button>
             </div>
         </div>
     </section>
@@ -103,7 +89,7 @@
             </a>
             <div class="glass p-10 rounded-3xl">
                 <h4 class="font-black text-xs uppercase mb-2">Email Soporte</h4>
-                <p class="text-2xl font-light italic opacity-50">nexoofficialmx@gmail.com</p>
+                <p class="text-2xl font-light italic opacity-50 text-sm">nexoofficialmx@gmail.com</p>
             </div>
         </div>
     </section>
@@ -113,21 +99,17 @@
             <h2 class="text-4xl font-black italic tracking-tighter">Tu Bolsa</h2>
             <button onclick="closeCart()" class="text-2xl font-black">✕</button>
         </div>
-        <div id="cart-items" class="flex-1 space-y-6 overflow-y-auto">
-            <p class="text-center opacity-30 italic py-20">No has agregado nada aún.</p>
+        <div id="cart-items" class="flex-1 space-y-6 overflow-y-auto text-center">
+            <p class="opacity-30 italic py-20">No has agregado nada aún.</p>
         </div>
         <div class="pt-10 border-t border-white/10 space-y-6">
             <div class="flex justify-between text-3xl font-black tracking-tighter">
                 <span>Total:</span>
                 <span id="cart-total-final">$0.00</span>
             </div>
-            <button onclick="confirmFirebaseOrder()" class="w-full bg-nexoGreen text-black py-6 rounded-3xl font-black text-xl hover:brightness-110 shadow-2xl uppercase">Confirmar Pedido</button>
+            <button onclick="confirmFirebaseOrder()" id="btn-confirm" class="w-full bg-nexoGreen text-black py-6 rounded-3xl font-black text-xl hover:brightness-110 shadow-2xl uppercase disabled:opacity-30">Confirmar Pedido</button>
         </div>
     </div>
-
-    <footer class="py-20 text-center opacity-20 text-[10px] font-black uppercase tracking-[1em]">
-        NEXO Technology &copy; 2026 Teziutlán
-    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -138,82 +120,120 @@
         const db = getFirestore(app);
 
         let cartQty = 0;
+        let currentStock = 0;
+        let mainQty = 1;
         const UNIT_PRICE = 250;
 
-        // --- RELOJ Y MODO ---
+        // --- RELOJ ---
         setInterval(() => {
             const now = new Date();
             document.getElementById('live-clock').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
         }, 1000);
 
-        window.toggleTheme = () => {
-            document.body.classList.toggle('dark');
-            document.body.classList.toggle('light');
-        }
+        window.toggleTheme = () => document.body.classList.toggle('light');
 
-        // --- PRECIO DINÁMICO ---
-        window.calcTotal = () => {
-            const qty = document.getElementById('qty-select').value;
-            document.getElementById('total-val').innerText = `$${(qty * UNIT_PRICE).toFixed(2)}`;
-        }
-
-        // --- STOCK EN TIEMPO REAL ---
+        // --- STOCK REAL ---
         onSnapshot(doc(db, "data", "stock"), (snap) => {
             if(snap.exists()) {
-                const stock = snap.data().cantidad;
-                document.getElementById('real-stock').innerText = stock;
-                // Deshabilitar opciones que superen el stock
-                const options = document.getElementById('qty-select').options;
-                for(let opt of options) {
-                    opt.disabled = parseInt(opt.value) > stock;
-                }
-            } else {
-                setDoc(doc(db, "data", "stock"), { cantidad: 4 });
+                currentStock = snap.data().cantidad;
+                document.getElementById('real-stock').innerText = currentStock;
+                updateMainUI();
             }
         });
+
+        // --- MANEJO DE CANTIDAD EN TIENDA ---
+        window.changeMainQty = (val) => {
+            const next = mainQty + val;
+            if(next >= 1 && next <= currentStock) {
+                mainQty = next;
+                updateMainUI();
+            }
+        }
+
+        function updateMainUI() {
+            document.getElementById('main-qty').innerText = mainQty;
+            document.getElementById('total-val').innerText = `$${(mainQty * UNIT_PRICE).toFixed(2)}`;
+        }
 
         // --- CARRITO ---
         window.openCart = () => document.getElementById('cart-panel').classList.remove('translate-x-full');
         window.closeCart = () => document.getElementById('cart-panel').classList.add('translate-x-full');
 
-        window.buyNow = () => {
-            const qty = parseInt(document.getElementById('qty-select').value);
-            cartQty = qty;
-            document.getElementById('count').innerText = cartQty;
-            document.getElementById('cart-total-final').innerText = `$${(cartQty * UNIT_PRICE).toFixed(2)}`;
-            document.getElementById('cart-items').innerHTML = `
-                <div class="glass p-8 rounded-3xl flex justify-between items-center border-nexoGreen/30">
-                    <div>
-                        <p class="text-xs font-black uppercase text-nexoGreen">Dispositivo NEXO MAX</p>
-                        <p class="text-2xl font-light">${cartQty} x $250.00</p>
-                    </div>
-                    <p class="font-black text-xl">$${cartQty * UNIT_PRICE}</p>
-                </div>
-            `;
+        window.addToCart = () => {
+            cartQty = mainQty;
+            renderCart();
             openCart();
         }
 
-        // --- FIREBASE ORDER ---
+        window.changeCartQty = (val) => {
+            const next = cartQty + val;
+            if(next >= 0 && next <= currentStock) {
+                cartQty = next;
+                renderCart();
+            } else if (next > currentStock) {
+                alert("Has alcanzado el límite de stock disponible.");
+            }
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            document.getElementById('count').innerText = cartQty;
+            document.getElementById('cart-total-final').innerText = `$${(cartQty * UNIT_PRICE).toFixed(2)}`;
+            
+            if(cartQty === 0) {
+                container.innerHTML = `<p class="opacity-30 italic py-20">Tu bolsa está vacía.</p>`;
+                document.getElementById('btn-confirm').disabled = true;
+                return;
+            }
+
+            document.getElementById('btn-confirm').disabled = false;
+            container.innerHTML = `
+                <div class="glass p-6 rounded-[35px] space-y-6">
+                    <div class="flex gap-4">
+                        <img src="NEXO PHOTO.jpeg" class="w-20 h-20 rounded-2xl object-cover">
+                        <div class="text-left">
+                            <p class="text-nexoGreen font-black text-xs tracking-widest uppercase">Dispositivo NEXO</p>
+                            <p class="text-xl font-bold">$250.00 c/u</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl">
+                        <p class="text-xs font-bold uppercase opacity-50 tracking-widest">Ajustar cantidad</p>
+                        <div class="flex items-center gap-4">
+                            <button onclick="changeCartQty(-1)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition">-</button>
+                            <span class="font-black text-xl">${cartQty}</span>
+                            <button onclick="changeCartQty(1)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition">+</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- PEDIDO FINAL ---
         window.confirmFirebaseOrder = async () => {
+            if(cartQty === 0) return;
+            
             const stockRef = doc(db, "data", "stock");
             const snap = await getDoc(stockRef);
-            const currentStock = snap.data().cantidad;
+            const realCurrentStock = snap.data().cantidad;
 
-            if (cartQty > currentStock) return alert("Lo sentimos, no hay stock suficiente.");
+            if (cartQty > realCurrentStock) {
+                alert("El stock cambió mientras comprabas. Ajustando...");
+                location.reload();
+                return;
+            }
 
-            // 1. Restar stock real
-            await updateDoc(stockRef, { cantidad: currentStock - cartQty });
-
-            // 2. Crear pedido
+            await updateDoc(stockRef, { cantidad: realCurrentStock - cartQty });
             await setDoc(doc(db, "pedidos", "NEXO-" + Date.now()), {
                 cantidad: cartQty,
                 total: cartQty * UNIT_PRICE,
                 fecha: new Date().toLocaleString(),
-                estado: "Nuevo Pedido"
+                estado: "Nuevo"
             });
 
-            alert("¡Pedido confirmado! Tu stock bajará para todos en la página.");
-            location.reload();
+            alert("¡Pedido realizado! Gracias por confiar en NEXO.");
+            cartQty = 0;
+            renderCart();
+            closeCart();
         }
     </script>
 </body>
