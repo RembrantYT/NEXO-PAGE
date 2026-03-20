@@ -9,134 +9,158 @@
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { extend: { colors: { nexoGreen: '#7ed957', nexoBlue: '#0b3c5d' } } }
+            theme: { extend: { colors: { nexoGreen: '#7ed957' } } }
         }
     </script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.5s; background-color: #000; color: white; }
-        .glass { backdrop-filter: blur(25px); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); }
-        .light .glass { background: rgba(0, 0, 0, 0.05); color: #000; border-color: rgba(0,0,0,0.1); }
-        .light { background-color: #f8fafc; color: #0f172a; }
-        #cart-panel { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-        .hero-text { font-size: clamp(3rem, 10vw, 9rem); line-height: 0.9; letter-spacing: -0.05em; }
+        .glass { backdrop-filter: blur(30px); background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.08); }
+        .light { background-color: #ffffff; color: #000; }
+        .light .glass { background: rgba(0, 0, 0, 0.03); border-color: rgba(0,0,0,0.05); color: #000; }
+        #cart-panel { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .hero-text { font-size: clamp(4rem, 15vw, 12rem); line-height: 0.8; letter-spacing: -0.07em; }
+        .section-title { font-size: clamp(2.5rem, 8vw, 5rem); line-height: 1; letter-spacing: -0.04em; }
+        ::selection { background: #7ed957; color: black; }
     </style>
 </head>
 <body class="dark overflow-x-hidden">
 
-    <nav class="fixed top-6 w-[90%] left-[5%] z-50 glass rounded-full px-8 py-4 flex justify-between items-center shadow-2xl">
-        <div class="text-2xl font-black italic">NEXO<span class="text-nexoGreen">.</span></div>
-        <div class="hidden md:flex gap-8 text-[10px] font-bold uppercase tracking-widest opacity-70">
-            <a href="#inicio" class="hover:text-nexoGreen transition">Inicio</a>
-            <a href="#mision" class="hover:text-nexoGreen transition">Nosotros</a>
-            <a href="#tienda" class="hover:text-nexoGreen transition">Tienda</a>
-            <a href="#contacto" class="hover:text-nexoGreen transition border-l pl-8 border-white/10">Contacto</a>
+    <nav class="fixed top-8 w-[94%] left-[3%] z-50 glass rounded-full px-10 py-5 flex justify-between items-center shadow-2xl">
+        <div class="text-3xl font-black italic tracking-tighter">NEXO<span class="text-nexoGreen">.</span></div>
+        <div class="hidden md:flex gap-12 text-[10px] font-black uppercase tracking-[0.4em] opacity-40">
+            <a href="#inicio" class="hover:opacity-100 transition">Inicio</a>
+            <a href="#mision" class="hover:opacity-100 transition">Manifiesto</a>
+            <a href="#tienda" class="hover:opacity-100 transition text-nexoGreen">Store</a>
+            <a href="#contacto" class="hover:opacity-100 transition border-l pl-12 border-white/10">Nexo Oficial</a>
         </div>
-        <div class="flex items-center gap-4">
-            <button onclick="toggleTheme()" class="text-xl">🌓</button>
-            <button onclick="openCart()" class="bg-white text-black px-5 py-2 rounded-full font-black text-[10px] hover:bg-nexoGreen transition uppercase">
-                Bolsa (<span id="count">0</span>)
+        <div class="flex items-center gap-6">
+            <button onclick="toggleTheme()" class="text-xl hover:scale-125 transition">🌓</button>
+            <button onclick="openCart()" class="bg-white text-black px-8 py-3 rounded-full font-black text-[11px] hover:bg-nexoGreen transition uppercase tracking-widest shadow-xl">
+                Bolsa [<span id="count">0</span>]
             </button>
         </div>
     </nav>
 
-    <div class="fixed bottom-6 left-6 z-50 text-[10px] font-black tracking-widest uppercase opacity-40" id="live-clock">
-        Cargando hora CDMX...
+    <div class="fixed bottom-8 left-10 z-50 text-[10px] font-black tracking-[0.5em] uppercase opacity-30" id="live-clock">
+        00:00:00 | 00/00/00
     </div>
 
-    <section id="inicio" class="min-h-screen flex flex-col items-center justify-center text-center px-4">
-        <p class="text-nexoGreen font-black tracking-[0.5em] mb-4 text-xs uppercase animate-pulse">Lanzamiento 2026</p>
-        <h1 class="hero-text font-black mb-8">NEXO<br><span class="opacity-20 italic">.</span></h1>
-        <a href="#tienda" class="bg-nexoGreen text-black px-12 py-5 rounded-full font-black text-sm hover:scale-110 transition shadow-2xl uppercase tracking-widest">Comprar Ahora</a>
+    <section id="inicio" class="min-h-screen flex flex-col items-center justify-center text-center px-6">
+        <div class="space-y-4 animate-fade-in">
+            <p class="text-nexoGreen font-black tracking-[1em] text-[10px] uppercase opacity-70 mb-6">Built in 2026</p>
+            <h1 class="hero-text font-black mb-12">NEXO<br><span class="opacity-10 italic"></span></h1>
+            <a href="#tienda" class="inline-block border border-white/20 hover:bg-white hover:text-black px-16 py-6 rounded-full font-black text-xs transition-all duration-500 uppercase tracking-[0.3em] backdrop-blur-sm">Explorar Dispositivo</a>
+        </div>
     </section>
 
-    <section id="mision" class="py-32 px-10 max-w-6xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-16 items-center">
-            <div class="space-y-6">
-                <h2 class="text-5xl font-black italic tracking-tighter uppercase">Nuestra <span class="text-nexoGreen">Esencia.</span></h2>
-                <p class="text-xl opacity-60 leading-relaxed font-light">
-                    En NEXO, creemos que la tecnología no debería ser una fuente de ruido, sino una herramienta para el silencio. Nuestra misión es reprogramar la calma a través de dispositivos diseñados para la introspección.
-                </p>
-                <div class="glass p-8 rounded-3xl border-l-4 border-nexoGreen">
-                    <h3 class="font-black uppercase text-xs tracking-[0.3em] mb-2 opacity-40">Visión 2026</h3>
-                    <p class="italic text-lg italic">"Ser el puente entre el caos digital y el equilibrio mental."</p>
+    <section id="mision" class="py-40 px-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-12 gap-10 items-start">
+                <div class="md:col-span-7">
+                    <h2 class="section-title font-black italic uppercase mb-12">
+                        Reprograma <br><span class="text-nexoGreen">tu silencio.</span>
+                    </h2>
+                    <p class="text-3xl md:text-5xl font-light leading-tight tracking-tight opacity-50 mb-16">
+                        No creamos gadgets. <br>Creamos estados mentales. <br>NEXO es la respuesta al ruido del siglo XXI.
+                    </p>
                 </div>
-            </div>
-            <div class="relative group">
-                <div class="absolute -inset-4 bg-nexoGreen/20 blur-3xl group-hover:bg-nexoGreen/30 transition"></div>
-                <div class="glass p-1 rounded-[40px] relative">
-                    <img src="NEXO PHOTO.jpeg" class="rounded-[35px] grayscale hover:grayscale-0 transition duration-700" alt="Nosotros">
+                <div class="md:col-span-5 glass p-12 rounded-[50px] space-y-10">
+                    <div>
+                        <h4 class="text-nexoGreen font-black text-[10px] uppercase tracking-[0.4em] mb-4">Nuestra Misión</h4>
+                        <p class="text-xl font-light opacity-80 italic">"Hackear el sistema nervioso para devolverte el control de tu tiempo y tu paz."</p>
+                    </div>
+                    <div class="pt-10 border-t border-white/5">
+                        <h4 class="text-white font-black text-[10px] uppercase tracking-[0.4em] mb-4 opacity-40">Visión</h4>
+                        <p class="text-xl font-light opacity-80 leading-relaxed">Liderar la transición mundial hacia una tecnología consciente y humana para 2030.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="tienda" class="py-32 px-10">
-        <div class="max-w-6xl mx-auto glass rounded-[60px] overflow-hidden grid md:grid-cols-2 items-center">
-            <div class="p-4">
-                <img src="NEXO PHOTO.jpeg" alt="NEXO" class="rounded-[45px] w-full h-full object-cover">
+    <section id="tienda" class="py-20 px-6">
+        <div class="max-w-[1400px] mx-auto glass rounded-[80px] overflow-hidden grid lg:grid-cols-2">
+            <div class="bg-[#0a0a0a] flex items-center justify-center p-10 relative overflow-hidden group">
+                <img src="NEXO PHOTO.jpeg" alt="Device" class="w-full h-full object-cover scale-105 group-hover:scale-110 transition duration-[2s] opacity-80">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
             </div>
-            <div class="p-16 space-y-8">
-                <h2 class="text-6xl font-black italic tracking-tighter leading-none text-nexoGreen">NEXO</h2>
-                <div class="flex justify-between items-end border-b border-white/10 pb-6">
-                    <p class="text-5xl font-light" id="unit-price">$250.00 <span class="text-sm opacity-40 uppercase">MXN</span></p>
-                    <p class="text-xs font-black uppercase tracking-widest opacity-60 italic">Edición Limitada</p>
+            <div class="p-12 md:p-24 flex flex-col justify-center space-y-12">
+                <div>
+                    <span class="text-nexoGreen font-black tracking-[0.4em] text-[10px] uppercase">Edición 001</span>
+                    <h3 class="text-8xl font-black tracking-tighter italic mt-4">NEXO</h3>
                 </div>
-                
-                <div class="space-y-4">
-                    <label class="text-[10px] font-black uppercase opacity-40 tracking-[0.3em]">Seleccionar cantidad:</label>
-                    <div class="flex items-center gap-4">
-                        <button onclick="changeMainQty(-1)" class="glass w-12 h-12 rounded-full font-bold text-xl hover:bg-white/10 transition">-</button>
-                        <span id="main-qty" class="text-3xl font-black w-10 text-center">1</span>
-                        <button onclick="changeMainQty(1)" class="glass w-12 h-12 rounded-full font-bold text-xl hover:bg-white/10 transition">+</button>
+
+                <div class="flex justify-between items-end border-b border-white/5 pb-10">
+                    <div class="space-y-2">
+                        <p class="text-6xl font-extralight tracking-tighter" id="unit-price">$250.00</p>
+                        <p class="text-[10px] font-bold opacity-30 tracking-widest uppercase italic">Pesos Mexicanos / Global Shipping</p>
                     </div>
                 </div>
 
-                <div class="flex justify-between items-center font-black text-2xl">
-                    <span class="opacity-50 text-sm italic uppercase tracking-widest">Subtotal:</span>
-                    <span id="total-val">$250.00</span>
+                <div class="space-y-6">
+                    <p class="text-[10px] font-black uppercase opacity-30 tracking-[0.5em]">Cantidad de Unidades</p>
+                    <div class="flex items-center gap-10">
+                        <button onclick="changeMainQty(-1)" class="w-16 h-16 rounded-full border border-white/10 text-2xl hover:bg-white hover:text-black transition-all">-</button>
+                        <span id="main-qty" class="text-5xl font-black w-20 text-center">1</span>
+                        <button onclick="changeMainQty(1)" class="w-16 h-16 rounded-full border border-white/10 text-2xl hover:bg-white hover:text-black transition-all">+</button>
+                    </div>
                 </div>
 
-                <button onclick="addToCart()" class="w-full bg-white text-black py-6 rounded-3xl font-black text-xl hover:bg-nexoGreen transition shadow-2xl uppercase tracking-tighter active:scale-95">Añadir a la bolsa</button>
+                <div class="pt-6">
+                    <button onclick="addToCart()" class="group w-full bg-white text-black py-8 rounded-full font-black text-xl hover:bg-nexoGreen transition-all duration-500 uppercase tracking-tighter flex items-center justify-center gap-4">
+                        Añadir a la bolsa
+                        <span class="text-2xl group-hover:translate-x-4 transition-transform">→</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="contacto" class="py-32 px-10 text-center max-w-4xl mx-auto">
-        <h2 class="text-5xl font-black mb-16 tracking-tighter uppercase">¿Tienes Dudas? <br><span class="opacity-30 italic">Hablemos.</span></h2>
-        <div class="grid md:grid-cols-2 gap-8">
-            <a href="https://wa.me/5223115148135" target="_blank" class="glass p-10 rounded-[40px] hover:bg-nexoGreen/10 transition-all hover:scale-105 group">
-                <div class="text-nexoGreen text-3xl mb-4 group-hover:animate-bounce">💬</div>
-                <h4 class="font-black text-xs uppercase mb-2 tracking-widest">WhatsApp Directo</h4>
-                <p class="text-2xl font-light">231 151 1435</p>
-            </a>
-            <div class="glass p-10 rounded-[40px] hover:bg-nexoGreen/10 transition-all hover:scale-105 group">
-                <div class="text-nexoGreen text-3xl mb-4 group-hover:animate-pulse">✉️</div>
-                <h4 class="font-black text-xs uppercase mb-2 tracking-widest">Email Soporte</h4>
-                <p class="text-xl font-light italic opacity-70">nexoofficialmx@gmail.com</p>
+    <section id="contacto" class="py-40 px-10">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-20">
+            <div>
+                <h2 class="section-title font-black italic uppercase mb-8 italic">Contacto<span class="text-nexoGreen">.</span></h2>
+                <p class="text-2xl opacity-40 font-light max-w-md">Para soporte técnico, colaboraciones o dudas sobre el envío de tu dispositivo.</p>
+            </div>
+            <div class="space-y-4">
+                <a href="https://wa.me/5223115148135" target="_blank" class="flex justify-between items-center glass p-10 rounded-[40px] hover:scale-[1.02] transition-all group">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.4em] opacity-40 mb-2">Canal Oficial</p>
+                        <p class="text-3xl font-light">WhatsApp Business</p>
+                    </div>
+                    <span class="text-4xl group-hover:rotate-12 transition">💬</span>
+                </a>
+                <div class="flex justify-between items-center glass p-10 rounded-[40px] hover:scale-[1.02] transition-all group">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.4em] opacity-40 mb-2">Direct Mail</p>
+                        <p class="text-2xl font-light italic opacity-70 text-nexoGreen">nexoofficialmx@gmail.com</p>
+                    </div>
+                    <span class="text-4xl group-hover:scale-110 transition">✉️</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <div id="cart-panel" class="fixed top-0 right-0 h-full w-full md:w-[450px] glass z-[100] translate-x-full shadow-2xl flex flex-col p-12">
-        <div class="flex justify-between items-center mb-16">
-            <h2 class="text-4xl font-black italic tracking-tighter uppercase">Tu Bolsa</h2>
-            <button onclick="closeCart()" class="text-2xl font-black hover:text-nexoGreen transition">✕</button>
+    <div id="cart-panel" class="fixed top-0 right-0 h-full w-full md:w-[500px] glass border-l border-white/10 z-[100] translate-x-full shadow-2xl flex flex-col p-16">
+        <div class="flex justify-between items-center mb-20">
+            <h2 class="text-5xl font-black italic tracking-tighter uppercase leading-none">Tu <br>Bolsa.</h2>
+            <button onclick="closeCart()" class="text-xl opacity-40 hover:opacity-100 hover:rotate-90 transition duration-500">CIERRE [✕]</button>
         </div>
-        <div id="cart-items" class="flex-1 space-y-6 overflow-y-auto text-center">
-            <p class="opacity-30 italic py-20">No has agregado nada aún.</p>
+        <div id="cart-items" class="flex-1 space-y-8 overflow-y-auto">
+            <p class="opacity-20 italic text-2xl py-20 text-center font-light">Bolsa vacía.</p>
         </div>
-        <div class="pt-10 border-t border-white/10 space-y-6">
-            <div class="flex justify-between text-3xl font-black tracking-tighter">
-                <span>Total:</span>
+        <div class="pt-12 border-t border-white/10 space-y-8">
+            <div class="flex justify-between text-4xl font-black tracking-tighter">
+                <span class="opacity-30 uppercase text-xs self-center tracking-[0.5em]">Total</span>
                 <span id="cart-total-final">$0.00</span>
             </div>
-            <button onclick="confirmFirebaseOrder()" id="btn-confirm" class="w-full bg-nexoGreen text-black py-6 rounded-3xl font-black text-xl hover:brightness-110 shadow-2xl uppercase disabled:opacity-30 transition">Confirmar Pedido</button>
+            <button onclick="confirmFirebaseOrder()" id="btn-confirm" class="w-full bg-nexoGreen text-black py-8 rounded-full font-black text-xl hover:brightness-110 shadow-2xl uppercase tracking-widest disabled:opacity-20 transition-all">Confirmar Pedido</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, updateDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSy...", authDomain: "nexo-1d9c2.firebaseapp.com", projectId: "nexo-1d9c2" };
         const app = initializeApp(firebaseConfig);
@@ -146,27 +170,20 @@
         let mainQty = 1;
         const UNIT_PRICE = 250;
 
-        // --- RELOJ TIEMPO REAL CDMX ---
+        // --- RELOJ CDMX REAL ---
         function updateClock() {
-            const now = new Date();
             const options = { timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             const dateOptions = { timeZone: 'America/Mexico_City', day: '2-digit', month: '2-digit', year: '2-digit' };
-            const timeStr = now.toLocaleTimeString('en-GB', options);
-            const dateStr = now.toLocaleDateString('en-GB', dateOptions);
-            document.getElementById('live-clock').innerText = `${timeStr} | ${dateStr}`;
+            const now = new Date();
+            document.getElementById('live-clock').innerText = `${now.toLocaleTimeString('es-MX', options)} | ${now.toLocaleDateString('es-MX', dateOptions)}`;
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(updateClock, 1000); updateClock();
 
         window.toggleTheme = () => document.body.classList.toggle('light');
 
-        // --- MANEJO DE CANTIDAD EN TIENDA ---
         window.changeMainQty = (val) => {
             const next = mainQty + val;
-            if(next >= 1) {
-                mainQty = next;
-                updateMainUI();
-            }
+            if(next >= 1) { mainQty = next; updateMainUI(); }
         }
 
         function updateMainUI() {
@@ -174,24 +191,19 @@
             document.getElementById('total-val').innerText = `$${(mainQty * UNIT_PRICE).toFixed(2)}`;
         }
 
-        // --- CARRITO ---
         window.openCart = () => document.getElementById('cart-panel').classList.remove('translate-x-full');
         window.closeCart = () => document.getElementById('cart-panel').classList.add('translate-x-full');
 
         window.addToCart = () => {
-            cartQty += mainQty; // CORREGIDO: Suma real
+            cartQty += mainQty; // SUMA CORRECTA
             renderCart();
             openCart();
-            mainQty = 1; 
-            updateMainUI();
+            mainQty = 1; updateMainUI();
         }
 
         window.changeCartQty = (val) => {
             const next = cartQty + val;
-            if(next >= 0) {
-                cartQty = next;
-                renderCart();
-            }
+            if(next >= 0) { cartQty = next; renderCart(); }
         }
 
         function renderCart() {
@@ -200,53 +212,50 @@
             document.getElementById('cart-total-final').innerText = `$${(cartQty * UNIT_PRICE).toFixed(2)}`;
             
             if(cartQty === 0) {
-                container.innerHTML = `<p class="opacity-30 italic py-20 text-center">Tu bolsa está vacía.</p>`;
+                container.innerHTML = `<p class="opacity-20 italic text-2xl py-20 text-center font-light">Bolsa vacía.</p>`;
                 document.getElementById('btn-confirm').disabled = true;
                 return;
             }
 
             document.getElementById('btn-confirm').disabled = false;
             container.innerHTML = `
-                <div class="glass p-6 rounded-[35px] space-y-6">
-                    <div class="flex gap-4 text-left">
-                        <img src="NEXO PHOTO.jpeg" class="w-20 h-20 rounded-2xl object-cover">
+                <div class="glass p-8 rounded-[40px] space-y-8 animate-fade-in">
+                    <div class="flex gap-6 items-center">
+                        <img src="NEXO PHOTO.jpeg" class="w-24 h-24 rounded-3xl object-cover shadow-2xl">
                         <div>
-                            <p class="text-nexoGreen font-black text-xs tracking-widest uppercase">Dispositivo NEXO</p>
-                            <p class="text-xl font-bold">$250.00 c/u</p>
+                            <p class="text-nexoGreen font-black text-[10px] tracking-[0.4em] uppercase mb-1">Device 001</p>
+                            <p class="text-3xl font-black italic tracking-tighter">NEXO</p>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl">
-                        <p class="text-[10px] font-bold uppercase opacity-50 tracking-widest">Cantidad</p>
-                        <div class="flex items-center gap-4">
-                            <button onclick="changeCartQty(-1)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition">-</button>
-                            <span class="font-black text-xl">${cartQty}</span>
-                            <button onclick="changeCartQty(1)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition">+</button>
+                    <div class="flex justify-between items-center border-t border-white/5 pt-8">
+                        <div class="flex items-center gap-6">
+                            <button onclick="changeCartQty(-1)" class="w-10 h-10 rounded-full border border-white/10 hover:bg-white hover:text-black transition">-</button>
+                            <span class="text-2xl font-black">${cartQty}</span>
+                            <button onclick="changeCartQty(1)" class="w-10 h-10 rounded-full border border-white/10 hover:bg-white hover:text-black transition">+</button>
                         </div>
+                        <p class="text-xl font-light opacity-60">$${(cartQty * UNIT_PRICE).toFixed(2)}</p>
                     </div>
                 </div>
             `;
         }
 
-        // --- CONFIRMACIÓN FIREBASE ---
         window.confirmFirebaseOrder = async () => {
             if(cartQty === 0) return;
             const btn = document.getElementById('btn-confirm');
-            btn.disabled = true;
-            btn.innerText = "PROCESANDO...";
+            btn.disabled = true; btn.innerText = "LINKING TO NEXO...";
 
             try {
                 const stockRef = doc(db, "data", "stock");
                 const snap = await getDoc(stockRef);
-                const stockDB = snap.data().cantidad;
+                const dbStock = snap.data().cantidad;
 
-                if (cartQty > stockDB) {
-                    alert(`Lo sentimos, solo nos quedan ${stockDB} unidades.`);
-                    cartQty = stockDB;
-                    renderCart();
+                if (cartQty > dbStock) {
+                    alert(`Solo quedan ${dbStock} unidades.`);
+                    cartQty = dbStock; renderCart();
                     return;
                 }
 
-                await updateDoc(stockRef, { cantidad: stockDB - cartQty });
+                await updateDoc(stockRef, { cantidad: dbStock - cartQty });
                 await setDoc(doc(db, "pedidos", "NEXO-" + Date.now()), {
                     cantidad: cartQty,
                     total: cartQty * UNIT_PRICE,
@@ -254,15 +263,12 @@
                     estado: "Nuevo"
                 });
 
-                alert("¡Pedido realizado con éxito!");
-                cartQty = 0;
-                renderCart();
-                closeCart();
+                alert("Sincronización Exitosa. Tu pedido está en camino.");
+                cartQty = 0; renderCart(); closeCart();
             } catch (e) {
-                alert("Error de conexión. Inténtalo de nuevo.");
+                alert("Error de enlace.");
             } finally {
-                btn.disabled = false;
-                btn.innerText = "Confirmar Pedido";
+                btn.disabled = false; btn.innerText = "Confirmar Pedido";
             }
         }
     </script>
