@@ -17,7 +17,6 @@
         body.light-mode .nexo-gradient { background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%); }
         body.light-mode .glass { background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0,0,0,0.1); color: #0b3c5d; }
 
-        /* Efecto Dorado para Ricardo */
         .text-gold {
             background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
             -webkit-background-clip: text;
@@ -45,6 +44,7 @@
         <ul class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-widest items-center">
             <li><a href="#inicio" class="hover:text-[#7ed957] transition">Inicio</a></li>
             <li><a href="#mision" class="hover:text-[#7ed957] transition">Misión</a></li>
+            <li><a href="#historia" class="hover:text-[#7ed957] transition">Historia</a></li>
             <li><a href="#catalogo" class="hover:text-[#7ed957] transition">Catálogo</a></li>
             <li><button onclick="toggleTheme()" id="theme-btn" class="text-xl hover:scale-125 transition">🌙</button></li>
             <li><button onclick="toggleCart()" class="relative bg-[#7ed957] text-black px-4 py-2 rounded-full hover:scale-105 transition font-black">
@@ -87,17 +87,33 @@
         <a href="#catalogo" class="bg-[#7ed957] text-black text-xl font-black px-12 py-5 rounded-full shadow-2xl hover:scale-110 transition">ORDENAR AHORA</a>
     </section>
 
-    <section id="mision" class="py-24 px-8 scroll-mt-20">
+    <section id="mision" class="py-12 px-8 scroll-mt-20">
         <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
-            <div class="glass p-10 rounded-[40px] border-white/10 hover:border-[#7ed957]/50 transition">
+            <div class="glass p-10 rounded-[40px] border-white/10">
                 <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Misión</div>
                 <h2 class="text-4xl font-black mb-6 italic">Nuestra Razón de Ser</h2>
                 <p class="text-lg opacity-80 leading-relaxed font-light">Brindar una herramienta tecnológica accesible que permita reconectar con la calma en cualquier lugar.</p>
             </div>
-            <div class="glass p-10 rounded-[40px] border-white/10 hover:border-[#7ed957]/50 transition">
+            <div class="glass p-10 rounded-[40px] border-white/10">
                 <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Visión</div>
                 <h2 class="text-4xl font-black mb-6 italic">Hacia el Futuro</h2>
                 <p class="text-lg opacity-80 leading-relaxed font-light">Convertirnos en el referente líder de dispositivos de bienestar en México, impulsado por talento joven.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="historia" class="py-24 px-8 scroll-mt-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="glass p-12 md:p-20 rounded-[60px] border-white/10 relative overflow-hidden shadow-2xl">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-[#7ed957]/10 blur-[100px]"></div>
+                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-[0.3em]">Nuestra Historia</div>
+                <h2 class="text-5xl md:text-6xl font-black mb-10 italic uppercase tracking-tighter">¿Cómo <span class="text-[#7ed957]">empezó</span> todo?</h2>
+                <p class="text-2xl md:text-3xl font-light italic opacity-95 leading-relaxed max-w-4xl">
+                    "NEXO nació de la necesidad de encontrar un equilibrio en un mundo cada vez más acelerado. 
+                    Lo que comenzó como una idea en las aulas de la <span class="text-white font-bold">Escuela Técnica Lucero</span>, 
+                    se convirtió en un proyecto real para llevar bienestar a las manos de quienes más lo necesitan. 
+                    Creemos que la tecnología no solo debe conectarnos con el mundo, sino también con nuestra propia paz interna."
+                </p>
             </div>
         </div>
     </section>
@@ -180,8 +196,7 @@
 
     <script>
         let cart = []; let currentQty = 1; const UNIT_PRICE = 250;
-
-        function handleCredentialResponse(r) { alert("¡Bienvenido Ricardo! Sesión iniciada con éxito."); }
+        function handleCredentialResponse(r) { alert("¡Bienvenido Ricardo! Sesión iniciada."); }
         function toggleTheme() { document.body.classList.toggle('light-mode'); }
         function updateQty(val) { currentQty = Math.max(1, currentQty + val); document.getElementById('prod-qty').innerText = currentQty; document.getElementById('display-price').innerText = currentQty * UNIT_PRICE; }
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
@@ -206,7 +221,7 @@
             setTimeout(() => {
                 let r = "Mmm, no entiendo eso. ¿Quieres saber sobre el precio de NEXO o quién es Ricardo?";
                 if(msg === "sexo" || msg.includes(" sexo ")) { r = "El sexo es cuando dos personas se aman mucho... pero aquí venimos a buscar PAZ con NEXO, ¿no crees? 😉"; }
-                else if(msg.includes("precio")) { r = "El Dispositivo NEXO cuesta $250.00 MXN e incluye cable de carga."; }
+                else if(msg.includes("precio")) { r = "El Dispositivo NEXO cuesta $250.00 MXN."; }
                 else if(msg.includes("ricardo")) { r = "NEXO es obra de Ricardo Bryan Peralta Marcelo, estudiante de TI del 2do semestre."; }
                 content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl mr-8 italic border border-white/5">🤖 ${r}</div>`;
                 content.scrollTop = content.scrollHeight;
