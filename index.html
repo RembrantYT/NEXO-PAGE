@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXO | Tú Espacio De Calma, Siempre Contigo</title>
+<title>NEXO</title>
 
 <style>
 body{
@@ -17,14 +17,13 @@ body{
 nav{
   display:flex;
   justify-content:space-between;
-  padding:20px;
-  backdrop-filter:blur(10px);
+  padding:15px;
 }
 
 /* HERO */
 .hero{
   text-align:center;
-  padding:100px 20px;
+  padding:40px 20px;
 }
 
 /* BOTONES */
@@ -34,52 +33,23 @@ nav{
   padding:10px 20px;
   border-radius:20px;
   cursor:pointer;
-  transition:.3s;
-}
-.btn:hover{
-  transform:scale(1.05);
 }
 
 /* PRODUCTO */
 .product{
   text-align:center;
-  padding:40px;
+  padding:20px;
 }
 
 .product img{
-  width:240px;
-  border-radius:20px;
-  box-shadow:0 0 40px rgba(0,0,0,0.6);
-  transition:0.3s;
-}
-.product img:hover{
-  transform:scale(1.05);
+  width:200px;
+  border-radius:15px;
 }
 
 /* ADMIN */
 .admin{
   display:none;
-  background:rgba(0,0,0,.3);
   padding:20px;
-  margin:20px;
-  border-radius:10px;
-}
-
-/* ANIMACIÓN */
-.fade{
-  opacity:0;
-  transform:translateY(40px);
-  transition:1s;
-}
-.show{
-  opacity:1;
-  transform:translateY(0);
-}
-
-/* RELOJ */
-.time-box{
-  margin-top:10px;
-  font-size:18px;
 }
 </style>
 </head>
@@ -91,23 +61,21 @@ nav{
 <button class="btn" onclick="login()">Login</button>
 </nav>
 
-<section class="hero fade">
+<section class="hero">
 <h1>NEXO</h1>
 <p id="user">No conectado</p>
 
-<div class="time-box">
 <p id="fecha"></p>
 <p id="hora"></p>
-</div>
 </section>
 
-<section class="product fade">
+<section class="product">
 <h2>Producto</h2>
 
 <img src="NEXO PHOTO.jpeg"
 onerror="this.src='https://i.postimg.cc/0Q0zZxYw/nexo.jpg'">
 
-<p>Stock disponible: <span id="stock">4</span></p>
+<p>Stock: <span id="stock">4</span></p>
 
 <select id="cantidad">
 <option value="1">1</option>
@@ -120,7 +88,7 @@ onerror="this.src='https://i.postimg.cc/0Q0zZxYw/nexo.jpg'">
 </section>
 
 <section class="admin" id="admin">
-<h2>Panel Admin</h2>
+<h2>Pedidos</h2>
 <div id="pedidos"></div>
 </section>
 
@@ -161,17 +129,16 @@ async function cargarStock(){
 
   if(!snap.exists()){
     await setDoc(ref,{cantidad:4});
-    document.getElementById("stock").innerText = 4;
-  } else {
-    document.getElementById("stock").innerText = snap.data().cantidad;
   }
+
+  document.getElementById("stock").innerText = snap.exists() ? snap.data().cantidad : 4;
 }
 cargarStock();
 
 // COMPRAR
 window.comprar = async ()=>{
   if(!user){
-    alert("Inicia sesión");
+    alert("Inicia sesión primero");
     return;
   }
 
@@ -182,7 +149,7 @@ window.comprar = async ()=>{
   let stock = snap.data().cantidad;
 
   if(cant > stock){
-    alert("No hay suficiente stock");
+    alert("No hay stock suficiente");
     return;
   }
 
@@ -190,8 +157,7 @@ window.comprar = async ()=>{
 
   await setDoc(doc(db,"pedidos",Date.now().toString()),{
     user:user.email,
-    cantidad:cant,
-    fecha:new Date().toISOString()
+    cantidad:cant
   });
 
   cart += cant;
@@ -228,17 +194,6 @@ function actualizarHora(){
 
 setInterval(actualizarHora,1000);
 actualizarHora();
-
-// ANIMACIONES
-const observer = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.classList.add("show");
-    }
-  });
-});
-
-document.querySelectorAll(".fade").forEach(el=>observer.observe(el));
 
 </script>
 
