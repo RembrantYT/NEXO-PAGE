@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO | Reprograma tu Calma</title>
+    <title>NEXO | Tú espacio de calma, siempre contigo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&display=swap" rel="stylesheet">
     <script>
@@ -137,7 +137,13 @@
             if(snap.exists()) {
                 currentStock = snap.data().cantidad;
                 document.getElementById('real-stock').innerText = currentStock;
+                
+                // Ajuste dinámico de mainQty si el stock baja repentinamente
+                if(mainQty > currentStock && currentStock > 0) mainQty = currentStock;
+                if(currentStock === 0) mainQty = 0;
+                
                 updateMainUI();
+                renderCart(); // Re-renderizar bolsa por si el stock cambió
             }
         });
 
@@ -160,9 +166,23 @@
         window.closeCart = () => document.getElementById('cart-panel').classList.add('translate-x-full');
 
         window.addToCart = () => {
-            cartQty = mainQty;
-            renderCart();
-            openCart();
+            if (currentStock <= 0) {
+                alert("Sin stock disponible.");
+                return;
+            }
+
+            // CORRECCIÓN: Ahora sumamos la nueva cantidad a la existente en lugar de sobrescribirla
+            const intentQty = cartQty + mainQty;
+
+            if (intentQty <= currentStock) {
+                cartQty = intentQty;
+                renderCart();
+                openCart();
+                mainQty = 1; // Resetear selector principal
+                updateMainUI();
+            } else {
+                alert(`Solo quedan ${currentStock} unidades. Ya tienes ${cartQty} en tu bolsa.`);
+            }
         }
 
         window.changeCartQty = (val) => {
@@ -171,7 +191,7 @@
                 cartQty = next;
                 renderCart();
             } else if (next > currentStock) {
-                alert("Has alcanzado el límite de stock disponible.");
+                alert("Stock máximo alcanzado.");
             }
         }
 
@@ -186,18 +206,21 @@
                 return;
             }
 
+            // Asegurar que cartQty no supere el stock si este cambió externamente
+            if (cartQty > currentStock) cartQty = currentStock;
+
             document.getElementById('btn-confirm').disabled = false;
             container.innerHTML = `
                 <div class="glass p-6 rounded-[35px] space-y-6">
-                    <div class="flex gap-4">
+                    <div class="flex gap-4 text-left">
                         <img src="NEXO PHOTO.jpeg" class="w-20 h-20 rounded-2xl object-cover">
-                        <div class="text-left">
+                        <div>
                             <p class="text-nexoGreen font-black text-xs tracking-widest uppercase">Dispositivo NEXO</p>
                             <p class="text-xl font-bold">$250.00 c/u</p>
                         </div>
                     </div>
                     <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl">
-                        <p class="text-xs font-bold uppercase opacity-50 tracking-widest">Ajustar cantidad</p>
+                        <p class="text-[10px] font-bold uppercase opacity-50 tracking-widest">Ajustar</p>
                         <div class="flex items-center gap-4">
                             <button onclick="changeCartQty(-1)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition">-</button>
                             <span class="font-black text-xl">${cartQty}</span>
@@ -212,28 +235,40 @@
         window.confirmFirebaseOrder = async () => {
             if(cartQty === 0) return;
             
-            const stockRef = doc(db, "data", "stock");
-            const snap = await getDoc(stockRef);
-            const realCurrentStock = snap.data().cantidad;
+            const btn = document.getElementById('btn-confirm');
+            btn.disabled = true;
+            btn.innerText = "Procesando...";
+            
+            try {
+                const stockRef = doc(db, "data", "stock");
+                const snap = await getDoc(stockRef);
+                const realCurrentStock = snap.data().cantidad;
 
-            if (cartQty > realCurrentStock) {
-                alert("El stock cambió mientras comprabas. Ajustando...");
-                location.reload();
-                return;
+                if (cartQty > realCurrentStock) {
+                    alert("El stock cambió. Ajustando tu bolsa...");
+                    location.reload();
+                    return;
+                }
+
+                await updateDoc(stockRef, { cantidad: realCurrentStock - cartQty });
+                await setDoc(doc(db, "pedidos", "NEXO-" + Date.now()), {
+                    cantidad: cartQty,
+                    total: cartQty * UNIT_PRICE,
+                    fecha: new Date().toLocaleString(),
+                    estado: "Nuevo"
+                });
+
+                alert("¡Pedido realizado con éxito!");
+                cartQty = 0;
+                renderCart();
+                closeCart();
+            } catch (e) {
+                console.error(e);
+                alert("Error al procesar el pedido.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Confirmar Pedido";
             }
-
-            await updateDoc(stockRef, { cantidad: realCurrentStock - cartQty });
-            await setDoc(doc(db, "pedidos", "NEXO-" + Date.now()), {
-                cantidad: cartQty,
-                total: cartQty * UNIT_PRICE,
-                fecha: new Date().toLocaleString(),
-                estado: "Nuevo"
-            });
-
-            alert("¡Pedido realizado! Gracias por confiar en NEXO.");
-            cartQty = 0;
-            renderCart();
-            closeCart();
         }
     </script>
 </body>
