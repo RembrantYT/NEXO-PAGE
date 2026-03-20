@@ -3,132 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO | Perla de la Sierra</title>
+    <title>NEXO | Tu espacio de calma profesional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         html { scroll-behavior: smooth; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.3s; }
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.4s ease; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.3); }
         .dark .glass { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.1); }
+        .bg-nexo { background: radial-gradient(circle at top right, #eff6ff, #f8fafc); }
+        .dark .bg-nexo { background: radial-gradient(circle at top right, #0f172a, #020617); }
+        .floating { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
         .error-shake { animation: shake 0.4s ease-in-out; border: 2px solid #ef4444 !important; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased">
+<body class="bg-nexo text-slate-900 dark:text-slate-100 antialiased">
 
-   <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="glass w-full max-w-md rounded-[40px] p-10 shadow-2xl relative text-center">
-        <h2 class="text-3xl font-black mb-1 tracking-tighter italic">NEXO<span class="text-blue-600">.</span></h2>
-        <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-8">Verificación de Identidad</p>
-        
-        <form onsubmit="validateSecurity(event)" class="space-y-6">
-            <div class="flex gap-2">
-                <div class="bg-slate-200 dark:bg-slate-700 p-4 rounded-2xl font-black flex items-center gap-1">
-                    <span>🇲🇽</span> <span>+52</span>
-                </div>
-                <input type="text" id="user-phone" placeholder="1234567890" maxlength="10" required 
-                       class="flex-1 p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 border-2 border-transparent outline-none font-bold text-lg text-center focus:border-blue-500 transition-all">
+    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+        <div class="glass w-full max-w-md rounded-[50px] p-12 shadow-2xl relative text-center">
+            <div class="inline-block p-4 bg-blue-600 rounded-3xl mb-6 shadow-xl shadow-blue-500/20">
+                <span class="text-3xl">🛡️</span>
             </div>
-            <p id="error-msg" class="hidden text-red-500 text-[10px] font-black uppercase">⚠️ ERROR: INGRESA UN NÚMERO REAL DE TEZIUTLÁN (231)</p>
-            <button type="submit" class="w-full bg-blue-600 text-white p-5 rounded-3xl font-black shadow-xl hover:bg-blue-700 transition active:scale-95">CONTINUAR</button>
-        </form>
+            <h2 class="text-4xl font-extrabold mb-2 tracking-tighter">Bienvenido</h2>
+            <p class="text-[10px] text-slate-500 uppercase font-black tracking-[0.2em] mb-10">Verificación Oficial NEXO</p>
+            
+            <div class="space-y-4">
+                <button onclick="alert('Conectando con Google Cloud API...')" class="w-full flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 rounded-3xl font-bold hover:shadow-lg transition">
+                    <img src="https://www.google.com/favicon.ico" class="w-5 h-5"> Continuar con Google
+                </button>
+                
+                <div class="relative flex items-center py-4">
+                    <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+                    <span class="flex-shrink mx-4 text-slate-400 text-[10px] font-black uppercase">o vía celular</span>
+                    <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
+                </div>
+
+                <form onsubmit="validateSecurity(event)" class="space-y-4">
+                    <div class="flex gap-2">
+                        <div class="bg-slate-100 dark:bg-slate-700 px-5 rounded-3xl font-black flex items-center gap-2 border border-transparent">
+                            <span>🇲🇽</span><span class="text-sm">+52</span>
+                        </div>
+                        <input type="tel" id="user-phone" placeholder="1234567890" maxlength="10" required 
+                               class="flex-1 p-5 rounded-3xl bg-slate-100 dark:bg-slate-800 border-2 border-transparent outline-none font-bold text-lg focus:border-blue-600 transition-all">
+                    </div>
+                    <p id="error-msg" class="hidden text-red-500 text-[10px] font-black uppercase italic">⚠️ Número inválido. Usa tu Lada de Teziutlán (231)</p>
+                    <button type="submit" class="w-full bg-slate-950 dark:bg-blue-600 text-white p-5 rounded-3xl font-black shadow-2xl hover:scale-[1.02] transition active:scale-95">ACCEDER AHORA</button>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
-    <nav class="fixed top-0 w-full z-50 px-6 py-6">
-        <div class="max-w-7xl mx-auto glass rounded-[30px] px-8 py-4 flex justify-between items-center shadow-xl">
-            <div class="text-2xl font-black tracking-tighter italic">NEXO<span class="text-blue-600">.</span></div>
-            <div class="hidden md:flex gap-8 text-[11px] font-black uppercase tracking-widest">
+
+    <nav class="fixed top-0 w-full z-50 px-6 py-8">
+        <div class="max-w-7xl mx-auto glass rounded-[35px] px-10 py-5 flex justify-between items-center shadow-2xl border-white/40">
+            <div class="text-3xl font-black tracking-tighter italic">NEXO<span class="text-blue-600">.</span></div>
+            
+            <div class="hidden md:flex gap-10 text-[11px] font-black uppercase tracking-[0.2em]">
                 <a href="#inicio" class="hover:text-blue-600 transition">Inicio</a>
                 <a href="#producto" class="hover:text-blue-600 transition">Producto</a>
                 <a href="#nosotros" class="hover:text-blue-600 transition">Nosotros</a>
                 <a href="#contacto" class="hover:text-blue-600 transition">Contacto</a>
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="document.documentElement.classList.toggle('dark')" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl">🌓</button>
-                <button onclick="toggleCart()" class="relative p-3 bg-blue-600 text-white rounded-2xl">
+
+            <div class="flex items-center gap-4">
+                <button onclick="document.documentElement.classList.toggle('dark')" class="p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition">🌓</button>
+                <button onclick="toggleCart()" class="relative p-3 bg-blue-600 text-white rounded-2xl shadow-xl shadow-blue-500/20">
                     <span class="text-xl">🛒</span>
-                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-[9px] px-1.5 py-0.5 rounded-full border-2 border-white font-black">0</span>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-[10px] px-2 py-0.5 rounded-full border-2 border-white font-black">0</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <section id="inicio" class="min-h-screen pt-32 flex items-center px-6 max-w-7xl mx-auto">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div class="space-y-10">
-                <h1 class="text-7xl md:text-9xl font-black tracking-tighter leading-[0.8]">PAZ<br><span class="text-blue-600 underline">TOTAL.</span></h1>
-                <div id="producto" class="glass p-10 rounded-[50px] shadow-2xl space-y-8">
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <p class="text-[10px] font-black uppercase text-slate-400 mb-1">Inversión en Bienestar</p>
-                            <span id="header-price" class="text-5xl font-black text-slate-900 dark:text-white">$250.00 <span class="text-sm font-normal text-slate-400 italic">MXN</span></span>
-                        </div>
-                        <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-3xl p-2">
-                            <button onclick="mainQty(-1)" class="w-12 h-12 font-black text-2xl hover:text-blue-600">-</button>
-                            <input type="number" id="qty-main" value="1" class="w-12 text-center font-black text-2xl bg-transparent outline-none" readonly>
-                            <button onclick="mainQty(1)" class="w-12 h-12 font-black text-2xl hover:text-blue-600">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart()" class="w-full bg-blue-600 text-white py-6 rounded-[30px] font-black text-xl shadow-2xl hover:bg-blue-700 transition">AGREGAR AL CARRITO</button>
-                </div>
-            </div>
-            <div class="flex justify-center">
-                <img src="NEXO PHOTO.jpeg" alt="NEXO" class="max-w-sm rounded-[60px] shadow-2xl rotate-3 border-[12px] border-white dark:border-slate-800">
-            </div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-950 shadow-2xl z-[60] transform translate-x-full transition-transform duration-500 flex flex-col">
+        <div class="p-10 border-b dark:border-slate-800 flex justify-between items-center">
+            <h2 class="text-3xl font-black tracking-tighter italic">Tu Pedido</h2>
+            <button onclick="toggleCart()" class="text-2xl hover:rotate-90 transition-transform">✕</button>
         </div>
-    </section>
-
-    <section id="nosotros" class="py-32 bg-white dark:bg-slate-900/50 px-6 text-center">
-        <h2 class="text-5xl font-black mb-6 tracking-tighter">Hecho en Teziutlán</h2>
-        <p class="max-w-2xl mx-auto text-slate-500 italic text-xl">Inspirados por la tranquilidad de la Perla de la Sierra.</p>
-    </section>
-
-    <section id="contacto" class="py-32 px-6 max-w-7xl mx-auto">
-        <div class="glass p-16 rounded-[60px] shadow-2xl text-center">
-            <h2 class="text-5xl font-black mb-8 tracking-tighter">Contáctanos</h2>
-            <p class="text-blue-600 font-bold mb-4">📍 Centro de Teziutlán, Puebla</p>
-            <p class="text-xl font-black">📞 +52 231 123 4567</p>
-        </div>
-    </section>
-
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-950 shadow-2xl z-[60] transform translate-x-full transition-transform duration-500 flex flex-col p-8">
-        <h2 class="text-3xl font-black mb-10 italic">Tu Carrito</h2>
-        <div id="cart-list" class="flex-1 overflow-y-auto space-y-6">
+        <div id="cart-list" class="flex-1 overflow-y-auto p-8 space-y-6">
             <p class="text-center text-slate-400 italic mt-20">El carrito está vacío</p>
         </div>
-        <div class="border-t dark:border-slate-800 pt-8 space-y-6">
+        <div class="p-10 border-t dark:border-slate-800 space-y-6 bg-slate-50/50 dark:bg-slate-900/50">
             <div class="flex justify-between items-end">
-                <span id="cart-total-display" class="text-3xl font-black text-blue-600">$0.00</span>
+                <span class="text-xs font-black uppercase text-slate-400">Total Final:</span>
+                <span id="cart-total-display" class="text-4xl font-black text-blue-600">$0.00</span>
             </div>
-            <button onclick="checkout()" class="w-full bg-blue-600 text-white py-6 rounded-[30px] font-black shadow-2xl">PAGAR AHORA</button>
+            <button onclick="checkout()" class="w-full bg-blue-600 text-white py-6 rounded-[30px] font-black text-lg shadow-2xl hover:bg-blue-700 transition">PROCEDER AL PAGO</button>
         </div>
     </div>
 
+    <section id="inicio" class="min-h-screen pt-40 pb-20 px-6 max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+        <div class="space-y-12">
+            <div class="inline-block px-6 py-2 bg-blue-600/10 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-[0.3em]">Tecnología de Vanguardia</div>
+            <h1 class="text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] text-slate-900 dark:text-white">
+                Siente la <br><span class="text-blue-600 underline decoration-8">Calma.</span>
+            </h1>
+            
+            <div id="producto" class="glass p-12 rounded-[60px] shadow-2xl space-y-10 border-2 border-blue-500/10 hover:border-blue-500/30 transition-all">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <p class="text-[10px] font-black uppercase text-slate-400 mb-2">Precio por Unidad</p>
+                        <span id="header-price" class="text-6xl font-black text-slate-900 dark:text-white">$250.00 <span class="text-base font-normal text-slate-400">MXN</span></span>
+                    </div>
+                    <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-3xl p-3 shadow-inner">
+                        <button onclick="mainQty(-1)" class="w-12 h-12 font-black text-3xl hover:text-blue-600">-</button>
+                        <input type="number" id="qty-main" value="1" class="w-16 text-center font-black text-3xl bg-transparent outline-none" readonly>
+                        <button onclick="mainQty(1)" class="w-12 h-12 font-black text-3xl hover:text-blue-600">+</button>
+                    </div>
+                </div>
+                <button onclick="addToCart()" class="w-full bg-blue-600 text-white py-7 rounded-[35px] font-black text-2xl shadow-2xl shadow-blue-500/40 hover:bg-blue-700 hover:scale-[1.02] transition active:scale-95">AGREGAR AL CARRITO</button>
+            </div>
+        </div>
+        
+        <div class="relative flex justify-center">
+            <div class="absolute inset-0 bg-blue-500/20 blur-[150px] rounded-full floating"></div>
+            <img src="NEXO PHOTO.jpeg" alt="NEXO" class="max-w-md rounded-[70px] shadow-2xl rotate-3 border-[15px] border-white dark:border-slate-800 floating relative z-10 transition-transform duration-700 hover:rotate-0">
+        </div>
+    </section>
+
+    <section id="nosotros" class="py-40 bg-white dark:bg-slate-900/40 px-6">
+        <div class="max-w-4xl mx-auto text-center space-y-10">
+            <h2 class="text-6xl font-black tracking-tighter italic">Hecho en Teziutlán</h2>
+            <p class="text-slate-500 text-2xl leading-relaxed font-light italic px-10">"Inspirados por la paz de la Sierra poblana, creamos NEXO para que lleves un pedazo de tranquilidad a donde quiera que vayas."</p>
+        </div>
+    </section>
+
+    <section id="contacto" class="py-40 px-6 max-w-7xl mx-auto">
+        <div class="glass p-20 rounded-[80px] grid lg:grid-cols-2 gap-20 shadow-2xl border-blue-500/5">
+            <div class="space-y-10">
+                <h2 class="text-7xl font-black tracking-tighter">Hablemos.</h2>
+                <div class="space-y-8 text-xl font-bold">
+                    <p class="flex items-center gap-5">📍 <span class="text-slate-500">Centro Histórico, Teziutlán, Pue.</span></p>
+                    <p class="flex items-center gap-5">📞 <span class="text-blue-600">+52 231 123 4567</span></p>
+                    <p class="flex items-center gap-5">✉️ <span class="text-slate-500">hola@nexo.mx</span></p>
+                </div>
+            </div>
+            <form onsubmit="alert('¡Mensaje enviado con éxito!'); return false" class="space-y-6">
+                <input type="text" placeholder="Nombre Completo" required class="w-full p-7 rounded-[30px] bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-blue-600 outline-none transition-all font-bold text-lg">
+                <textarea placeholder="¿Cómo podemos ayudarte?" rows="4" class="w-full p-7 rounded-[30px] bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-blue-600 outline-none transition-all font-bold text-lg"></textarea>
+                <button class="w-full bg-slate-950 dark:bg-blue-600 text-white py-7 rounded-[30px] font-black uppercase tracking-widest shadow-2xl hover:bg-blue-700 transition">Enviar Mensaje</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="py-20 text-center">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.6em]">NEXO TECHNOLOGY &copy; 2026 | PERLA DE LA SIERRA</p>
+    </footer>
+
     <script>
         const UNIT_PRICE = 250;
-        let cartTotalItems = 0;
-        let auth = false;
+        let cartTotal = 0;
+        let isVerified = false;
 
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
 
-        // --- VALIDACIÓN CORREGIDA (ACEPTA NÚMEROS REALES) ---
+        // --- SEGURIDAD TEZIUTLÁN (LADA 231) ---
         function validateSecurity(e) {
             e.preventDefault();
             const phone = document.getElementById('user-phone').value.trim();
             const input = document.getElementById('user-phone');
             const error = document.getElementById('error-msg');
 
-            // Solo aceptamos números que empiecen con 231 y tengan 10 dígitos exactos
-            const isTeziutlan = phone.startsWith("231");
-            const isFake = ["1234567890", "0123456789", "0000000000"].includes(phone);
+            const isLocal = phone.startsWith("231");
+            const blackList = ["1234567890", "0123456789", "2310000000"];
 
-            if (phone.length === 10 && isTeziutlan && !isFake) {
-                auth = true;
-                error.classList.add('hidden');
+            if (phone.length === 10 && isLocal && !blackList.includes(phone)) {
+                isVerified = true;
                 document.getElementById('login-modal').classList.add('hidden');
-                alert("✅ Acceso verificado. ¡Bienvenido!");
+                alert("✅ Acceso seguro verificado.");
             } else {
                 input.classList.add('error-shake');
                 error.classList.remove('hidden');
@@ -143,41 +188,63 @@
             let newQty = parseInt(input.value) + val;
             if (newQty >= 1) {
                 input.value = newQty;
-                let total = newQty * UNIT_PRICE;
-                priceTag.innerHTML = `$${total.toFixed(2)} <span class="text-sm font-normal text-slate-400 italic">MXN</span>`;
+                priceTag.innerHTML = `$${(newQty * UNIT_PRICE).toFixed(2)} <span class="text-base font-normal text-slate-400">MXN</span>`;
             }
         }
 
+        // --- SISTEMA DE CARRITO ---
         function addToCart() {
-            cartTotalItems += parseInt(document.getElementById('qty-main').value);
+            const qtyToAdd = parseInt(document.getElementById('qty-main').value);
+            cartTotal += qtyToAdd;
             renderCart();
             toggleCart();
         }
 
+        function editCart(val) {
+            cartTotal += val;
+            if (cartTotal < 0) cartTotal = 0;
+            renderCart();
+        }
+
         function renderCart() {
             const list = document.getElementById('cart-list');
-            document.getElementById('cart-count').innerText = cartTotalItems;
-            document.getElementById('cart-total-display').innerText = `$${(cartTotalItems * UNIT_PRICE).toFixed(2)}`;
-            
-            if (cartTotalItems > 0) {
-                list.innerHTML = `
-                    <div class="bg-slate-50 dark:bg-slate-900 p-6 rounded-[35px] space-y-2">
-                        <p class="font-black text-sm uppercase">Dispositivo NEXO</p>
-                        <p class="font-bold text-blue-600">${cartTotalItems} unidades</p>
-                        <button onclick="cartTotalItems=0; renderCart()" class="text-[10px] text-red-500 font-black uppercase">Limpiar Carrito</button>
-                    </div>
-                `;
-            } else {
+            const count = document.getElementById('cart-count');
+            const totalDisplay = document.getElementById('cart-total-display');
+
+            count.innerText = cartTotal;
+            totalDisplay.innerText = `$${(cartTotal * UNIT_PRICE).toFixed(2)}`;
+
+            if (cartTotal === 0) {
                 list.innerHTML = `<p class="text-center text-slate-400 italic mt-20">El carrito está vacío</p>`;
+                return;
             }
+
+            list.innerHTML = `
+                <div class="glass p-8 rounded-[40px] space-y-6 shadow-inner">
+                    <div class="flex gap-6 items-center">
+                        <img src="NEXO PHOTO.jpeg" class="w-20 h-20 rounded-3xl object-cover shadow-lg">
+                        <div>
+                            <p class="font-black text-sm uppercase tracking-tighter">Dispositivo NEXO</p>
+                            <p class="text-xs text-blue-600 font-bold italic">$250.00 c/u</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-3 rounded-2xl border dark:border-slate-700">
+                        <button onclick="editCart(-1)" class="w-10 h-10 font-black text-xl hover:text-red-500 transition">-</button>
+                        <span class="font-black text-lg">${cartTotal}</span>
+                        <button onclick="editCart(1)" class="w-10 h-10 font-black text-xl hover:text-green-500 transition">+</button>
+                    </div>
+                </div>
+            `;
         }
 
         function checkout() {
-            if (!auth) {
+            if (!isVerified) {
+                alert("🔒 Por seguridad, verifica tu identidad primero.");
                 document.getElementById('login-modal').classList.remove('hidden');
                 return;
             }
-            alert("💳 Redirigiendo a pasarela de pago segura...");
+            if (cartTotal === 0) return alert("Agrega algo a tu carrito.");
+            alert("💳 Procesando pago con encriptación bancaria...");
         }
     </script>
 </body>
