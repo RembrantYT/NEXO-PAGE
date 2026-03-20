@@ -54,7 +54,7 @@
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-black italic underline decoration-blue-600">Tu Compra</h2>
             <button onclick="toggleCart()" class="text-xl">✕</button>
-        </div>
+        <span id="header-price" class="text-2xl font-bold text-blue-600">$250.00 MXN</span>
         <div id="cart-list" class="flex-1 overflow-y-auto space-y-4">
             </div>
         <div class="border-t pt-6 space-y-4">
@@ -96,6 +96,33 @@
 
     <script>
         const UNIT_PRICE = 250;
+
+function changeQty(val) {
+    const input = document.getElementById('qty'); // Asegúrate que tu input tenga id="qty"
+    const priceTag = document.getElementById('header-price');
+    let newQty = parseInt(input.value) + val;
+    
+    if (newQty >= 1) {
+        input.value = newQty;
+        // Esto actualiza el precio en pantalla: 250, 500, 750...
+        let total = newQty * UNIT_PRICE;
+        priceTag.innerText = `$${total.toFixed(2)} MXN`;
+    }
+}
+
+// Esta función es la que bloquea el 1234567890
+function validateSecurity(e) {
+    e.preventDefault();
+    const phone = document.getElementById('user-phone').value;
+    const blackList = ["1234567890", "0123456789", "0000000000"];
+    
+    if (blackList.includes(phone) || phone.length < 10) {
+        alert("⚠️ Por seguridad, usa un número real.");
+        return;
+    }
+    alert("✅ Verificado.");
+    document.getElementById('login-modal').classList.add('hidden');
+}const UNIT_PRICE = 250;
         let cartItems = 0;
         let auth = false;
 
