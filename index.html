@@ -16,7 +16,6 @@
         body.light-mode .nexo-gradient { background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%); }
         body.light-mode .glass { background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0,0,0,0.1); color: #0b3c5d; }
 
-        /* Estilo degradado para la escuela */
         .text-lucero-gradient {
             background: linear-gradient(to right, #ff0000, #888888);
             -webkit-background-clip: text;
@@ -25,7 +24,7 @@
         }
 
         .product-card:hover { transform: translateY(-10px); transition: all 0.3s ease; }
-        #cart-sidebar, #loginModal { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        #cart-sidebar, #ai-chat { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--nexo-green); border-radius: 10px; }
     </style>
@@ -50,6 +49,26 @@
         <div class="text-[#7ed957] mt-1 flex items-center gap-2">📍 TEZIUTLÁN, PUE <span id="temp-val">18°C</span></div>
     </div>
 
+    <div class="fixed bottom-6 right-6 z-[60]">
+        <button onclick="toggleAIChat()" class="bg-white text-black p-5 rounded-full shadow-2xl hover:scale-110 transition-all border-4 border-[#7ed957]">
+            <span class="text-2xl" id="chat-icon">🤖</span>
+        </button>
+
+        <div id="ai-chat" class="absolute bottom-20 right-0 w-[320px] h-[450px] glass rounded-[30px] border-white/20 shadow-2xl flex flex-col scale-0 origin-bottom-right overflow-hidden">
+            <div class="p-5 border-b border-white/10 bg-[#7ed957]/10">
+                <p class="text-[10px] font-black tracking-widest text-[#7ed957] uppercase">Asistente NEXO</p>
+                <p class="text-xs font-bold italic">¿En qué puedo ayudarte?</p>
+            </div>
+            <div id="chat-content" class="flex-1 overflow-y-auto p-4 space-y-3 text-[11px]">
+                <div class="bg-white/10 p-3 rounded-2xl rounded-tl-none">¡Hola! Soy la IA de NEXO. Pregúntame sobre el dispositivo, precios o envíos.</div>
+            </div>
+            <div class="p-3 bg-black/20 flex gap-2">
+                <input id="ai-input" type="text" placeholder="Escribe aquí..." class="flex-1 bg-white/5 border border-white/10 p-2 rounded-xl outline-none text-xs">
+                <button onclick="sendAIMessage()" class="text-[#7ed957] font-black text-xs">ENVIAR</button>
+            </div>
+        </div>
+    </div>
+
     <section id="inicio" class="flex flex-col items-center justify-center text-center py-32 px-6">
         <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none">EL COMIENZO DE <br><span class="text-[#7ed957]">TU PAZ.</span></h1>
         <p class="text-xl md:text-2xl font-light mb-10 max-w-2xl opacity-90 italic">Tecnología en la palma de tu mano para relajar tu bienestar.</p>
@@ -68,7 +87,7 @@
                         <p class="text-gray-300 text-lg leading-relaxed">Pulsos hápticos diseñados para reducir el estrés. Incluye cable USB-C.</p>
                         
                         <div class="flex items-center gap-6">
-                            <span class="text-4xl font-black">$250.00 <small class="text-sm opacity-50">MXN</small></span>
+                            <span class="text-4xl font-black">$<span id="display-price">250</span>.00 <small class="text-sm opacity-50">MXN</small></span>
                             <div class="flex items-center bg-black/20 rounded-2xl p-2 border border-white/10">
                                 <button onclick="updateQty(-1)" class="w-10 h-10 font-black hover:text-[#7ed957]">-</button>
                                 <span id="prod-qty" class="w-12 text-center font-black">1</span>
@@ -95,113 +114,108 @@
     <section id="contacto" class="py-20 px-8">
         <div class="max-w-4xl mx-auto glass p-10 rounded-[40px] text-center space-y-6 border-white/5">
             <h3 class="text-3xl font-black uppercase tracking-tighter">Contáctanos</h3>
-            <div class="flex flex-col md:flex-row justify-center items-center gap-8">
-                <div>
-                    <p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Llámanos o WhatsApp</p>
-                    <p class="text-2xl font-bold">231 151 1435</p>
-                </div>
-                <div class="h-[1px] w-12 bg-white/20 hidden md:block"></div>
-                <div>
-                    <p class="text-[10px] font-black opacity-50 uppercase tracking-widest">Instagram</p>
-                    <p class="text-2xl font-bold text-[#7ed957]">@nexo_oficial1</p>
-                </div>
-            </div>
-            <a href="https://wa.me/522311511435?text=Quiero%20más%20información%20del%20dispositivo%20NEXO" target="_blank" class="inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-black hover:bg-[#7ed957] transition-all transform hover:scale-110">
-                💬 CHAT DE EMPRESA
+            <p class="text-2xl font-bold">231 151 1435 | @nexo_oficial1</p>
+            <a href="https://wa.me/522311511435?text=Quiero%20más%20información%20del%20dispositivo%20NEXO" target="_blank" class="inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-black hover:bg-[#7ed957] transition-all transform hover:scale-110 uppercase text-sm">
+                💬 Chat de Empresa
             </a>
         </div>
     </section>
 
-    <footer class="py-20 px-8 text-center opacity-60">
-        <p class="font-bold uppercase tracking-widest text-xs">© 2026 NEXO | Teziutlán, Puebla</p>
-    </footer>
-
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white text-black z-[100] transform translate-x-full shadow-2xl flex flex-col">
         <div class="p-8 border-b flex justify-between items-center bg-gray-50">
             <h2 class="text-2xl font-black italic uppercase tracking-tighter">Tu Bolsa</h2>
-            <button onclick="toggleCart()" class="text-2xl font-black hover:text-[#7ed957]">✕</button>
+            <button onclick="toggleCart()" class="text-2xl font-black">✕</button>
         </div>
-        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-4">
-            <p class="text-center text-gray-400 py-10 italic">Bolsa vacía.</p>
-        </div>
-        <div class="p-8 border-t bg-gray-50 space-y-4">
-            <div class="flex justify-between text-2xl font-black italic uppercase">
-                <span>Total</span>
-                <span id="cart-total">$0.00</span>
-            </div>
-            <button class="w-full bg-black text-white py-5 rounded-2xl font-black hover:bg-[#7ed957] hover:text-black transition uppercase tracking-widest">Pagar Ahora</button>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-4"></div>
+        <div class="p-8 border-t bg-gray-50">
+            <div class="flex justify-between text-2xl font-black mb-4 uppercase italic"><span>Total</span><span id="cart-total">$0.00</span></div>
+            <button class="w-full bg-black text-white py-5 rounded-2xl font-black uppercase tracking-widest">Pagar Ahora</button>
         </div>
     </div>
 
     <script>
         let cart = [];
         let currentQty = 1;
+        const UNIT_PRICE = 250;
 
+        // TEMA
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
-            const btn = document.getElementById('theme-btn');
-            btn.innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+            document.getElementById('theme-btn').innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
         }
 
+        // CANTIDAD Y PRECIO DINÁMICO
         function updateQty(val) {
             currentQty = Math.max(1, currentQty + val);
             document.getElementById('prod-qty').innerText = currentQty;
+            document.getElementById('display-price').innerText = currentQty * UNIT_PRICE;
         }
 
+        // CARRITO
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
 
         function addToCart(name, price) {
             const itemIndex = cart.findIndex(i => i.name === name);
-            if(itemIndex > -1) {
-                cart[itemIndex].qty += currentQty;
-            } else {
-                cart.push({ name, price, qty: currentQty });
-            }
-            currentQty = 1; 
+            if(itemIndex > -1) { cart[itemIndex].qty += currentQty; } 
+            else { cart.push({ name, price, qty: currentQty }); }
+            currentQty = 1;
             document.getElementById('prod-qty').innerText = 1;
+            document.getElementById('display-price').innerText = UNIT_PRICE;
             updateCartUI();
             toggleCart();
         }
 
         function updateCartUI() {
             const list = document.getElementById('cart-items');
-            const totalEl = document.getElementById('cart-total');
-            const countEl = document.getElementById('cart-count');
-            let total = 0;
-            let count = 0;
-
-            if(cart.length === 0) {
-                list.innerHTML = `<p class="text-center text-gray-400 py-10 italic uppercase text-[10px] tracking-widest font-black">Tu bolsa está vacía.</p>`;
-            } else {
+            let total = 0; let count = 0;
+            if(cart.length === 0) { list.innerHTML = `<p class="text-center text-gray-400 py-10">Vacío</p>`; }
+            else {
                 list.innerHTML = cart.map((item, idx) => {
                     total += item.price * item.qty;
                     count += item.qty;
-                    return `
-                    <div class="bg-gray-100 p-6 rounded-[30px] flex justify-between items-center border border-gray-200">
-                        <div>
-                            <p class="font-black text-xs text-[#0b3c5d] uppercase tracking-tighter">${item.name} x${item.qty}</p>
-                            <p class="font-bold text-gray-500">$${(item.price * item.qty).toFixed(2)}</p>
-                        </div>
-                        <button onclick="removeFromCart(${idx})" class="text-red-400 font-black text-xl hover:rotate-90 transition">✕</button>
+                    return `<div class="bg-gray-100 p-4 rounded-2xl flex justify-between items-center">
+                        <div><p class="font-black text-xs uppercase">${item.name} x${item.qty}</p><p class="font-bold">$${item.price * item.qty}</p></div>
+                        <button onclick="removeFromCart(${idx})" class="text-red-500 font-black">✕</button>
                     </div>`;
                 }).join('');
             }
-            totalEl.innerText = `$${total.toFixed(2)}`;
-            countEl.innerText = count;
+            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+            document.getElementById('cart-count').innerText = count;
         }
 
-        function removeFromCart(idx) {
-            cart.splice(idx, 1);
-            updateCartUI();
+        function removeFromCart(idx) { cart.splice(idx, 1); updateCartUI(); }
+
+        // CHAT IA
+        function toggleAIChat() {
+            const chat = document.getElementById('ai-chat');
+            chat.classList.toggle('scale-0');
         }
 
-        function openLogin() { document.getElementById("loginModal")?.classList.remove('hidden'); }
-        function closeLogin() { document.getElementById("loginModal")?.classList.add('hidden'); }
+        function sendAIMessage() {
+            const input = document.getElementById('ai-input');
+            const content = document.getElementById('chat-content');
+            if(!input.value.trim()) return;
 
+            content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl rounded-tr-none ml-8 font-bold">${input.value}</div>`;
+            const msg = input.value.toLowerCase();
+            input.value = "";
+
+            setTimeout(() => {
+                let r = "Lo siento, no entendí. Prueba preguntando por el precio o envíos.";
+                if(msg.includes("precio") || msg.includes("cuesta")) r = "El Dispositivo NEXO cuesta $250 MXN por unidad.";
+                if(msg.includes("teziutlan")) r = "¡Sí! Hacemos entregas personales en Teziutlán, Puebla.";
+                if(msg.includes("nexo")) r = "NEXO es tecnología diseñada para reprogramar tu bienestar mediante calma háptica.";
+                if(msg.includes("lucero")) r = "Estamos muy orgullosos de colaborar con la Escuela Técnica Lucero.";
+                
+                content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl rounded-tl-none mr-8 italic border border-white/5">🤖 ${r}</div>`;
+                content.scrollTop = content.scrollHeight;
+            }, 800);
+        }
+
+        // RELOJ
         function updateWidget() {
             const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12: false}) + " | " + now.toLocaleDateString();
-            document.getElementById('temp-val').innerText = (17 + Math.random() * 2).toFixed(1) + "°C";
+            document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX') + " | " + now.toLocaleDateString();
         }
         setInterval(updateWidget, 1000); updateWidget();
     </script>
