@@ -17,7 +17,7 @@
         body.light-mode .nexo-gradient { background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%); }
         body.light-mode .glass { background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0,0,0,0.1); color: #0b3c5d; }
 
-        /* Efecto Dorado Premium para Ricardo */
+        /* Efecto Dorado para Ricardo */
         .text-gold {
             background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
             -webkit-background-clip: text;
@@ -55,10 +55,10 @@
         <div class="g_id_signin" data-type="standard" data-shape="pill"></div>
     </nav>
 
-    <div class="fixed bottom-6 left-6 z-40 glass p-5 rounded-3xl border-white/5 shadow-2xl">
-        <div id="live-clock" class="text-2xl font-black tracking-tighter">00:00:00</div>
-        <div id="live-date" class="text-[9px] opacity-60 uppercase font-bold">Viernes, 20 de Marzo</div>
-        <div class="text-[#7ed957] mt-1 flex items-center gap-2 font-black text-[10px]">📍 TEZIUTLÁN, PUE <span id="temp-val">18°C</span></div>
+    <div class="fixed bottom-6 left-6 z-40 glass p-6 rounded-3xl border-white/5 shadow-2xl">
+        <div id="live-clock" class="text-3xl font-black tracking-tighter leading-none mb-1">00:00:00</div>
+        <div id="live-date" class="text-[10px] opacity-70 uppercase font-bold tracking-widest">Viernes, 20 de Marzo</div>
+        <div class="text-[#7ed957] mt-2 flex items-center gap-2 font-black text-[11px]">📍 TEZIUTLÁN, PUE <span id="temp-val">18°C</span></div>
     </div>
 
     <div class="fixed bottom-6 right-6 z-[60]">
@@ -82,20 +82,20 @@
     </div>
 
     <section id="inicio" class="flex flex-col items-center justify-center text-center py-32 px-6">
-        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none">EL COMIENZO DE <br><span class="text-[#7ed957]">TU PAZ.</span></h1>
+        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none italic">EL COMIENZO DE <br><span class="text-[#7ed957]">TU PAZ.</span></h1>
         <p class="text-xl md:text-2xl font-light mb-10 max-w-2xl opacity-90 italic">Tecnología en la palma de tu mano para relajar tu bienestar.</p>
         <a href="#catalogo" class="bg-[#7ed957] text-black text-xl font-black px-12 py-5 rounded-full shadow-2xl hover:scale-110 transition">ORDENAR AHORA</a>
     </section>
 
     <section id="mision" class="py-24 px-8 scroll-mt-20">
         <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
-            <div class="glass p-10 rounded-[40px] border-white/10">
-                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs">Misión</div>
+            <div class="glass p-10 rounded-[40px] border-white/10 hover:border-[#7ed957]/50 transition">
+                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Misión</div>
                 <h2 class="text-4xl font-black mb-6 italic">Nuestra Razón de Ser</h2>
                 <p class="text-lg opacity-80 leading-relaxed font-light">Brindar una herramienta tecnológica accesible que permita reconectar con la calma en cualquier lugar.</p>
             </div>
-            <div class="glass p-10 rounded-[40px] border-white/10">
-                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs">Visión</div>
+            <div class="glass p-10 rounded-[40px] border-white/10 hover:border-[#7ed957]/50 transition">
+                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Visión</div>
                 <h2 class="text-4xl font-black mb-6 italic">Hacia el Futuro</h2>
                 <p class="text-lg opacity-80 leading-relaxed font-light">Convertirnos en el referente líder de dispositivos de bienestar en México, impulsado por talento joven.</p>
             </div>
@@ -111,10 +111,10 @@
                     <div class="space-y-6 w-full">
                         <div class="inline-block bg-[#7ed957]/20 text-[#7ed957] px-4 py-1 rounded-full text-xs font-black uppercase">Edición Limitada</div>
                         <h3 class="text-5xl font-black tracking-tight">Dispositivo NEXO</h3>
-                        <p class="text-gray-300 text-lg leading-relaxed">Diseñado para ayudarte a reconectar con tu calma en cualquier lugar.</p>
+                        <p class="text-gray-300 text-lg leading-relaxed font-light">Diseñado para acompañarte en momentos de descanso y ayudarte a reconectar con tu calma.</p>
                         <div class="flex items-center gap-6">
                             <span class="text-4xl font-black">$<span id="display-price">250</span>.00</span>
-                            <div class="flex items-center bg-black/20 rounded-2xl p-2">
+                            <div class="flex items-center bg-black/20 rounded-2xl p-2 border border-white/10">
                                 <button onclick="updateQty(-1)" class="w-10 h-10 font-black">-</button>
                                 <span id="prod-qty" class="w-12 text-center font-black">1</span>
                                 <button onclick="updateQty(1)" class="w-10 h-10 font-black">+</button>
@@ -128,9 +128,12 @@
     </section>
 
     <section class="py-20 px-8">
-        <div class="max-w-4xl mx-auto glass p-12 rounded-[50px] text-center">
-            <h2 class="text-3xl font-black italic mb-6 uppercase">Nuestro Reconocimiento</h2>
-            <p class="text-xl font-light italic opacity-90 leading-relaxed">"Agradecimiento a la <span class="text-lucero-gradient text-2xl uppercase">Escuela Técnica Lucero</span> por su invaluable apoyo."</p>
+        <div class="max-w-5xl mx-auto glass p-16 rounded-[60px] border-white/5 text-center shadow-2xl">
+            <h2 class="text-4xl font-black italic mb-8 uppercase tracking-tighter">NUESTRO <span class="text-[#7ed957]">RECONOCIMIENTO</span></h2>
+            <p class="text-2xl md:text-3xl font-light italic opacity-95 leading-relaxed">
+                "NEXO extiende un profundo agradecimiento a la <span class="text-lucero-gradient text-3xl md:text-4xl font-black uppercase">Escuela Técnica Lucero</span> por su invaluable apoyo en la formación técnica e innovación. <br><br>
+                Muchas gracias a la <span class="text-white font-bold">Directora Lucero Carcamo Ramírez</span> y al <span class="text-white font-bold">Ingeniero Juan Flores</span> por todos sus consejos."
+            </p>
         </div>
     </section>
 
@@ -139,17 +142,17 @@
             <h2 class="text-5xl font-black mb-16 italic uppercase">Elige tu <span class="text-[#7ed957]">Experiencia</span></h2>
             <div class="grid md:grid-cols-3 gap-10">
                 <div class="glass p-8 rounded-[40px] border-white/10 hover:scale-105 transition">
-                    <h3 class="text-2xl font-black mb-4">Básico</h3>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Básico</h3>
                     <p class="text-3xl font-black mb-6">$250 MXN</p>
                     <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
                 </div>
                 <div class="glass p-8 rounded-[40px] border-[#7ed957] border-2 scale-105 shadow-2xl">
-                    <h3 class="text-2xl font-black mb-4 text-[#7ed957]">Avanzado</h3>
+                    <h3 class="text-2xl font-black mb-4 text-[#7ed957] uppercase tracking-tighter">Avanzado</h3>
                     <p class="text-3xl font-black mb-6">$450 MXN</p>
                     <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
                 </div>
                 <div class="glass p-8 rounded-[40px] border-white/10 hover:scale-105 transition">
-                    <h3 class="text-2xl font-black mb-4">Premium</h3>
+                    <h3 class="text-2xl font-black mb-4 uppercase tracking-tighter">Premium</h3>
                     <p class="text-3xl font-black mb-6">$700 MXN</p>
                     <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
                 </div>
@@ -157,15 +160,15 @@
         </div>
     </section>
 
-    <footer class="py-12 border-t border-white/10 text-center">
+    <footer class="py-16 border-t border-white/10 text-center">
         <p class="text-[10px] tracking-[0.4em] uppercase opacity-40 mb-4">© 2026 NEXO - Ricardo Peralta</p>
-        <p class="text-xl font-black italic text-gold">NEXO x RICARDO BRYAN PERALTA MARCELO</p>
+        <p class="text-2xl font-black italic text-gold uppercase tracking-tight">NEXO x RICARDO BRYAN PERALTA MARCELO</p>
         <p class="text-xs font-bold opacity-60 uppercase mt-2">Tecnologías de la Información | Escuela Técnica Lucero</p>
     </footer>
 
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white text-black z-[100] transform translate-x-full shadow-2xl flex flex-col">
         <div class="p-8 border-b flex justify-between items-center bg-gray-50">
-            <h2 class="text-2xl font-black italic uppercase tracking-tighter">Tu Bolsa</h2>
+            <h2 class="text-2xl font-black italic uppercase">Tu Bolsa</h2>
             <button onclick="toggleCart()" class="text-2xl font-black">✕</button>
         </div>
         <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-4"></div>
@@ -178,7 +181,7 @@
     <script>
         let cart = []; let currentQty = 1; const UNIT_PRICE = 250;
 
-        function handleCredentialResponse(r) { alert("¡Bienvenido Ricardo! Sesión iniciada."); }
+        function handleCredentialResponse(r) { alert("¡Bienvenido Ricardo! Sesión iniciada con éxito."); }
         function toggleTheme() { document.body.classList.toggle('light-mode'); }
         function updateQty(val) { currentQty = Math.max(1, currentQty + val); document.getElementById('prod-qty').innerText = currentQty; document.getElementById('display-price').innerText = currentQty * UNIT_PRICE; }
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
@@ -188,7 +191,7 @@
             const list = document.getElementById('cart-items'); let total = 0; let count = 0;
             list.innerHTML = cart.map((item, idx) => {
                 total += item.price * item.qty; count += item.qty;
-                return `<div class="bg-gray-100 p-4 rounded-2xl flex justify-between"><div><p class="font-black text-xs">${item.name} x${item.qty}</p><p class="font-bold">$${item.price*item.qty}</p></div><button onclick="cart.splice(${idx},1);updateCartUI();" class="text-red-500 font-black">✕</button></div>`;
+                return `<div class="bg-gray-100 p-4 rounded-2xl flex justify-between"><div><p class="font-black text-xs uppercase">${item.name} x${item.qty}</p><p class="font-bold">$${item.price*item.qty}</p></div><button onclick="cart.splice(${idx},1);updateCartUI();" class="text-red-500 font-black">✕</button></div>`;
             }).join('');
             document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
             document.getElementById('cart-count').innerText = count;
@@ -201,10 +204,10 @@
             content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 font-bold text-right">${input.value}</div>`;
             input.value = "";
             setTimeout(() => {
-                let r = "Mmm, no entiendo eso. ¿Quieres saber sobre el precio o quién es Ricardo?";
+                let r = "Mmm, no entiendo eso. ¿Quieres saber sobre el precio de NEXO o quién es Ricardo?";
                 if(msg === "sexo" || msg.includes(" sexo ")) { r = "El sexo es cuando dos personas se aman mucho... pero aquí venimos a buscar PAZ con NEXO, ¿no crees? 😉"; }
-                else if(msg.includes("precio")) { r = "El Dispositivo NEXO cuesta $250.00 MXN."; }
-                else if(msg.includes("ricardo")) { r = "NEXO es obra de Ricardo Bryan Peralta Marcelo, estudiante de TI."; }
+                else if(msg.includes("precio")) { r = "El Dispositivo NEXO cuesta $250.00 MXN e incluye cable de carga."; }
+                else if(msg.includes("ricardo")) { r = "NEXO es obra de Ricardo Bryan Peralta Marcelo, estudiante de TI del 2do semestre."; }
                 content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl mr-8 italic border border-white/5">🤖 ${r}</div>`;
                 content.scrollTop = content.scrollHeight;
             }, 600);
@@ -213,7 +216,7 @@
         function updateWidget() {
             const now = new Date();
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12:false});
-            document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long' });
+            document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
         }
         setInterval(updateWidget, 1000); updateWidget();
     </script>
