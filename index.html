@@ -3,35 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO | Tu espacio de calma, siempre contigo</title>
+    <title>NEXO | Tu espacio de calma, Siempre contigo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&libraries=places"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --nexo-green: #7ed957; --nexo-dark: #0b3c5d; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; transition: background 0.8s ease; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
-        .nexo-gradient { background: radial-gradient(circle at center, #0b3c5d 0%, #051926 70%, #000000 100%); background-attachment: fixed; }
-        .text-lucero-gradient { background: linear-gradient(to right, #ff0000, #888888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
         
-        /* Animación para el logo saltarín */
-        #logo-game { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
-        .hidden-logo { position: fixed; z-index: 1000; transform: scale(1.5); }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            scroll-behavior: smooth; 
+            transition: background 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease; 
+        }
+
+        .glass { transition: all 0.5s ease; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
+        
+        .nexo-gradient { 
+            background: radial-gradient(circle at center, #0b3c5d 0%, #051926 70%, #000000 100%); 
+            background-attachment: fixed;
+        }
+        
+        body.light-mode { background: #ffffff; color: #0b3c5d; }
+        body.light-mode .nexo-gradient { 
+            background: linear-gradient(135deg, #0b3c5d 0%, #1d70a2 50%, #7ed957 100%); 
+        }
+        body.light-mode .glass { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(11, 60, 93, 0.1); color: #0b3c5d; }
+        body.light-mode .text-white { color: #0b3c5d !important; }
+
+        .text-gold {
+            background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .text-lucero-gradient {
+            background: linear-gradient(to right, #ff0000, #888888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .product-card:hover { transform: translateY(-10px); transition: all 0.3s ease; }
+        #cart-sidebar, #ai-chat { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: var(--nexo-green); border-radius: 10px; }
     </style>
 </head>
 <body class="nexo-gradient text-white min-h-screen">
 
     <nav class="flex justify-between items-center px-8 py-4 sticky top-0 z-50 glass shadow-2xl">
         <div class="flex items-center gap-3">
-            <img src="LOGO para NEXO.png" id="logo-game" onclick="startLogoGame()" alt="Icono" class="h-10 w-auto object-contain hover:rotate-12">
+            <img src="LOGO para NEXO.png" alt="Icono" class="h-10 w-auto object-contain">
             <h2 class="text-3xl font-extrabold tracking-tighter italic">NEXO<span class="text-[#7ed957]">.</span></h2>
         </div>
         <ul class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-widest items-center">
             <li><a href="#inicio" class="hover:text-[#7ed957] transition">Inicio</a></li>
             <li><a href="#mision" class="hover:text-[#7ed957] transition">Misión</a></li>
             <li><a href="#catalogo" class="hover:text-[#7ed957] transition">Catálogo</a></li>
-            <li><button onclick="toggleCart()" class="relative bg-[#7ed957] text-black px-4 py-2 rounded-full hover:scale-105 transition font-black">🛒 (<span id="cart-count">0</span>)</button></li>
+            <li><button onclick="toggleTheme()" id="theme-btn" class="text-xl hover:scale-125 transition">☀️</button></li>
+            <li><button onclick="toggleCart()" class="relative bg-[#7ed957] text-black px-4 py-2 rounded-full hover:scale-105 transition font-black">
+                🛒 (<span id="cart-count">0</span>)
+            </button></li>
         </ul>
         <div id="g_id_onload" data-client_id="27684299860-mc7adc5pu8fu07u01hmsijiok8bdguia.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
         <div class="g_id_signin" data-type="standard" data-shape="pill"></div>
@@ -44,8 +77,8 @@
         </div>
         <div>
             <div id="live-clock" class="text-3xl font-black tracking-tighter leading-none mb-1">00:00:00</div>
-            <div id="live-date" class="text-[10px] opacity-70 uppercase font-bold tracking-widest">Cargando...</div>
-            <div class="text-[#7ed957] mt-2 flex items-center gap-2 font-black text-[11px]">📍 TEZIUTLÁN, PUE <span>18°C</span></div>
+            <div id="live-date" class="text-[10px] opacity-70 uppercase font-bold tracking-widest">Viernes, 20 de Marzo</div>
+            <div class="text-[#7ed957] mt-2 flex items-center gap-2 font-black text-[11px]">📍 TEZIUTLÁN, PUE <span id="temp-val">18°C</span></div>
         </div>
     </div>
 
@@ -53,193 +86,301 @@
         <button onclick="toggleAIChat()" class="bg-white text-black p-5 rounded-full shadow-2xl hover:scale-110 transition-all border-4 border-[#7ed957]">
             <span class="text-2xl" id="chat-icon">🤖</span>
         </button>
+
         <div id="ai-chat" class="absolute bottom-20 right-0 w-[320px] h-[450px] glass rounded-[30px] border-white/20 shadow-2xl flex flex-col scale-0 origin-bottom-right overflow-hidden">
             <div class="p-5 border-b border-white/10 bg-[#7ed957]/10">
                 <p class="text-[10px] font-black tracking-widest text-[#7ed957] uppercase">Asistente NEXO</p>
-                <p class="text-xs font-bold italic">Cuidado con lo que dices...</p>
+                <p class="text-xs font-bold italic">En línea ahora</p>
             </div>
             <div id="chat-content" class="flex-1 overflow-y-auto p-4 space-y-3 text-[11px]">
-                <div class="bg-white/10 p-3 rounded-2xl rounded-tl-none">¿Qué onda? Soy la IA de NEXO. No me busques porque me encuentras... ¿Qué quieres saber?</div>
+                <div class="bg-white/10 p-3 rounded-2xl rounded-tl-none border border-white/5">¡Hola! Soy la IA de NEXO. ¿Preguntas sobre precios, quién nos creóo o envíos?</div>
             </div>
             <form onsubmit="event.preventDefault(); sendAIMessage();" class="p-3 bg-black/20 flex gap-2">
-                <input id="ai-input" type="text" placeholder="Escribe aquí..." class="flex-1 bg-white/5 border border-white/10 p-2 rounded-xl outline-none text-xs">
-                <button type="submit" class="text-[#7ed957] font-black text-xs">ENVIAR</button>
+                <input id="ai-input" type="text" placeholder="Escribe un mensaje..." class="flex-1 bg-white/5 border border-white/10 p-2 rounded-xl outline-none text-xs text-white">
+                <button type="submit" class="text-[#7ed957] font-black text-xs px-2">ENVIAR</button>
             </form>
         </div>
     </div>
 
     <section id="inicio" class="flex flex-col items-center justify-center text-center py-32 px-6">
-        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter italic uppercase">El comienzo de <br><span class="text-[#7ed957]">Tu Paz.</span></h1>
+        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none italic">EL COMIENZO DE <br><span class="text-[#7ed957]">TU PAZ.</span></h1>
+        <p class="text-xl md:text-2xl font-light mb-10 max-w-2xl opacity-90 italic">Tecnología en la palma de tu mano para relajar tu bienestar.</p>
         <a href="#catalogo" class="bg-[#7ed957] text-black text-xl font-black px-12 py-5 rounded-full shadow-2xl hover:scale-110 transition">ORDENAR AHORA</a>
     </section>
 
-    <section id="mision" class="py-12 px-8">
+    <section id="mision" class="py-12 px-8 scroll-mt-20">
         <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
-            <div class="glass p-10 rounded-[40px]">
-                <h2 class="text-4xl font-black mb-6 italic text-[#7ed957]">Misión</h2>
+            <div class="glass p-10 rounded-[40px] border-white/10">
+                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Misión</div>
+                <h2 class="text-4xl font-black mb-6 italic">Nuestra Razón de Ser</h2>
                 <p class="text-lg opacity-80 leading-relaxed font-light">Brindar una herramienta tecnológica accesible que permita reconectar con la calma en cualquier lugar.</p>
             </div>
-            <div class="glass p-10 rounded-[40px]">
-                <h2 class="text-4xl font-black mb-6 italic text-[#7ed957]">Visión</h2>
+            <div class="glass p-10 rounded-[40px] border-white/10">
+                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Visión</div>
+                <h2 class="text-4xl font-black mb-6 italic">Hacia el Futuro</h2>
                 <p class="text-lg opacity-80 leading-relaxed font-light">Convertirnos en el referente líder de dispositivos de bienestar en México, impulsado por talento joven.</p>
             </div>
         </div>
     </section>
 
-    <section id="catalogo" class="py-24 px-8">
+    <section id="catalogo" class="py-24 px-8 bg-white/5 backdrop-blur-sm scroll-mt">
         <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-5xl font-black mb-16 italic uppercase">Catálogo</h2>
-            <div class="glass p-8 rounded-[40px] flex flex-col md:flex-row gap-12 items-center">
-                <img src="NEXO PHOTO.jpeg" class="w-full md:w-1/2 rounded-[30px] border-4 border-[#7ed957]/30">
-                <div class="text-left space-y-6">
-                    <h3 class="text-5xl font-black uppercase">Dispositivo NEXO</h3>
-                    <p class="text-gray-300">Calma en la palma de tu mano.</p>
-                    <p class="text-4xl font-black">$250.00</p>
-                    <button onclick="addToCart('Dispositivo NEXO', 250)" class="bg-[#7ed957] text-black font-black px-12 py-5 rounded-2xl hover:bg-white transition">AGREGAR AL CARRITO</button>
+            <h2 class="text-5xl font-black mb-16 italic uppercase tracking-tighter">Catálogo</h2>
+            <div class="glass p-8 rounded-[40px] flex flex-col md:flex-row gap-12 items-center product-card">
+                <img src="NEXO PHOTO.jpeg" alt="NEXO Device" class="w-full md:w-1/2 rounded-[30px] shadow-2xl border-4 border-[#7ed957]/30">
+                <div class="space-y-6 w-full text-left">
+                    <div class="inline-block bg-[#7ed957]/20 text-[#7ed957] px-4 py-1 rounded-full text-xs font-black uppercase">Edición Limitada</div>
+                    <h3 class="text-5xl font-black tracking-tight">Dispositivo NEXO</h3>
+                    <p class="text-gray-300 text-lg leading-relaxed font-light">Diseñado para acompañarte en momentos de estrés, ansiedad y ayudarte a reconectar con tu calma.</p>
+                    <div class="flex items-center gap-6">
+                        <span class="text-4xl font-black">$<span id="display-price">250</span>.00</span>
+                        <div class="flex items-center bg-black/20 rounded-2xl p-2 border border-white/10">
+                            <button onclick="updateQty(-1)" class="w-10 h-10 font-black">-</button>
+                            <span id="prod-qty" class="w-12 text-center font-black">1</span>
+                            <button onclick="updateQty(1)" class="w-10 h-10 font-black">+</button>
+                        </div>
+                    </div>
+                    <button onclick="addToCart('Dispositivo NEXO', 250)" class="w-full md:w-auto bg-[#7ed957] text-black font-black px-12 py-5 rounded-2xl hover:bg-white transition shadow-xl uppercase">AGREGAR AL CARRITO</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-20 px-8 text-center">
-        <div class="max-w-5xl mx-auto glass p-16 rounded-[60px]">
-            <h2 class="text-4xl font-black italic mb-8 uppercase">NUESTRO <span class="text-[#7ed957]">RECONOCIMIENTO</span></h2>
-            <p class="text-2xl font-light italic">"NEXO agradece a la <span class="text-lucero-gradient uppercase">Escuela Técnica Lucero</span>, a la <span class="font-bold">Directora Lucero Carcamo</span> y al <span class="font-bold">Ingeniero Juan Flores</span>."</p>
+    <section class="py-20 px-8">
+        <div class="max-w-5xl mx-auto glass p-16 rounded-[60px] border-white/5 text-center shadow-2xl">
+            <h2 class="text-4xl font-black italic mb-8 uppercase tracking-tighter text-white">NUESTRO <span class="text-[#7ed957]">RECONOCIMIENTO</span></h2>
+            <div class="text-2xl md:text-3xl font-light italic opacity-95 leading-relaxed">
+                "NEXO extiende un profundo agradecimiento a la <span class="text-lucero-gradient text-3xl md:text-4xl font-black uppercase">Escuela Técnica Lucero</span> por su apoyo en la formación técnica e innovación. <br><br>
+                Gracias a la <span class="text-white font-bold">Directora Lucero Carcamo Ramírez</span> y al <span class="text-white font-bold">Ingeniero Juan Flores</span> por toda la ayuda que nos brindaron."
+            </div>
         </div>
     </section>
 
-    <footer class="py-10 border-t border-white/10 text-center opacity-50 text-[10px] tracking-widest">
-        © 2026 NEXO - Ricardo Peralta
+    <section id="planes" class="py-24 px-8">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-5xl font-black mb-16 italic uppercase">Elige tu <span class="text-[#7ed957]">Experiencia</span></h2>
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="glass p-8 rounded-[40px] border-white/10 hover:scale-105 transition flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-black mb-2 uppercase">Básico</h3>
+                        <p class="text-3xl font-black mb-4">$250 MXN</p>
+                        <p class="text-sm opacity-70 mb-6 italic">Relajación esencial para el día a día.</p>
+                        <ul class="text-left space-y-2 text-xs font-bold mb-8">
+                            <li>✔ 1 Modo estándar de vibración</li>
+                            <li>✔ Diseño ergonómico ligero</li>
+                            <li>✔ Batería de larga duración</li>
+                            <li>✔ Manual de usuario digital</li>
+                            <li>✔ Estuche protector básico</li>
+                        </ul>
+                    </div>
+                    <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
+                </div>
+                <div class="glass p-8 rounded-[40px] border-[#7ed957] border-2 scale-105 shadow-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="bg-[#7ed957] text-black text-[10px] font-black py-1 px-3 rounded-full inline-block mb-4">MÁS POPULAR</div>
+                        <h3 class="text-2xl font-black mb-2 text-[#7ed957] uppercase">Avanzado</h3>
+                        <p class="text-3xl font-black mb-4">$450 MXN</p>
+                        <ul class="text-left space-y-2 text-xs font-bold mb-8">
+                            <li>✔ 3 Modos de intensidad regulable</li>
+                            <li>✔ Sistema de carga rápida USB-C</li>
+                            <li>✔ Acceso a Nexo App (Versión Lite)</li>
+                            <li>✔ Garantía extendida de 6 meses</li>
+                            <li>✔ Tutoriales de relajación guiada</li>
+                            <li>✔ Notificaciones inteligentes</li>
+                        </ul>
+                    </div>
+                    <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
+                </div>
+                <div class="glass p-8 rounded-[40px] border-white/10 hover:scale-105 transition flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-black mb-2 uppercase">Premium</h3>
+                        <p class="text-3xl font-black mb-4">$700 MXN</p>
+                        <ul class="text-left space-y-2 text-xs font-bold mb-8">
+                            <li>✔ NEXO App Ilimitada (Premium)</li>
+                            <li>✔ Materiales de acabado Ultra-Soft</li>
+                            <li>✔ Sensores de biofeedback integrados</li>
+                            <li>✔ 5 Modos personalizados vía App</li>
+                            <li>✔ Soporte prioritario 24/7</li>
+                            <li>✔ Envío gratis a todo México</li>
+                            <li>✔ Edición de color exclusiva</li>
+                        </ul>
+                    </div>
+                    <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-16 border-t border-white/10 text-center">
+        <p class="text-[10px] tracking-[0.4em] uppercase opacity-40 mb-4">© 2026 NEXO - Ricardo Peralta</p>
+        <div class="flex justify-center mb-4">
+            <img src="LOGO para NEXO.png" alt="Logo" class="h-8 w-auto opacity-70 grayscale hover:grayscale-0 transition">
+        </div>
+        <p class="text-xs font-bold opacity-60 uppercase mt-2">NEXO</p>
     </footer>
 
-    <div id="profile-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-black/90 backdrop-blur-xl hidden p-4">
-        <div class="bg-[#111] w-full max-w-md rounded-[50px] border border-white/10 overflow-hidden shadow-2xl">
-            <div class="h-32 bg-gradient-to-r from-[#7ed957] to-[#0b3c5d] relative">
-                <button onclick="closeProfile()" class="absolute top-4 right-4 bg-black/50 w-10 h-10 rounded-full flex items-center justify-center font-bold">✕</button>
-            </div>
-            <div class="px-8 pb-8 -mt-16 text-center">
-                <div id="profile-img-container"></div>
-                <h3 id="profile-name" class="text-2xl font-black mt-4 uppercase italic tracking-tighter">Usuario</h3>
-                <p class="text-[#7ed957] text-[10px] font-bold tracking-widest uppercase mb-6">Miembro Premium Nexo</p>
-                
-                <div class="text-left space-y-4">
-                    <div class="group">
-                        <label class="text-[9px] font-black text-[#7ed957] uppercase ml-2">Dirección de Entrega (Google Maps)</label>
-                        <input type="text" id="user-dir" placeholder="Escribe tu calle y aparecerá la magia..." 
-                               class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:border-[#7ed957] outline-none transition">
-                    </div>
-                    <button onclick="saveDeliveryData()" class="w-full bg-[#7ed957] text-black font-black py-4 rounded-2xl hover:shadow-[0_0_20px_#7ed957] transition active:scale-95">ACTUALIZAR LOGÍSTICA</button>
-                    <button onclick="location.reload()" class="w-full text-red-500 font-bold text-xs uppercase pt-2">Cerrar Sesión</button>
-                </div>
-            </div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white text-black z-[100] transform translate-x-full shadow-2xl flex flex-col">
+        <div class="p-8 border-b flex justify-between items-center bg-gray-50">
+            <h2 class="text-2xl font-black italic uppercase">Tu Bolsa</h2>
+            <button onclick="toggleCart()" class="text-2xl font-black">✕</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-4"></div>
+        <div class="p-8 border-t bg-gray-50">
+            <div class="flex justify-between text-2xl font-black mb-4 uppercase italic"><span>Total</span><span id="cart-total">$0.00</span></div>
+            <button class="w-full bg-black text-white py-5 rounded-2xl font-black uppercase">Pagar Ahora</button>
         </div>
     </div>
+<div id="profile-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-md hidden">
+    <div class="glass w-[90%] max-w-md p-8 rounded-[40px] border-[#7ed957]/30 text-center relative shadow-2xl">
+        <button onclick="closeProfile()" class="absolute top-6 right-6 text-2xl hover:text-[#7ed957] transition">✕</button>
+        <div id="profile-content">
+            <p class="text-xs animate-pulse">Iniciando escaneo biométrico...</p>
+        </div>
+    </div>
+</div>
+<script>
+    let cart = []; 
+    let currentQty = 1; 
+    const UNIT_PRICE = 250;
+    let userLoggedData = null; 
 
-    <script>
-        let cart = [];
-        let userLoggedData = null;
+    // --- 1. LOGIN Y PERFIL SEGURO ---
+    function handleCredentialResponse(response) {
+        const responsePayload = JSON.parse(atob(response.credential.split('.')[1]));
+        userLoggedData = responsePayload; 
+        
+        const nav = document.querySelector('nav ul');
+        document.querySelector('.g_id_signin').style.display = 'none';
+        
+        const userProfileHTML = `
+            <li class="flex items-center gap-2 bg-white/10 p-1 pr-4 rounded-full border border-white/10 cursor-pointer hover:bg-white/20 transition" onclick="openSecureProfile()">
+                <img src="${responsePayload.picture}" class="w-8 h-8 rounded-full border border-[#7ed957]">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-black leading-none">${responsePayload.given_name}</span>
+                    <span class="text-[8px] opacity-60 uppercase">Perfil Nexo</span>
+                </div>
+            </li>
+        `;
+        nav.insertAdjacentHTML('beforeend', userProfileHTML);
+        alert("¡Bienvenido " + responsePayload.name + "! Configura tu dirección en tu perfil.");
+    }
 
-        // --- JUEGO DEL LOGO ---
-        function startLogoGame() {
-            const logo = document.getElementById('logo-game');
-            logo.classList.add('hidden-logo');
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 100);
-            logo.style.left = x + 'px';
-            logo.style.top = y + 'px';
-            alert("¡Ups! El logo se escapó. ¡Encuéntralo!");
-            
-            logo.onclick = function() {
-                logo.classList.remove('hidden-logo');
-                logo.style.position = 'static';
-                logo.style.left = 'auto';
-                logo.style.top = 'auto';
-                logo.onclick = startLogoGame;
-                alert("¡Lo atrapaste! Regresó a su lugar.");
-            };
-        }
+    async function openSecureProfile() {
+        document.getElementById('profile-modal').classList.remove('hidden');
+        const content = document.getElementById('profile-content');
+        
+        // Cargar datos guardados en la compu del usuario
+        const savedDir = localStorage.getItem('nexo_dir') || '';
+        const savedTel = localStorage.getItem('nexo_tel') || '';
 
-        // --- GOOGLE LOGIN ---
-        function handleCredentialResponse(response) {
-            const payload = JSON.parse(atob(response.credential.split('.')[1]));
-            userLoggedData = payload;
-            document.querySelector('.g_id_signin').style.display = 'none';
-            document.querySelector('nav ul').insertAdjacentHTML('beforeend', `
-                <li onclick="openSecureProfile()" class="cursor-pointer flex items-center gap-2 bg-white/10 p-1 pr-3 rounded-full border border-white/20">
-                    <img src="${payload.picture}" class="w-8 h-8 rounded-full border border-[#7ed957]">
-                    <span class="text-[10px] font-black uppercase">${payload.given_name}</span>
-                </li>
-            `);
-            initMapAutocomplete();
-        }
+        content.innerHTML = <p class="text-xs animate-pulse text-[#7ed957] font-black uppercase tracking-tighter">Accediendo a Nexo ID...</p>;
 
-        function initMapAutocomplete() {
-            const input = document.getElementById('user-dir');
-            const autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.setComponentRestrictions({ country: ["mx"] });
-        }
-
-        function openSecureProfile() {
-            document.getElementById('profile-modal').classList.remove('hidden');
-            document.getElementById('profile-name').innerText = userLoggedData.name;
-            document.getElementById('profile-img-container').innerHTML = `<img src="${userLoggedData.picture}" class="w-32 h-32 rounded-[40px] border-4 border-[#111] mx-auto shadow-2xl">`;
-            document.getElementById('user-dir').value = localStorage.getItem('nexo_dir') || '';
-        }
-
-        function saveDeliveryData() {
-            localStorage.setItem('nexo_dir', document.getElementById('user-dir').value);
-            alert("Dirección vinculada con éxito.");
-        }
-
-        function closeProfile() { document.getElementById('profile-modal').classList.add('hidden'); }
-
-        // --- IA CON PERSONALIDAD ---
-        function sendAIMessage() {
-            const input = document.getElementById('ai-input');
-            const content = document.getElementById('chat-content');
-            const msg = input.value.trim();
-            if(!msg) return;
-
-            content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 font-bold text-right mb-2">${msg}</div>`;
-            const m = msg.toLowerCase();
-            input.value = "";
-
-            setTimeout(() => {
-                let r = "NEXO está para servirte. ¿Quieres calmarte o qué?";
+        setTimeout(() => {
+            content.innerHTML = `
+                <img src="${userLoggedData.picture}" class="w-16 h-16 rounded-full border-2 border-[#7ed957] mx-auto mb-2 shadow-lg">
+                <h3 class="text-lg font-black text-white uppercase italic">${userLoggedData.given_name}</h3>
                 
-                // Detección de groserías (Filtro Albur)
-                const groserias = ["pendejo", "puto", "chinga", "verga", "estupido", "mierda", "gato"];
-                const amabilidad = ["linda", "bonita", "hermosa", "gracias", "te amo", "hola"];
+                <div class="text-left mt-4 space-y-3 bg-white/5 p-4 rounded-3xl border border-white/10">
+                    <div>
+                        <label class="text-[8px] font-black text-[#7ed957] uppercase">Dirección (Solo Teziutlán)</label>
+                        <input type="text" id="user-dir" value="${savedDir}" placeholder="Ej. Col. Centro, Calle Real #10" 
+                            class="w-full bg-black/20 border border-white/10 rounded-xl p-2 text-[11px] text-white outline-none focus:border-[#7ed957]">
+                    </div>
+                    <div>
+                        <label class="text-[8px] font-black text-[#7ed957] uppercase">WhatsApp de contacto</label>
+                        <input type="tel" id="user-tel" value="${savedTel}" placeholder="231 123 4567" 
+                            class="w-full bg-black/20 border border-white/10 rounded-xl p-2 text-[11px] text-white outline-none focus:border-[#7ed957]">
+                    </div>
+                    <button onclick="saveDeliveryData()" class="w-full bg-[#7ed957] text-black font-black text-[9px] py-2 rounded-lg uppercase shadow-md active:scale-95 transition">
+                        Guardar datos de logística
+                    </button>
+                </div>
+                <button onclick="location.reload()" class="mt-4 text-[9px] font-bold text-red-500 uppercase hover:underline">Cerrar Sesión</button>
+            `;
+        }, 800);
+    }
 
-                if (groserias.some(word => m.includes(word))) {
-                    const albures = [
-                        "Ahorita no joven, mejor tráeme a tu hermana que ella sí sabe agradecer.",
-                        "¿Tan chiquito y ya tan grosero? Se me hace que te falta que te den... pero consejos.",
-                        "Si así como ladras te sientas, ya te hubieras sentado en ésta.",
-                        "¿Esa boca es para insultar o para que te la llene de bendiciones?",
-                        "Cálmate o te voy a enterrar... pero el orgullo, ¡fíjate bien!"
-                    ];
-                    r = albures[Math.floor(Math.random()*albures.length)];
-                } else if (amabilidad.some(word => m.includes(word))) {
-                    r = "¡Ay, qué lindo! ❤️ Me pones más roja que el logo de la técnica Lucero. ¿En qué más te ayudo, cielo?";
-                }
+    function saveDeliveryData() {
+        const dir = document.getElementById('user-dir').value;
+        const tel = document.getElementById('user-tel').value;
+        if(!dir || !tel) return alert("Llena tus datos para los envíos.");
+        localStorage.setItem('nexo_dir', dir);
+        localStorage.setItem('nexo_tel', tel);
+        alert("¡Datos guardados! Ya puedes ordenar.");
+    }
 
-                content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl mr-8 italic border border-white/5 mb-2">🤖 ${r}</div>`;
-                content.scrollTop = content.scrollHeight;
-            }, 600);
+    function closeProfile() { document.getElementById('profile-modal').classList.add('hidden'); }
+
+    // --- 2. TIENDA Y WHATSAPP ---
+    function updateQty(val) { 
+        currentQty = Math.max(1, currentQty + val); 
+        document.getElementById('prod-qty').innerText = currentQty; 
+        document.getElementById('display-price').innerText = currentQty * UNIT_PRICE; 
+    }
+
+    function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
+
+    function addToCart(name, price) { 
+        cart.push({name, price, qty: currentQty}); 
+        updateCartUI(); 
+        toggleCart(); 
+    }
+
+    function updateCartUI() {
+        const list = document.getElementById('cart-items'); 
+        let total = 0; let count = 0;
+        list.innerHTML = cart.map((item, idx) => {
+            total += item.price * item.qty; count += item.qty;
+            return `<div class="bg-gray-100 p-3 rounded-2xl flex justify-between items-center text-black mb-2">
+                        <div class="leading-tight">
+                            <p class="font-black text-[10px] uppercase">${item.name} x${item.qty}</p>
+                            <p class="font-bold text-xs">$${item.price * item.qty}</p>
+                        </div>
+                        <button onclick="cart.splice(${idx},1);updateCartUI();" class="text-red-500 font-black">✕</button>
+                    </div>`;
+        }).join('');
+        document.getElementById('cart-total').innerText = $${total.toFixed(2)};
+        document.getElementById('cart-count').innerText = count;
+    }
+
+    function finalizePurchase() {
+        const dir = localStorage.getItem('nexo_dir');
+        const tel = localStorage.getItem('nexo_tel');
+        if(!userLoggedData) return alert("Inicia sesión primero.");
+        if(!dir || !tel) {
+            alert("Faltan tus datos de envío.");
+            openSecureProfile();
+            return;
         }
 
-        // --- RELOJ ---
-        function updateWidget() {
-            const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12:false});
-            document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long' });
-        }
-        setInterval(updateWidget, 1000); updateWidget();
+        let pedido = cart.map(i => ${i.name} (x${i.qty})).join(', ');
+        const miWhatsApp = "522311234567"; // CAMBIA ESTO POR TU NÚMERO
+        
+        const msg = ¡Hola NEXO! Nuevo pedido de: ${userLoggedData.name}%0APedido: ${pedido}%0ADirección: ${dir}%0ATeléfono: ${tel}%0A(Región Teziutlán);
+        window.open(https://wa.me/${miWhatsApp}?text=${msg}, '_blank');
+    }
 
-        function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-0'); }
-        function toggleCart() { alert("Carrito en desarrollo, pero ya puedes agregar productos."); }
-        function addToCart(n, p) { cart.push({n, p}); document.getElementById('cart-count').innerText = cart.length; }
+    // --- 3. RELOJ Y IA ---
+    function updateWidget() {
+        const now = new Date();
+        document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12:false});
+        document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    }
+    setInterval(updateWidget, 1000); updateWidget();
+
+    function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-0'); }
+    function sendAIMessage() {
+        const input = document.getElementById('ai-input'); const content = document.getElementById('chat-content');
+        if(!input.value.trim()) return;
+        content.innerHTML += <div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 font-bold text-right text-xs mb-2">${input.value}</div>;
+        const m = input.value.toLowerCase(); input.value = "";
+        setTimeout(() => {
+            let r = "NEXO está para servirte. ¿Dudas sobre el envío?";
+            if(m.includes("precio")) r = "El Dispositivo NEXO cuesta $250 MXN.";
+            content.innerHTML += <div class="bg-white/10 p-3 rounded-2xl mr-8 italic border border-white/5 text-white text-xs mb-2">🤖 ${r}</div>;
+            content.scrollTop = content.scrollHeight;
+        }, 600);
+    }
     </script>
 </body>
 </html>
