@@ -12,10 +12,6 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; transition: background 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease; }
         .glass { transition: all 0.5s ease; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
         .nexo-gradient { background: radial-gradient(circle at center, #0b3c5d 0%, #051926 70%, #000000 100%); background-attachment: fixed; }
-        body.light-mode { background: #ffffff; color: #0b3c5d; }
-        body.light-mode .nexo-gradient { background: linear-gradient(135deg, #0b3c5d 0%, #1d70a2 50%, #7ed957 100%); }
-        body.light-mode .glass { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(11, 60, 93, 0.1); color: #0b3c5d; }
-        body.light-mode .text-white { color: #0b3c5d !important; }
         .text-lucero-gradient { background: linear-gradient(to right, #ff0000, #888888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
         .product-card:hover { transform: translateY(-10px); transition: all 0.3s ease; }
         #cart-sidebar, #ai-chat { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -34,8 +30,7 @@
             <li><a href="#inicio" class="hover:text-[#7ed957] transition">Inicio</a></li>
             <li><a href="#mision" class="hover:text-[#7ed957] transition">Misión</a></li>
             <li><a href="#catalogo" class="hover:text-[#7ed957] transition">Catálogo</a></li>
-            <li><button onclick="toggleTheme()" id="theme-btn" class="text-xl hover:scale-125 transition">☀️</button></li>
-            <li><button onclick="toggleCart()" class="relative bg-[#7ed957] text-black px-4 py-2 rounded-full hover:scale-105 transition font-black shadow-lg">
+            <li><button onclick="toggleCart()" class="relative bg-[#7ed957] text-black px-4 py-2 rounded-full hover:scale-105 transition font-black">
                 🛒 (<span id="cart-count">0</span>)
             </button></li>
         </ul>
@@ -43,291 +38,115 @@
         <div class="g_id_signin" data-type="standard" data-shape="pill"></div>
     </nav>
 
-    <div class="fixed bottom-6 left-6 z-40 glass p-6 rounded-3xl border-white/5 shadow-2xl flex items-center gap-6">
-        <div class="flex flex-col items-center border-r border-white/10 pr-4">
-            <img src="LOGO para NEXO.png" alt="Logo" class="w-12 h-12 object-contain mb-2">
-            <div class="text-[10px] font-black text-[#7ed957]">NEXO APP</div>
-        </div>
-        <div>
-            <div id="live-clock" class="text-3xl font-black tracking-tighter leading-none mb-1">00:00:00</div>
-            <div id="live-date" class="text-[10px] opacity-70 uppercase font-bold tracking-widest">Cargando...</div>
-            <div class="text-[#7ed957] mt-2 flex items-center gap-2 font-black text-[11px]">📍 TEZIUTLÁN, PUE <span>18°C</span></div>
-        </div>
-    </div>
-
-    <div class="fixed bottom-6 right-6 z-[60]">
-        <button onclick="toggleAIChat()" class="bg-white text-black p-5 rounded-full shadow-2xl hover:scale-110 transition-all border-4 border-[#7ed957]">
-            <span class="text-2xl">🤖</span>
-        </button>
-        <div id="ai-chat" class="absolute bottom-20 right-0 w-[320px] h-[450px] glass rounded-[30px] border-white/20 shadow-2xl flex flex-col scale-0 origin-bottom-right overflow-hidden">
-            <div class="p-5 border-b border-white/10 bg-[#7ed957]/10">
-                <p class="text-[10px] font-black tracking-widest text-[#7ed957] uppercase">Asistente NEXO</p>
-                <p class="text-xs font-bold italic text-white">En línea ahora</p>
-            </div>
-            <div id="chat-content" class="flex-1 overflow-y-auto p-4 space-y-3 text-[11px]">
-                <div class="bg-white/10 p-3 rounded-2xl rounded-tl-none border border-white/5">¡Hola! Soy la IA de NEXO. ¿Preguntas sobre precios o envíos en Teziutlán?</div>
-            </div>
-            <form onsubmit="event.preventDefault(); sendAIMessage();" class="p-3 bg-black/20 flex gap-2">
-                <input id="ai-input" type="text" placeholder="Escribe un mensaje..." class="flex-1 bg-white/5 border border-white/10 p-2 rounded-xl outline-none text-xs text-white">
-                <button type="submit" class="text-[#7ed957] font-black text-xs px-2">ENVIAR</button>
-            </form>
-        </div>
-    </div>
-
     <section id="inicio" class="flex flex-col items-center justify-center text-center py-32 px-6">
-        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none italic uppercase">EL COMIENZO DE <br><span class="text-[#7ed957]">TU PAZ.</span></h1>
-        <p class="text-xl md:text-2xl font-light mb-10 max-w-2xl opacity-90 italic">Tecnología local para tu bienestar mental.</p>
-        <a href="#catalogo" class="bg-[#7ed957] text-black text-xl font-black px-12 py-5 rounded-full shadow-2xl hover:scale-110 transition uppercase">ORDENAR AHORA</a>
+        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none italic">EL COMIENZO DE <br><span class="text-[#7ed957]">TU PAZ.</span></h1>
+        <p class="text-xl md:text-2xl font-light mb-10 max-w-2xl opacity-90 italic">Tecnología en la palma de tu mano para relajar tu bienestar.</p>
+        <a href="#catalogo" class="bg-[#7ed957] text-black text-xl font-black px-12 py-5 rounded-full shadow-2xl hover:scale-110 transition">ORDENAR AHORA</a>
     </section>
 
-    <section id="catalogo" class="py-24 px-8 bg-white/5 backdrop-blur-sm scroll-mt">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-5xl font-black mb-16 italic uppercase tracking-tighter">Catálogo</h2>
-            <div class="glass p-8 rounded-[40px] flex flex-col md:flex-row gap-12 items-center product-card max-w-4xl mx-auto">
-                <img src="NEXO PHOTO.jpeg" alt="NEXO Device" class="w-full md:w-1/2 rounded-[30px] shadow-2xl border-4 border-[#7ed957]/30">
-                <div class="space-y-6 w-full text-left">
-                    <div class="inline-block bg-[#7ed957]/20 text-[#7ed957] px-4 py-1 rounded-full text-xs font-black uppercase">Edición Local</div>
-                    <h3 class="text-5xl font-black tracking-tight">Dispositivo NEXO</h3>
-                    <p class="text-gray-300 text-lg leading-relaxed font-light">Diseñado para acompañarte en momentos de estrés y ansiedad.</p>
-                    <div class="flex items-center gap-6">
-                        <span class="text-4xl font-black">$<span id="display-price">250</span>.00</span>
-                        <div class="flex items-center bg-black/20 rounded-2xl p-2 border border-white/10">
-                            <button onclick="updateQty(-1)" class="w-10 h-10 font-black hover:text-[#7ed957]">-</button>
-                            <span id="prod-qty" class="w-12 text-center font-black text-xl">1</span>
-                            <button onclick="updateQty(1)" class="w-10 h-10 font-black hover:text-[#7ed957]">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Dispositivo NEXO', 250)" class="w-full md:w-auto bg-[#7ed957] text-black font-black px-12 py-5 rounded-2xl hover:bg-white transition shadow-xl uppercase">AGREGAR AL CARRITO</button>
-                </div>
+    <section id="mision" class="py-12 px-8 scroll-mt-20">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
+            <div class="glass p-10 rounded-[40px] border-white/10">
+                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Misión</div>
+                <h2 class="text-4xl font-black mb-6 italic">Nuestra Razón de Ser</h2>
+                <p class="text-lg opacity-80 leading-relaxed font-light">Brindar una herramienta tecnológica accesible que permita reconectar con la calma en cualquier lugar.</p>
             </div>
-        </div>
-    </section>
-
-    <section class="py-20 px-8">
-        <div class="max-w-5xl mx-auto glass p-16 rounded-[60px] border-white/5 text-center shadow-2xl">
-            <h2 class="text-4xl font-black italic mb-8 uppercase tracking-tighter text-white">NUESTRO <span class="text-[#7ed957]">RECONOCIMIENTO</span></h2>
-            <div class="text-2xl md:text-3xl font-light italic opacity-95 leading-relaxed">
-                "NEXO extiende un profundo agradecimiento a la <span class="text-lucero-gradient text-3xl md:text-4xl font-black uppercase">Escuela Técnica Lucero</span> por su apoyo en la formación técnica e innovación."
+            <div class="glass p-10 rounded-[40px] border-white/10">
+                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Visión</div>
+                <h2 class="text-4xl font-black mb-6 italic">Hacia el Futuro</h2>
+                <p class="text-lg opacity-80 leading-relaxed font-light">Convertirnos en el referente líder de dispositivos de bienestar en México, impulsado por talento joven.</p>
             </div>
         </div>
     </section>
 
     <footer class="py-16 border-t border-white/10 text-center">
         <p class="text-[10px] tracking-[0.4em] uppercase opacity-40 mb-4">© 2026 NEXO - Ricardo Peralta</p>
-        <div class="flex justify-center">
-            <img src="LOGO para NEXO.png" alt="Logo" class="h-8 w-auto grayscale opacity-50">
+        <div class="flex justify-center mb-4">
+            <img src="LOGO para NEXO.png" alt="Logo" class="h-8 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer">
         </div>
+        <p class="text-xs font-bold opacity-60 uppercase mt-2">NEXO</p>
     </footer>
 
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-white text-black z-[100] transform translate-x-full shadow-2xl flex flex-col">
-        <div class="p-8 border-b flex justify-between items-center bg-gray-50">
-            <h2 class="text-2xl font-black italic uppercase">Tu Bolsa</h2>
-            <button onclick="toggleCart()" class="text-2xl font-black hover:text-red-500">✕</button>
+    <div id="ai-chat" class="fixed bottom-24 right-6 w-[320px] h-[450px] glass rounded-[30px] border-white/20 shadow-2xl flex flex-col scale-0 origin-bottom-right overflow-hidden z-[100]">
+        <div class="p-5 border-b border-white/10 bg-[#7ed957]/10">
+            <p class="text-[10px] font-black tracking-widest text-[#7ed957] uppercase">Asistente NEXO</p>
+            <p class="text-xs font-bold italic">En línea ahora</p>
         </div>
-        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-4"></div>
-        <div class="p-8 border-t bg-gray-100">
-            <div class="flex justify-between text-2xl font-black mb-1 uppercase italic"><span>Total</span><span id="cart-total">$0.00</span></div>
-            <p id="shipping-note" class="text-[10px] font-bold text-gray-500 uppercase mb-4 italic tracking-tighter">Inicia sesión para calcular envío</p>
-            <button onclick="finalizePurchase()" class="w-full bg-black text-white py-5 rounded-2xl font-black uppercase hover:bg-[#7ed957] hover:text-black transition duration-500 shadow-xl">Confirmar y Pagar</button>
+        <div id="chat-content" class="flex-1 overflow-y-auto p-4 space-y-3 text-[11px]">
+            <div class="bg-white/10 p-3 rounded-2xl rounded-tl-none border border-white/5">¡Hola! Soy la IA de NEXO. Pregúntame lo que quieras, sobre el dispositivo o cualquier otro tema.</div>
         </div>
+        <form onsubmit="event.preventDefault(); sendAIMessage();" class="p-3 bg-black/20 flex gap-2">
+            <input id="ai-input" type="text" placeholder="Escribe un mensaje..." class="flex-1 bg-white/5 border border-white/10 p-2 rounded-xl outline-none text-xs text-white">
+            <button type="submit" class="text-[#7ed957] font-black text-xs px-2">ENVIAR</button>
+        </form>
     </div>
 
-    <div id="profile-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-md hidden">
-        <div class="glass w-[90%] max-w-md p-8 rounded-[40px] border-[#7ed957]/30 text-center relative shadow-2xl text-white">
-            <button onclick="closeProfile()" class="absolute top-6 right-6 text-2xl hover:text-[#7ed957] transition">✕</button>
-            <div id="profile-content"></div>
-        </div>
-    </div>
+    <button onclick="toggleAIChat()" class="fixed bottom-6 right-6 z-[110] bg-white text-black p-5 rounded-full shadow-2xl border-4 border-[#7ed957] hover:scale-110 transition">
+        <span class="text-2xl">🤖</span>
+    </button>
 
     <script>
     let cart = []; 
-    let currentQty = 1; 
-    const UNIT_PRICE = 250;
-    let userLoggedData = null; 
+    let userLoggedData = null;
 
-    // --- 1. LOGIN Y PERFIL ---
-    function handleCredentialResponse(response) {
-        const responsePayload = JSON.parse(atob(response.credential.split('.')[1]));
-        userLoggedData = responsePayload; 
-        
-        const nav = document.querySelector('nav ul');
-        document.querySelector('.g_id_signin').style.display = 'none';
-        
-        const userProfileHTML = `
-            <li class="flex items-center gap-2 bg-white/10 p-1 pr-4 rounded-full border border-white/10 cursor-pointer hover:bg-white/20 transition" onclick="openSecureProfile()">
-                <img src="${responsePayload.picture}" class="w-8 h-8 rounded-full border border-[#7ed957]">
-                <div class="flex flex-col">
-                    <span class="text-[10px] font-black leading-none">${responsePayload.given_name}</span>
-                    <span class="text-[8px] opacity-60 uppercase tracking-tighter">Logística NEXO</span>
-                </div>
-            </li>
-        `;
-        nav.insertAdjacentHTML('beforeend', userProfileHTML);
-        updateCartUI(); // Actualizar para ver el envío si ya tiene datos guardados
-        alert("Sesión iniciada. Por favor verifica tus datos de envío en tu perfil.");
-    }
+    // --- IA QUE RESPONDE A TODO ---
+    async function sendAIMessage() {
+        const input = document.getElementById('ai-input');
+        const content = document.getElementById('chat-content');
+        const userMsg = input.value.trim();
+        if(!userMsg) return;
 
-    async function openSecureProfile() {
-        document.getElementById('profile-modal').classList.remove('hidden');
-        const content = document.getElementById('profile-content');
-        const savedDir = localStorage.getItem('nexo_dir') || '';
-        const savedTel = localStorage.getItem('nexo_tel') || '';
+        content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 font-bold text-right text-xs mb-2">${userMsg}</div>`;
+        input.value = "";
+        content.scrollTop = content.scrollHeight;
 
-        content.innerHTML = `<p class="text-xs animate-pulse text-[#7ed957] font-black uppercase">Escaneando Nexo ID...</p>`;
-
+        // Simulamos una IA que "piensa" y responde a cualquier cosa
         setTimeout(() => {
-            content.innerHTML = `
-                <img src="${userLoggedData.picture}" class="w-16 h-16 rounded-full border-2 border-[#7ed957] mx-auto mb-2 shadow-lg">
-                <h3 class="text-lg font-black text-white uppercase italic mb-4">${userLoggedData.name}</h3>
-                
-                <div class="text-left space-y-3 bg-white/5 p-5 rounded-3xl border border-white/10">
-                    <div>
-                        <label class="text-[9px] font-black text-[#7ed957] uppercase tracking-widest">Dirección de Entrega</label>
-                        <input type="text" id="user-dir" value="${savedDir}" placeholder="Ej. Calle Real #10, Teziutlán" 
-                            class="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-[#7ed957]">
-                        <p class="text-[8px] opacity-50 mt-1 italic">* Incluye 'Teziutlán' para tarifa local ($40).</p>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-[#7ed957] uppercase tracking-widest">WhatsApp de contacto</label>
-                        <input type="tel" id="user-tel" value="${savedTel}" placeholder="231 151 1435" 
-                            class="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-[#7ed957]">
-                    </div>
-                    <button onclick="saveDeliveryData()" class="w-full bg-[#7ed957] text-black font-black text-[10px] py-3 rounded-xl uppercase shadow-lg hover:scale-105 transition">
-                        Actualizar Datos de Logística
-                    </button>
-                </div>
-                <button onclick="location.reload()" class="mt-6 text-[9px] font-bold text-red-500 uppercase">Cerrar Sesión</button>
-            `;
-        }, 600);
-    }
+            let response = "";
+            const m = userMsg.toLowerCase();
 
-    function saveDeliveryData() {
-        const dir = document.getElementById('user-dir').value.trim();
-        const tel = document.getElementById('user-tel').value.trim();
-        if(!dir || !tel) return alert("Completa los datos para el envío.");
-        
-        localStorage.setItem('nexo_dir', dir);
-        localStorage.setItem('nexo_tel', tel);
-        
-        const isLocal = dir.toLowerCase().includes("teziutlan") || dir.toLowerCase().includes("teziutlán");
-        alert(isLocal ? "Tarifa local aplicada: $40" : "Tarifa foránea detectada: $100");
-        
-        updateCartUI();
-        closeProfile();
-    }
+            if(m.includes("precio") || m.includes("cuanto cuesta")) {
+                response = "El Dispositivo NEXO cuesta $250 MXN. ¡Un gran aliado para tu calma!";
+            } else if(m.includes("teziutlan") || m.includes("envio")) {
+                response = "Entregamos en Teziutlán por $40 y al resto del país por $100.";
+            } else if(m.includes("hola") || m.includes("quien eres")) {
+                response = "¡Hola! Soy el asistente inteligente de NEXO, diseñado para ayudarte con el estrés y dudas de nuestra tecnología.";
+            } else {
+                // Respuesta genérica para "cualquier cosa"
+                const frasesGriegas = [
+                    "Interesante pregunta. Desde la perspectiva de NEXO, el bienestar es la clave para entender eso.",
+                    "Como IA de NEXO, te diría que la calma ayuda a ver esos temas con más claridad.",
+                    "¡Vaya! No me habían preguntado eso hoy, pero aquí en Teziutlán estamos listos para todo.",
+                    "Esa es una gran duda. Aunque mi especialidad es el bienestar, me encanta charlar de todo un poco."
+                ];
+                response = frasesGriegas[Math.floor(Math.random() * frasesGriegas.length)];
+            }
 
-    function closeProfile() { document.getElementById('profile-modal').classList.add('hidden'); }
-
-    // --- 2. TIENDA ---
-    function updateQty(val) { 
-        currentQty = Math.max(1, currentQty + val); 
-        document.getElementById('prod-qty').innerText = currentQty; 
-        document.getElementById('display-price').innerText = currentQty * UNIT_PRICE; 
-    }
-
-    function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
-
-    function addToCart(name, price) { 
-        cart.push({name, price, qty: currentQty}); 
-        updateCartUI(); 
-        if(!document.getElementById('cart-sidebar').classList.contains('translate-x-0')) toggleCart();
-    }
-
-    function updateCartUI() {
-        const list = document.getElementById('cart-items'); 
-        const totalSpan = document.getElementById('cart-total');
-        const shipNote = document.getElementById('shipping-note');
-        let subtotal = 0; let count = 0;
-
-        list.innerHTML = cart.map((item, idx) => {
-            subtotal += item.price * item.qty; count += item.qty;
-            return `<div class="bg-gray-100 p-4 rounded-2xl flex justify-between items-center text-black shadow-sm">
-                        <div class="leading-tight">
-                            <p class="font-black text-[11px] uppercase">${item.name} x${item.qty}</p>
-                            <p class="font-bold text-sm">$${item.price * item.qty}</p>
-                        </div>
-                        <button onclick="cart.splice(${idx},1);updateCartUI();" class="text-red-500 font-black px-2 hover:scale-125 transition">✕</button>
-                    </div>`;
-        }).join('');
-
-        let shipping = 0;
-        const savedDir = localStorage.getItem('nexo_dir');
-        
-        if(savedDir && count > 0) {
-            const isLocal = savedDir.toLowerCase().includes("teziutlan") || savedDir.toLowerCase().includes("teziutlán");
-            shipping = isLocal ? 40 : 100;
-            shipNote.innerText = `ENVÍO: $${shipping} (${isLocal ? 'TEZIUTLÁN' : 'FORÁNEO'})`;
-            shipNote.classList.add('text-[#7ed957]');
-        } else {
-            shipNote.innerText = "Calculando envío...";
-        }
-
-        totalSpan.innerText = `$${(subtotal + shipping).toFixed(2)}`;
-        document.getElementById('cart-count').innerText = count;
-    }
-
-    function finalizePurchase() {
-        const dir = localStorage.getItem('nexo_dir');
-        const tel = localStorage.getItem('nexo_tel');
-        
-        if(!userLoggedData) return alert("Inicia sesión con Google para comprar.");
-        if(!dir || !tel) {
-            alert("Necesitamos tu dirección para el envío.");
-            openSecureProfile();
-            return;
-        }
-        if(cart.length === 0) return alert("Tu bolsa está vacía.");
-
-        let subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-        const isLocal = dir.toLowerCase().includes("teziutlan") || dir.toLowerCase().includes("teziutlán");
-        const shipping = isLocal ? 40 : 100;
-        const total = subtotal + shipping;
-
-        let itemsMsg = cart.map(i => `- ${i.name} (x${i.qty})`).join('%0A');
-        const miNumero = "522311511435"; 
-        
-        const text = `*NEXO - NUEVA ORDEN*%0A` +
-                     `--------------------------%0A` +
-                     `*Cliente:* ${userLoggedData.name}%0A` +
-                     `*Pedido:*%0A${itemsMsg}%0A%0A` +
-                     `*Subtotal:* $${subtotal}%0A` +
-                     `*Envío:* $${shipping} (${isLocal ? 'Teziutlán' : 'Foráneo'})%0A` +
-                     `*TOTAL:* $${total}%0A%0A` +
-                     `*DIRECCIÓN:* ${dir}%0A` +
-                     `*TEL:* ${tel}%0A` +
-                     `--------------------------%0A` +
-                     `_Confirmar para recibir instrucciones de pago._`;
-
-        window.open(`https://wa.me/${miNumero}?text=${text}`, '_blank');
-    }
-
-    // --- 3. EXTRAS ---
-    function toggleTheme() { 
-        document.body.classList.toggle('light-mode'); 
-        document.getElementById('theme-btn').innerText = document.body.classList.contains('light-mode') ? "🌙" : "☀️";
-    }
-
-    function updateWidget() {
-        const now = new Date();
-        document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12:false});
-        document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long' });
-    }
-    setInterval(updateWidget, 1000); updateWidget();
-
-    function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-0'); }
-    function sendAIMessage() {
-        const input = document.getElementById('ai-input'); const content = document.getElementById('chat-content');
-        if(!input.value.trim()) return;
-        content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 font-bold text-right text-xs mb-2">${input.value}</div>`;
-        const m = input.value.toLowerCase(); input.value = "";
-        setTimeout(() => {
-            let r = "NEXO está para servirte. ¿Dudas sobre el envío?";
-            if(m.includes("precio")) r = "El Dispositivo NEXO cuesta $250 MXN.";
-            if(m.includes("teziutlan") || m.includes("envío")) r = "El envío en Teziutlán cuesta $40. Fuera de la región $100.";
-            content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl mr-8 italic border border-white/5 text-white text-xs mb-2">🤖 ${r}</div>`;
+            content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl mr-8 italic border border-white/5 text-white text-xs mb-2">🤖 ${response}</div>`;
             content.scrollTop = content.scrollHeight;
-        }, 600);
+        }, 800);
     }
+
+    // --- LÓGICA DE DIRECCIÓN TIPO DOMINO'S ---
+    const puntosTeziutlan = ["Plaza Crystal, Teziutlán", "Centro Histórico, Teziutlán", "Paseo Chedraui, Teziutlán", "Barrio de Francia, Teziutlán", "Cipreses, Teziutlán"];
+
+    function showSuggestions(val) {
+        const div = document.getElementById('suggestions');
+        if (val.length < 2) { div.classList.add('hidden'); return; }
+        const matches = puntosTeziutlan.filter(p => p.toLowerCase().includes(val.toLowerCase()));
+        if (matches.length > 0) {
+            div.classList.remove('hidden');
+            div.innerHTML = matches.map(m => `<div onclick="selectLoc('${m}')" class="p-2 text-[10px] hover:bg-[#7ed957] hover:text-black cursor-pointer border-b border-white/5">${m}</div>`).join('');
+        } else { div.classList.add('hidden'); }
+    }
+
+    function selectLoc(val) {
+        document.getElementById('user-dir').value = val;
+        document.getElementById('suggestions').classList.add('hidden');
+    }
+
+    // (Aquí van tus funciones handleCredentialResponse, openSecureProfile, updateQty, etc. que ya tenías)
+    function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-0'); }
     </script>
 </body>
 </html>
