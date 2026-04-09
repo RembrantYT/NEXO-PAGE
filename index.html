@@ -238,95 +238,129 @@
         </div>
     </div>
 </div>
-    <script>
-    let cart = []; let currentQty = 1; const UNIT_PRICE = 250;
+<script>
+    let cart = []; 
+    let currentQty = 1; 
+    const UNIT_PRICE = 250;
+    let userLoggedData = null; // Variable para guardar los datos del usuario
 
+    // --- 1. LOGIN Y PERFIL SEGURO ---
     function handleCredentialResponse(response) {
         // Decodifica la info real del usuario
         const responsePayload = JSON.parse(atob(response.credential.split('.')[1]));
+        userLoggedData = responsePayload; 
         
-        // Saludo dinámico con el nombre de la cuenta
-        alert("¡Bienvenido " + responsePayload.name + "! Sesión iniciada correctamente.");
-
-        // Muestra la foto y nombre en el menú
         const nav = document.querySelector('nav ul');
         document.querySelector('.g_id_signin').style.display = 'none';
         
+        // Creamos la burbuja de perfil con "cursor-pointer" y "onclick" para abrir el modal
         const userProfileHTML = `
-            <li class="flex items-center gap-2 bg-white/10 p-1 pr-4 rounded-full border border-white/10">
+            <li class="flex items-center gap-2 bg-white/10 p-1 pr-4 rounded-full border border-white/10 cursor-pointer hover:bg-white/20 transition" onclick="openSecureProfile()">
                 <img src="${responsePayload.picture}" class="w-8 h-8 rounded-full border border-[#7ed957]">
                 <div class="flex flex-col">
                     <span class="text-[10px] font-black leading-none">${responsePayload.given_name}</span>
-                    <span class="text-[8px] opacity-60">Conectado</span>
+                    <span class="text-[8px] opacity-60">Seguridad Activa</span>
                 </div>
-                <button onclick="location.reload()" class="ml-2 text-[10px] hover:text-red-500">✕</button>
             </li>
         `;
         nav.insertAdjacentHTML('beforeend', userProfileHTML);
+        alert("¡Bienvenido " + responsePayload.name + "! Toca tu foto para ver tu panel.");
     }
-    // ... el resto de tus funciones (toggleTheme, etc.) siguen aquí abajo
+
+    // Función para abrir y llenar el modal de perfil
+    async function openSecureProfile() {
+        document.getElementById('profile-modal').classList.remove('hidden');
+        const content = document.getElementById('profile-content');
         
-        function toggleTheme() { 
-            const body = document.body;
-            const btn = document.getElementById('theme-btn');
-            body.classList.toggle('light-mode'); 
-            btn.innerText = body.classList.contains('light-mode') ? "🌙" : "☀️";
-        }
+        // Efecto de carga
+        content.innerHTML = `<p class="text-xs animate-pulse text-[#7ed957] font-black uppercase">Escaneando Identidad...</p>`;
 
-        function updateQty(val) { currentQty = Math.max(1, currentQty + val); document.getElementById('prod-qty').innerText = currentQty; document.getElementById('display-price').innerText = currentQty * UNIT_PRICE; }
-        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
-        function addToCart(name, price) { cart.push({name, price, qty: currentQty}); updateCartUI(); toggleCart(); }
+        setTimeout(() => {
+            content.innerHTML = `
+                <img src="${userLoggedData.picture}" class="w-20 h-20 rounded-full border-4 border-[#7ed957] mx-auto mb-4">
+                <h3 class="text-xl font-black italic mb-1 uppercase text-white">${userLoggedData.name}</h3>
+                <p class="text-[#7ed957] font-bold text-[10px] mb-6 uppercase tracking-widest">${userLoggedData.email}</p>
+                <div class="text-left space-y-3 bg-white/5 p-5 rounded-3xl border border-white/10 text-white">
+                    <div class="flex justify-between text-[9px] font-bold"><span class="opacity-50">ESTADO:</span> <span class="text-[#7ed957]">AUTENTICADO</span></div>
+                    <div class="flex justify-between text-[9px] font-bold"><span class="opacity-50">SESIÓN:</span> <span>ACTIVA</span></div>
+                </div>
+                <button onclick="location.reload()" class="mt-6 text-[10px] font-black text-red-500 hover:scale-110 transition uppercase">Cerrar Sesión</button>
+            `;
+        }, 1000);
+    }
 
-        function updateCartUI() {
-            const list = document.getElementById('cart-items'); let total = 0; let count = 0;
-            list.innerHTML = cart.map((item, idx) => {
-                total += item.price * item.qty; count += item.qty;
-                return `<div class="bg-gray-100 p-4 rounded-2xl flex justify-between"><div><p class="font-black text-xs uppercase">${item.name} x${item.qty}</p><p class="font-bold">$${item.price*item.qty}</p></div><button onclick="cart.splice(${idx},1);updateCartUI();" class="text-red-500 font-black">✕</button></div>`;
-            }).join('');
-            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
-            document.getElementById('cart-count').innerText = count;
-        }
+    function closeProfile() {
+        document.getElementById('profile-modal').classList.add('hidden');
+    }
 
-        function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-0'); }
+    // --- 2. FUNCIONES DE TIENDA ---
+    function updateQty(val) { 
+        currentQty = Math.max(1, currentQty + val); 
+        document.getElementById('prod-qty').innerText = currentQty; 
+        document.getElementById('display-price').innerText = currentQty * UNIT_PRICE; 
+    }
+
+    function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
+
+    function addToCart(name, price) { 
+        cart.push({name, price, qty: currentQty}); 
+        updateCartUI(); 
+        toggleCart(); 
+    }
+
+    function updateCartUI() {
+        const list = document.getElementById('cart-items'); 
+        let total = 0; let count = 0;
+        list.innerHTML = cart.map((item, idx) => {
+            total += item.price * item.qty; count += item.qty;
+            return `<div class="bg-gray-100 p-4 rounded-2xl flex justify-between items-center text-black shadow-sm">
+                        <div>
+                            <p class="font-black text-[10px] uppercase">${item.name} x${item.qty}</p>
+                            <p class="font-bold text-sm">$${item.price * item.qty}</p>
+                        </div>
+                        <button onclick="cart.splice(${idx},1);updateCartUI();" class="text-red-500 font-black px-2 hover:scale-125 transition">✕</button>
+                    </div>`;
+        }).join('');
+        document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+        document.getElementById('cart-count').innerText = count;
+    }
+
+    // --- 3. INTERFAZ Y RELOJ ---
+    function toggleTheme() { 
+        document.body.classList.toggle('light-mode'); 
+        document.getElementById('theme-btn').innerText = document.body.classList.contains('light-mode') ? "🌙" : "☀️";
+    }
+
+    function updateWidget() {
+        const now = new Date();
+        document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12:false});
+        document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    }
+    setInterval(updateWidget, 1000); 
+    updateWidget();
+
+    // --- 4. CHAT IA ---
+    function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-0'); }
+
+    function sendAIMessage() {
+        const input = document.getElementById('ai-input'); 
+        const content = document.getElementById('chat-content');
+        if(!input.value.trim()) return;
         
-        function sendAIMessage() {
-            const input = document.getElementById('ai-input'); 
-            const content = document.getElementById('chat-content');
-            const msg = input.value.toLowerCase().trim(); 
+        content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 font-bold text-right shadow-md">${input.value}</div>`;
+        const m = input.value.toLowerCase();
+        input.value = "";
+        
+        setTimeout(() => {
+            let r = "Soy la IA de NEXO. ¿Preguntas sobre precios o quién nos creó?";
+            if(m.includes("hola")) r = "¡Hola! Bienvenido al soporte de NEXO.";
+            if(m.includes("precio")) r = "El Dispositivo NEXO cuesta $250 MXN.";
+            if(m.includes("creador") || m.includes("creo")) r = "NEXO fue creado por Ricardo Peralta con el apoyo de la Técnica Lucero.";
             
-            if(!msg) return;
-            
-            content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 font-bold text-right">${input.value}</div>`;
-            input.value = "";
-            
-            setTimeout(() => {
-                let r = "Lo siento, no entiendo eso. ¿Quieres saber algo sobre NEXO?";
-                if (msg.includes("hola") || msg.includes("buenos dias")) {
-                    r = "¡Hola! Bienvendo al soporte de NEXO. ¿En qué puedo ayudarte hoy?";
-                }
-                if (msg.includes("nexo")) {
-                    if (msg.includes("creo") || msg.includes("creador")) {
-                        r = "¡NEXO fue creado por Ricardo Bryan Peralta Marcelo con el apoyo de la Escuela Técnica Lucero!";
-                    } else if (msg.includes("precio") || msg.includes("costo")) {
-                        r = "El Dispositivo NEXO básico cuesta $250.00 MXN. También tenemos planes Avanzado ($450) y Premium ($700).";
-                    }
-                } else if (msg.includes("sexo")) {
-                    r = "Nuestra prioridad es tu paz mental. 😉";
-                } else if (msg.includes("gracias")) {
-                    r = "¡De nada! En NEXO estamos para servirte.";
-                }
-
-                content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl mr-8 italic border border-white/5">🤖 ${r}</div>`;
-                content.scrollTop = content.scrollHeight;
-            }, 600);
-        }
-
-        function updateWidget() {
-            const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12:false});
-            document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-        }
-        setInterval(updateWidget, 1000); updateWidget();
+            content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl mr-8 italic border border-white/5 text-white shadow-inner">🤖 ${r}</div>`;
+            content.scrollTop = content.scrollHeight;
+        }, 600);
+    }
     </script>
 </body>
 </html>
