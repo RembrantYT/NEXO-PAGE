@@ -3,190 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO | Tu espacio de calma, Siempre contigo</title>
+    <title>NEXO | Tu espacio de calma</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --nexo-green: #7ed957; --nexo-dark: #0b3c5d; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; transition: background 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease; }
-        .glass { transition: all 0.5s ease; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); transition: 0.5s; }
         .nexo-gradient { background: radial-gradient(circle at center, #0b3c5d 0%, #051926 70%, #000000 100%); background-attachment: fixed; }
-        body.light-mode { background: #ffffff; color: #0b3c5d; }
-        body.light-mode .nexo-gradient { background: linear-gradient(135deg, #0b3c5d 0%, #1d70a2 50%, #7ed957 100%); }
-        body.light-mode .glass { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(11, 60, 93, 0.1); color: #0b3c5d; }
-        body.light-mode .text-white { color: #0b3c5d !important; }
         .text-lucero-gradient { background: linear-gradient(to right, #ff0000, #888888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
-        .product-card:hover { transform: translateY(-10px); transition: all 0.3s ease; }
-        #cart-sidebar, #ai-chat { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: var(--nexo-green); border-radius: 10px; }
+        .product-card:hover { transform: translateY(-10px); }
+        #ai-chat { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .suggestion-item:hover { background: var(--nexo-green); color: black; }
     </style>
 </head>
 <body class="nexo-gradient text-white min-h-screen">
 
     <nav class="flex justify-between items-center px-8 py-4 sticky top-0 z-50 glass shadow-2xl">
         <div class="flex items-center gap-3">
-            <img src="LOGO para NEXO.png" alt="Icono" class="h-10 w-auto object-contain">
+            <img src="LOGO para NEXO.png" alt="Icono" class="h-10 w-auto">
             <h2 class="text-3xl font-extrabold tracking-tighter italic">NEXO<span class="text-[#7ed957]">.</span></h2>
         </div>
-        <ul class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-widest items-center">
-            <li><a href="#inicio" class="hover:text-[#7ed957] transition">Inicio</a></li>
-            <li><a href="#mision" class="hover:text-[#7ed957] transition">Misión</a></li>
-            <li><a href="#catalogo" class="hover:text-[#7ed957] transition">Catálogo</a></li>
-            <li><button onclick="toggleTheme()" id="theme-btn" class="text-xl hover:scale-125 transition">☀️</button></li>
-            <li><button onclick="toggleCart()" class="relative bg-[#7ed957] text-black px-4 py-2 rounded-full hover:scale-105 transition font-black">
-                🛒 (<span id="cart-count">0</span>)
-            </button></li>
+        <ul class="hidden md:flex gap-8 font-bold text-sm uppercase items-center">
+            <li><a href="#inicio" class="hover:text-[#7ed957]">Inicio</a></li>
+            <li><a href="#catalogo" class="hover:text-[#7ed957]">Producto</a></li>
+            <li><button onclick="toggleCart()" class="bg-[#7ed957] text-black px-4 py-2 rounded-full font-black">🛒 (<span id="cart-count">0</span>)</button></li>
         </ul>
         <div id="g_id_onload" data-client_id="27684299860-mc7adc5pu8fu07u01hmsijiok8bdguia.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
         <div class="g_id_signin" data-type="standard" data-shape="pill"></div>
     </nav>
 
-    <div class="fixed bottom-6 left-6 z-40 glass p-6 rounded-3xl border-white/5 shadow-2xl flex items-center gap-6">
+    <div class="fixed bottom-6 left-6 z-40 glass p-6 rounded-3xl flex items-center gap-6">
         <div class="flex flex-col items-center border-r border-white/10 pr-4">
             <img src="LOGO para NEXO.png" alt="Logo" class="w-12 h-12 object-contain mb-2">
             <div class="text-[10px] font-black text-[#7ed957]">NEXO APP</div>
         </div>
         <div>
-            <div id="live-clock" class="text-3xl font-black tracking-tighter leading-none mb-1">00:00:00</div>
-            <div id="live-date" class="text-[10px] opacity-70 uppercase font-bold tracking-widest">Cargando...</div>
-            <div class="text-[#7ed957] mt-2 flex items-center gap-2 font-black text-[11px]">📍 TEZIUTLÁN, PUE <span id="temp-val">18°C</span></div>
+            <div id="live-clock" class="text-3xl font-black tracking-tighter mb-1">00:00:00</div>
+            <div id="live-date" class="text-[10px] opacity-70 uppercase font-bold">Cargando...</div>
+            <div class="text-[#7ed957] mt-2 flex items-center gap-2 font-black text-[11px]">📍 TEZIUTLÁN, PUE <span>18°C</span></div>
         </div>
     </div>
 
     <div class="fixed bottom-6 right-6 z-[60]">
-        <button onclick="toggleAIChat()" class="bg-white text-black p-5 rounded-full shadow-2xl hover:scale-110 transition-all border-4 border-[#7ed957]">
-            <span class="text-2xl" id="chat-icon">🤖</span>
-        </button>
-        <div id="ai-chat" class="absolute bottom-20 right-0 w-[320px] h-[450px] glass rounded-[30px] border-white/20 shadow-2xl flex flex-col scale-0 origin-bottom-right overflow-hidden">
+        <button onclick="toggleAIChat()" class="bg-white text-black p-5 rounded-full shadow-2xl border-4 border-[#7ed957] hover:scale-110 transition">🤖</button>
+        <div id="ai-chat" class="absolute bottom-20 right-0 w-[320px] h-[450px] glass rounded-[30px] flex flex-col scale-0 origin-bottom-right overflow-hidden">
             <div class="p-5 border-b border-white/10 bg-[#7ed957]/10">
-                <p class="text-[10px] font-black tracking-widest text-[#7ed957] uppercase">Asistente NEXO</p>
-                <p class="text-xs font-bold italic">Inteligencia Activa</p>
+                <p class="text-[10px] font-black tracking-widest text-[#7ed957] uppercase">Asistente NEXO v2</p>
             </div>
             <div id="chat-content" class="flex-1 overflow-y-auto p-4 space-y-3 text-[11px]">
-                <div class="bg-white/10 p-3 rounded-2xl rounded-tl-none border border-white/5">¡Hola! Soy la IA de NEXO. Pregúntame lo que quieras, estoy lista para ayudarte.</div>
+                <div class="bg-white/10 p-3 rounded-2xl border border-white/5">Hola, soy la inteligencia de NEXO. ¿Hablamos de bienestar o tienes dudas del dispositivo?</div>
             </div>
             <form onsubmit="event.preventDefault(); sendAIMessage();" class="p-3 bg-black/20 flex gap-2">
-                <input id="ai-input" type="text" placeholder="Escribe cualquier duda..." class="flex-1 bg-white/5 border border-white/10 p-2 rounded-xl outline-none text-xs text-white">
+                <input id="ai-input" type="text" placeholder="Escribe lo que sea..." class="flex-1 bg-white/5 border border-white/10 p-2 rounded-xl outline-none text-xs text-white">
                 <button type="submit" class="text-[#7ed957] font-black text-xs px-2">ENVIAR</button>
             </form>
         </div>
     </div>
 
-    <section id="inicio" class="flex flex-col items-center justify-center text-center py-32 px-6">
-        <h1 class="text-7xl md:text-9xl font-black mb-6 tracking-tighter leading-none italic">EL COMIENZO DE <br><span class="text-[#7ed957]">TU PAZ.</span></h1>
-        <p class="text-xl md:text-2xl font-light mb-10 max-w-2xl opacity-90 italic">Tecnología en la palma de tu mano para relajar tu bienestar.</p>
-        <a href="#catalogo" class="bg-[#7ed957] text-black text-xl font-black px-12 py-5 rounded-full shadow-2xl hover:scale-110 transition">ORDENAR AHORA</a>
-    </section>
-
-    <section id="mision" class="py-12 px-8 scroll-mt-20">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
-            <div class="glass p-10 rounded-[40px] border-white/10">
-                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Misión</div>
-                <h2 class="text-4xl font-black mb-6 italic">Nuestra Razón de Ser</h2>
-                <p class="text-lg opacity-80 leading-relaxed font-light">Brindar una herramienta tecnológica accesible que permita reconectar con la calma en cualquier lugar.</p>
-            </div>
-            <div class="glass p-10 rounded-[40px] border-white/10">
-                <div class="text-[#7ed957] font-black mb-4 uppercase text-xs tracking-widest">Visión</div>
-                <h2 class="text-4xl font-black mb-6 italic">Hacia el Futuro</h2>
-                <p class="text-lg opacity-80 leading-relaxed font-light">Convertirnos en el referente líder de dispositivos de bienestar en México, impulsado por talento joven.</p>
+    <section id="catalogo" class="py-24 px-8 scroll-mt-20">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-5xl font-black mb-16 italic text-center uppercase">Nuestro <span class="text-[#7ed957]">Producto</span></h2>
+            <div class="glass p-8 rounded-[40px] flex flex-col md:flex-row gap-12 items-center product-card border-white/20">
+                <img src="NEXO PHOTO.jpeg" alt="NEXO Device" class="w-full md:w-1/2 rounded-[30px] shadow-2xl border-4 border-[#7ed957]/30">
+                <div class="space-y-6 w-full">
+                    <div class="inline-block bg-[#7ed957]/20 text-[#7ed957] px-4 py-1 rounded-full text-xs font-black">EDICIÓN ESPECIAL</div>
+                    <h3 class="text-5xl font-black tracking-tight italic">Dispositivo NEXO</h3>
+                    <p class="text-gray-300 text-lg font-light">Tecnología diseñada por talento joven para el control del estrés y la ansiedad.</p>
+                    <div class="flex items-center gap-6">
+                        <span class="text-4xl font-black">$<span id="display-price">250</span></span>
+                        <div class="flex items-center bg-black/40 rounded-2xl p-2 border border-white/10">
+                            <button onclick="updateQty(-1)" class="w-10 h-10 font-black">-</button>
+                            <span id="prod-qty" class="w-12 text-center font-black">1</span>
+                            <button onclick="updateQty(1)" class="w-10 h-10 font-black">+</button>
+                        </div>
+                    </div>
+                    <button onclick="addToCart('Dispositivo NEXO', 250)" class="w-full bg-[#7ed957] text-black font-black py-5 rounded-2xl hover:bg-white transition uppercase">Añadir a mi calma</button>
+                </div>
             </div>
         </div>
     </section>
 
     <section class="py-20 px-8">
-        <div class="max-w-5xl mx-auto glass p-16 rounded-[60px] border-white/5 text-center shadow-2xl">
-            <h2 class="text-4xl font-black italic mb-8 uppercase tracking-tighter text-white">NUESTRO <span class="text-[#7ed957]">RECONOCIMIENTO</span></h2>
-            <div class="text-2xl md:text-3xl font-light italic opacity-95 leading-relaxed text-white">
-                "NEXO extiende un profundo agradecimiento a la <span class="text-lucero-gradient text-3xl md:text-4xl font-black uppercase">Escuela Técnica Lucero</span> por su apoyo en la formación técnica e innovación. <br><br>
-                Gracias a la <span class="font-bold">Directora Lucero Carcamo Ramírez</span> y al <span class="font-bold">Ingeniero Juan Flores</span> por toda la ayuda que nos brindaron."
-            </div>
-        </div>
-    </section>
-
-    <section id="planes" class="py-24 px-8">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-5xl font-black mb-16 italic uppercase">Elige tu <span class="text-[#7ed957]">Experiencia</span></h2>
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="glass p-8 rounded-[40px] border-white/10 hover:scale-105 transition flex flex-col justify-between text-white">
-                    <div>
-                        <h3 class="text-2xl font-black mb-2 uppercase">Básico</h3>
-                        <p class="text-3xl font-black mb-4">$250 MXN</p>
-                        <ul class="text-left space-y-2 text-xs font-bold mb-8 opacity-80">
-                            <li>✔ 1 Modo estándar de vibración</li>
-                            <li>✔ Diseño ergonómico ligero</li>
-                            <li>✔ Batería de larga duración</li>
-                        </ul>
-                    </div>
-                    <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
-                </div>
-                <div class="glass p-8 rounded-[40px] border-[#7ed957] border-2 scale-105 shadow-2xl flex flex-col justify-between text-white">
-                    <div class="bg-[#7ed957] text-black text-[10px] font-black py-1 px-3 rounded-full inline-block mb-4">MÁS POPULAR</div>
-                    <h3 class="text-2xl font-black mb-2 text-[#7ed957] uppercase">Avanzado</h3>
-                    <p class="text-3xl font-black mb-4">$450 MXN</p>
-                    <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
-                </div>
-                <div class="glass p-8 rounded-[40px] border-white/10 hover:scale-105 transition flex flex-col justify-between text-white">
-                    <h3 class="text-2xl font-black mb-2 uppercase">Premium</h3>
-                    <p class="text-3xl font-black mb-4">$700 MXN</p>
-                    <button class="bg-[#7ed957] text-black px-6 py-3 rounded-full font-black uppercase text-xs">Elegir</button>
-                </div>
+        <div class="max-w-5xl mx-auto glass p-16 rounded-[60px] text-center border-white/5">
+            <h2 class="text-4xl font-black italic mb-8 uppercase text-white">RECONOCIMIENTO <span class="text-[#7ed957]">ESPECIAL</span></h2>
+            <div class="text-2xl md:text-3xl font-light italic leading-relaxed text-white">
+                "NEXO agradece profundamente a la <span class="text-lucero-gradient text-3xl md:text-4xl font-black uppercase">Escuela Técnica Lucero</span> por su apoyo. <br><br>
+                A la <span class="font-bold underline">Directora Lucero Carcamo Ramírez</span> y al <span class="font-bold underline">Ingeniero Juan Flores</span>."
             </div>
         </div>
     </section>
 
     <footer class="py-16 border-t border-white/10 text-center">
-        <p class="text-[10px] tracking-[0.4em] uppercase opacity-40 mb-4">© 2026 NEXO - Ricardo Peralta</p>
         <div class="flex justify-center mb-4">
-            <img src="LOGO para NEXO.png" alt="Logo" class="h-8 w-auto opacity-70 grayscale hover:grayscale-0 transition duration-500 cursor-pointer">
+            <img src="LOGO para NEXO.png" alt="Logo" class="h-10 w-auto opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition duration-700 cursor-pointer">
         </div>
-        <p class="text-xs font-bold opacity-60 uppercase mt-2">NEXO</p>
+        <p class="text-[10px] tracking-[0.4em] uppercase opacity-40">© 2026 NEXO - Ricardo Peralta</p>
     </footer>
 
     <div id="profile-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-md hidden">
-        <div class="glass w-[90%] max-w-md p-8 rounded-[40px] border-[#7ed957]/30 text-center relative shadow-2xl">
-            <button onclick="closeProfile()" class="absolute top-6 right-6 text-2xl hover:text-[#7ed957] transition text-white">✕</button>
+        <div class="glass w-[90%] max-w-md p-8 rounded-[40px] text-center relative border-[#7ed957]/30">
+            <button onclick="closeProfile()" class="absolute top-6 right-6 text-2xl text-white">✕</button>
             <div id="profile-content"></div>
         </div>
     </div>
 
     <script>
-        let cart = []; let currentQty = 1; const UNIT_PRICE = 250; let userLoggedData = null;
+        let cart = []; let currentQty = 1; let userLoggedData = null;
 
-        // IA DE RESPUESTA TOTAL
+        // IA DINÁMICA (No solo una respuesta)
         function sendAIMessage() {
-            const input = document.getElementById('ai-input'); const content = document.getElementById('chat-content');
-            const userMsg = input.value.trim(); if(!userMsg) return;
-
-            content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 font-bold text-right text-xs mb-2">${userMsg}</div>`;
+            const input = document.getElementById('ai-input');
+            const content = document.getElementById('chat-content');
+            const msg = input.value.trim(); if(!msg) return;
+            
+            content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 font-bold text-right text-xs mb-2">${msg}</div>`;
             input.value = "";
 
             setTimeout(() => {
-                let r = ""; const m = userMsg.toLowerCase();
-                if(m.includes("precio")) r = "El Dispositivo NEXO cuesta $250 MXN. ¡Calidad y paz asegurada!";
-                else if(m.includes("quien") || m.includes("creo")) r = "Fui creada por Ricardo Peralta con el apoyo técnico de la Escuela Lucero.";
-                else if(m.includes("envio") || m.includes("teziutlan")) r = "En Teziutlán entregamos por $40. ¡Llegamos rapidísimo!";
-                else r = "Como IA de NEXO, puedo decirte que esa es una gran pregunta. Mi objetivo es tu bienestar, ¿en qué más puedo apoyarte?";
+                const lowMsg = msg.toLowerCase();
+                let r = "";
                 
+                if(lowMsg.includes("precio")) r = "El NEXO cuesta $250. ¿Te gustaría que te ayude a calcular el total con envío?";
+                else if(lowMsg.includes("hola") || lowMsg.includes("buen")) r = "¡Hola! ¿Cómo va tu día? Aquí estoy para lo que necesites sobre NEXO.";
+                else if(lowMsg.includes("quien") || lowMsg.includes("hizo")) r = "Soy un proyecto de Ricardo Peralta, creado con la guía de los expertos de la Escuela Técnica Lucero.";
+                else if(lowMsg.length > 20) r = "Interesante... Mi sistema está aprendiendo de lo que dices. Sobre el bienestar, lo más importante es dar el primer paso con NEXO.";
+                else r = "¿Podrías darme más detalles? Me encanta aprender cómo puedo ayudarte mejor.";
+
                 content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl mr-8 italic border border-white/5 text-white text-xs mb-2">🤖 ${r}</div>`;
                 content.scrollTop = content.scrollHeight;
-            }, 600);
+            }, 800);
         }
 
-        // LÓGICA DE MAPA PARA TEZIUTLÁN
-        const puntosTeziutlan = ["Plaza Crystal, Teziutlán", "Centro Histórico, Teziutlán", "Paseo Chedraui, Teziutlán", "Barrio de Francia, Teziutlán", "Cipreses, Teziutlán"];
-        
-        function showSuggestions(val) {
-            const div = document.getElementById('suggestions');
-            if (val.length < 2) { div.classList.add('hidden'); return; }
-            const matches = puntosTeziutlan.filter(p => p.toLowerCase().includes(val.toLowerCase()));
-            if (matches.length > 0) {
-                div.classList.remove('hidden');
-                div.innerHTML = matches.map(m => `<div onclick="selectLoc('${m}')" class="p-2 text-[10px] hover:bg-[#7ed957] hover:text-black cursor-pointer border-b border-white/5">${m}</div>`).join('');
-            } else { div.classList.add('hidden'); }
+        // DIRECCIONES EXACTAS (SIMULACIÓN DE PRECISIÓN MAPS)
+        const baseDirecciones = [
+            "Calle Real #124, Colonia Centro, Teziutlán",
+            "Av. Hidalgo #10, Plaza Crystal, Teziutlán",
+            "Calle 16 de Septiembre, Barrio de Francia, Teziutlán",
+            "Paseo Chedraui, Local 15, Teziutlán",
+            "Unidad Habitacional Cipreses, Edificio B, Teziutlán",
+            "Carretera Federal, Entrada a Chignautla, Teziutlán"
+        ];
+
+        function buscarDireccion(val) {
+            const sugBox = document.getElementById('suggestions');
+            if (val.length < 3) { sugBox.classList.add('hidden'); return; }
+            
+            const coincidencias = baseDirecciones.filter(d => d.toLowerCase().includes(val.toLowerCase()));
+            if(coincidencias.length > 0) {
+                sugBox.classList.remove('hidden');
+                sugBox.innerHTML = coincidencias.map(c => `
+                    <div onclick="setDir('${c}')" class="p-3 text-[10px] text-left border-b border-white/5 cursor-pointer hover:bg-[#7ed957] hover:text-black transition">
+                        📍 ${c}
+                    </div>
+                `).join('');
+            } else { sugBox.classList.add('hidden'); }
         }
-        function selectLoc(val) { document.getElementById('user-dir').value = val; document.getElementById('suggestions').classList.add('hidden'); }
+
+        function setDir(val) {
+            document.getElementById('user-dir').value = val;
+            document.getElementById('suggestions').classList.add('hidden');
+        }
 
         async function openSecureProfile() {
             document.getElementById('profile-modal').classList.remove('hidden');
@@ -194,42 +172,40 @@
             const savedDir = localStorage.getItem('nexo_dir') || '';
             const savedTel = localStorage.getItem('nexo_tel') || '';
 
-            content.innerHTML = `<img src="${userLoggedData.picture}" class="w-16 h-16 rounded-full border-2 border-[#7ed957] mx-auto mb-2 shadow-lg">
-                <h3 class="text-lg font-black text-white uppercase italic">${userLoggedData.given_name}</h3>
-                <div class="text-left mt-4 space-y-3 bg-white/5 p-4 rounded-3xl border border-white/10">
-                    <div class="relative">
-                        <label class="text-[8px] font-black text-[#7ed957] uppercase">📍 Dirección (Teziutlán)</label>
-                        <input type="text" id="user-dir" value="${savedDir}" oninput="showSuggestions(this.value)" class="w-full bg-black/20 border border-white/10 rounded-xl p-2 text-[11px] text-white outline-none">
-                        <div id="suggestions" class="absolute w-full bg-[#0b3c5d] rounded-xl mt-1 hidden z-50 border border-white/10"></div>
+            content.innerHTML = `
+                <img src="${userLoggedData.picture}" class="w-20 h-20 rounded-full border-4 border-[#7ed957] mx-auto mb-4">
+                <h3 class="text-xl font-black text-white italic">${userLoggedData.name}</h3>
+                <div class="mt-6 space-y-4">
+                    <div class="relative text-left">
+                        <label class="text-[9px] font-black text-[#7ed957] uppercase ml-2">Dirección de Entrega Exacta</label>
+                        <input type="text" id="user-dir" value="${savedDir}" oninput="buscarDireccion(this.value)" 
+                               placeholder="Escribe tu calle o lugar..." class="w-full bg-black/40 border border-white/10 rounded-2xl p-3 text-xs text-white outline-none focus:border-[#7ed957]">
+                        <div id="suggestions" class="absolute w-full bg-[#0b3c5d] rounded-2xl mt-1 hidden z-50 border border-white/10 overflow-hidden shadow-2xl"></div>
                     </div>
-                    <div>
-                        <label class="text-[8px] font-black text-[#7ed957] uppercase">📱 WhatsApp</label>
-                        <input type="tel" id="user-tel" value="${savedTel}" class="w-full bg-black/20 border border-white/10 rounded-xl p-2 text-[11px] text-white outline-none">
+                    <div class="text-left">
+                        <label class="text-[9px] font-black text-[#7ed957] uppercase ml-2">WhatsApp</label>
+                        <input type="tel" id="user-tel" value="${savedTel}" placeholder="231 123 4567" class="w-full bg-black/40 border border-white/10 rounded-2xl p-3 text-xs text-white outline-none">
                     </div>
-                    <button onclick="saveDeliveryData()" class="w-full bg-[#7ed957] text-black font-black text-[9px] py-2 rounded-lg uppercase">Guardar Datos</button>
+                    <button onclick="saveData()" class="w-full bg-[#7ed957] text-black font-black py-3 rounded-xl uppercase text-xs">Confirmar Datos de Envío</button>
                 </div>`;
         }
 
-        // ... (Resto de tus funciones handleCredentialResponse, updateWidget, etc.)
-        function toggleTheme() { document.body.classList.toggle('light-mode'); }
+        function updateQty(v) { currentQty = Math.max(1, currentQty + v); document.getElementById('prod-qty').innerText = currentQty; document.getElementById('display-price').innerText = currentQty * 250; }
+        function saveData() { localStorage.setItem('nexo_dir', document.getElementById('user-dir').value); localStorage.setItem('nexo_tel', document.getElementById('user-tel').value); alert("Dirección exacta guardada."); }
         function closeProfile() { document.getElementById('profile-modal').classList.add('hidden'); }
         function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-0'); }
-        function saveDeliveryData() { localStorage.setItem('nexo_dir', document.getElementById('user-dir').value); localStorage.setItem('nexo_tel', document.getElementById('user-tel').value); alert("Datos de logística actualizados."); }
-        
-        function updateWidget() {
+
+        function handleCredentialResponse(r) {
+            userLoggedData = JSON.parse(atob(r.credential.split('.')[1]));
+            document.querySelector('.g_id_signin').style.display = 'none';
+            document.querySelector('nav ul').insertAdjacentHTML('beforeend', `<li onclick="openSecureProfile()" class="cursor-pointer flex items-center gap-2 bg-white/10 p-1 pr-4 rounded-full border border-white/10"><img src="${userLoggedData.picture}" class="w-8 h-8 rounded-full border border-[#7ed957]"><span class="text-[10px] font-black">${userLoggedData.given_name}</span></li>`);
+        }
+
+        setInterval(() => {
             const now = new Date();
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12:false});
             document.getElementById('live-date').innerText = now.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long' });
-        }
-        setInterval(updateWidget, 1000); updateWidget();
-
-        function handleCredentialResponse(response) {
-            const payload = JSON.parse(atob(response.credential.split('.')[1]));
-            userLoggedData = payload;
-            const nav = document.querySelector('nav ul');
-            document.querySelector('.g_id_signin').style.display = 'none';
-            nav.insertAdjacentHTML('beforeend', `<li onclick="openSecureProfile()" class="cursor-pointer flex items-center gap-2 bg-white/10 p-1 pr-4 rounded-full border border-white/10"><img src="${payload.picture}" class="w-8 h-8 rounded-full border border-[#7ed957]"><span class="text-[10px] font-black">${payload.given_name}</span></li>`);
-        }
+        }, 1000);
     </script>
 </body>
 </html>
