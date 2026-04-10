@@ -128,9 +128,14 @@
             <button onclick="toggleCart()" class="text-xl font-black hover:text-[#7ed957]">✕</button>
         </div>
         <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-        <div class="p-6 border-t border-white/10 bg-black/40">
-            <div class="flex justify-between text-2xl font-black mb-6 uppercase tracking-tighter"><span>Total</span><span id="cart-total">$0.00</span></div>
-            <button onclick="finalizePurchase()" class="w-full bg-[#7ed957] text-black py-4 rounded-xl font-black uppercase flex items-center justify-center gap-2 hover:bg-white transition">
+        
+        <div class="p-6 border-t border-white/10 bg-black/40 space-y-2">
+            <div class="flex justify-between text-xs opacity-60 uppercase font-bold"><span>Subtotal</span><span id="cart-subtotal">$0.00</span></div>
+            <div class="flex justify-between text-xs opacity-60 uppercase font-bold"><span>IVA (16%)</span><span id="cart-iva">$0.00</span></div>
+            <div class="flex justify-between text-xs text-[#7ed957] uppercase font-bold"><span>Envío (Teziutlán)</span><span>$30.00</span></div>
+            <div class="flex justify-between text-2xl font-black pt-2 uppercase tracking-tighter border-t border-white/10"><span>Total</span><span id="cart-total">$0.00</span></div>
+            <p class="text-[9px] opacity-40 italic text-center">Envío estimado: 1 a 2 días hábiles</p>
+            <button onclick="finalizePurchase()" class="w-full bg-[#7ed957] text-black py-4 rounded-xl font-black uppercase flex items-center justify-center gap-2 hover:bg-white transition mt-4">
                 Finalizar pedido 📱
             </button>
         </div>
@@ -147,8 +152,8 @@
     let cart = [];
     let mainQty = 1;
     let userLoggedData = null;
+    const ENVIO_COST = 30;
 
-    // --- RELOJ ---
     function updateWidget() {
         const now = new Date();
         document.getElementById('live-clock').innerText = now.toLocaleTimeString('es-MX', {hour12:false});
@@ -157,37 +162,26 @@
     setInterval(updateWidget, 1000);
     updateWidget();
 
-    // --- IA EQUILIBRADA ---
     function toggleAIChat() { document.getElementById('ai-chat').classList.toggle('scale-100'); }
     function sendAIMessage() {
         const input = document.getElementById('ai-input');
         const content = document.getElementById('chat-content');
         const msg = input.value.toLowerCase();
         if(!msg.trim()) return;
-
         content.innerHTML += `<div class="bg-[#7ed957] text-black p-3 rounded-2xl ml-8 text-right font-bold text-xs mb-2">${input.value}</div>`;
         input.value = "";
-
         setTimeout(() => {
             let res = "¡NEXO está contigo! ¿Cómo puedo hacer tu día más relajado? ✨";
             const groserias = ["pendejo", "puto", "idiota", "tonto", "estupido", "mierda", "verga", "wey", "culo"];
-            
             if (groserias.some(word => msg.includes(word))) {
-                const albures = [
-                    "Uy, tan grandote y tan chillón... relájate mijo que te va a hacer daño.",
-                    "¿Esa boca usas para comer? Con razón no te sabe nada, ¡ponte NEXO!",
-                    "Si quieres pelea, siéntate y lo platicamos... pero cuidado no te piques.",
-                    "Oféndeme lo que quieras, pero aquí el estresado eres tú. ¡Cómprame un dispositivo!"
-                ];
+                const albures = ["Uy, tan grandote y tan chillón... relájate mijo.", "¿Esa boca usas para comer?", "Si quieres pelea, siéntate y lo platicamos..."];
                 res = albures[Math.floor(Math.random() * albures.length)];
-            } else if (msg.includes("precio")) res = "El dispositivo NEXO tiene un costo de $250.00 MXN. ¡Vale cada peso por tu paz!";
-
+            } else if (msg.includes("precio")) res = "El dispositivo NEXO cuesta $250.00 MXN + IVA y envío.";
             content.innerHTML += `<div class="bg-white/10 p-3 rounded-2xl mr-8 border border-white/5 mb-2">🤖 ${res}</div>`;
             content.scrollTop = content.scrollHeight;
         }, 600);
     }
 
-    // --- CARRITO CORREGIDO ---
     function updateMainQty(val) {
         mainQty = Math.max(1, mainQty + val);
         document.getElementById('main-qty').innerText = mainQty;
@@ -197,15 +191,11 @@
 
     function addToCart() {
         const existing = cart.find(i => i.name === 'Dispositivo NEXO');
-        if(existing) {
-            existing.qty += mainQty; // SUMA CORRECTA
-        } else {
-            cart.push({name: 'Dispositivo NEXO', price: 250, qty: mainQty});
-        }
+        if(existing) existing.qty += mainQty;
+        else cart.push({name: 'Dispositivo NEXO', price: 250, qty: mainQty});
         updateCartUI();
         if(document.getElementById('cart-sidebar').classList.contains('translate-x-full')) toggleCart();
-        mainQty = 1; 
-        document.getElementById('main-qty').innerText = 1;
+        mainQty = 1; document.getElementById('main-qty').innerText = 1;
     }
 
     function changeCartQty(index, val) {
@@ -215,12 +205,13 @@
 
     function updateCartUI() {
         const list = document.getElementById('cart-items');
-        let total = 0; let count = 0;
+        let subtotal = 0; let count = 0;
+        
         if(cart.length === 0) {
             list.innerHTML = `<div class="text-center opacity-30 italic mt-10">Bolsa vacía</div>`;
         } else {
             list.innerHTML = cart.map((item, idx) => {
-                total += item.price * item.qty; count += item.qty;
+                subtotal += item.price * item.qty; count += item.qty;
                 return `<div class="bg-white/5 border border-white/10 p-5 rounded-3xl flex flex-col gap-3">
                     <div class="flex justify-between font-black text-xs uppercase tracking-widest">
                         <span>${item.name}</span> 
@@ -232,30 +223,41 @@
                             <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
                             <button onclick="changeCartQty(${idx},1)" class="w-6 font-black">+</button>
                         </div>
-                        <span class="font-black text-sm text-[#7ed957]">$${item.price * item.qty}.00</span>
+                        <span class="font-black text-sm text-[#7ed957]">$${(item.price * item.qty).toFixed(2)}</span>
                     </div>
                 </div>`;
             }).join('');
         }
-        document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+
+        const iva = subtotal * 0.16;
+        const totalFinal = cart.length > 0 ? (subtotal + iva + ENVIO_COST) : 0;
+
+        document.getElementById('cart-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+        document.getElementById('cart-iva').innerText = `$${iva.toFixed(2)}`;
+        document.getElementById('cart-total').innerText = `$${totalFinal.toFixed(2)}`;
         document.getElementById('cart-count').innerText = count;
     }
 
     function finalizePurchase() {
         const dir = localStorage.getItem('nexo_dir');
         if(!userLoggedData) return alert("Inicia sesión con Google para agendar tu entrega.");
-        if(!dir) {
-            alert("Necesitamos tu dirección en Teziutlán.");
-            return openSecureProfile();
-        }
+        if(cart.length === 0) return alert("Tu bolsa está vacía.");
+        if(!dir) return openSecureProfile();
 
-        let pedido = cart.map(i => `- ${i.name} (x${i.qty})`).join('%0A');
-        let total = document.getElementById('cart-total').innerText;
-        const msg = `¡HOLA NEXO!%0A%0A*NUEVO PEDIDO*%0A👤 Cliente: ${userLoggedData.name}%0A📦 Pedido:%0A${pedido}%0A💰 Total: ${total}%0A%0A*LUGAR DE ENTREGA*%0A📍 Dir: ${dir}%0A%0A_Pedido generado desde el portal oficial NEXO_`;
+        let subtotal = 0;
+        let pedido = cart.map(i => {
+            subtotal += i.price * i.qty;
+            return `- ${i.name} (x${i.qty})`;
+        }).join('%0A');
+
+        const iva = subtotal * 0.16;
+        const total = subtotal + iva + ENVIO_COST;
+
+        const msg = `¡HOLA NEXO!%0A%0A*NUEVO PEDIDO*%0A👤 Cliente: ${userLoggedData.name}%0A📦 Detalle:%0A${pedido}%0A%0A*DESGLOSE*%0ASubtotal: $${subtotal.toFixed(2)}%0AIVA (16%): $${iva.toFixed(2)}%0AEnvío: $${ENVIO_COST.toFixed(2)}%0A💰 *TOTAL: $${total.toFixed(2)}*%0A%0A*DATOS DE ENTREGA*%0A📍 Dir: ${dir}%0A🚚 *TIEMPO DE ENTREGA:* 1 a 2 días dependiendo tu zona en Teziutlán.%0A%0A_Generado desde NEXO Web_`;
+        
         window.open(`https://wa.me/522311511435?text=${msg}`, '_blank');
     }
 
-    // --- PERFIL CORREGIDO ---
     function handleCredentialResponse(r) {
         userLoggedData = JSON.parse(atob(r.credential.split('.')[1]));
         document.querySelector('.g_id_signin').style.display = 'none';
@@ -291,11 +293,8 @@
     }
     function closeProfile() { document.getElementById('profile-modal').classList.add('hidden'); }
 
-    // --- MINIJUEGO AJUSTADO ---
     let isPlaying = false;
     let score = 0;
-    let gameInterval;
-
     function startGame() {
         if(isPlaying) return;
         isPlaying = true; score = 0;
@@ -309,10 +308,7 @@
         if(p.style.bottom === '0px' || p.style.bottom === '') {
             p.style.transition = '0.3s cubic-bezier(0,1,.4,1)';
             p.style.bottom = '90px';
-            setTimeout(() => {
-                p.style.transition = '0.3s ease-in';
-                p.style.bottom = '0px';
-            }, 300);
+            setTimeout(() => { p.style.transition = '0.3s ease-in'; p.style.bottom = '0px'; }, 300);
         }
     }
     function spawnObstacle() {
@@ -321,39 +317,26 @@
         ob.classList.add('obstacle');
         document.getElementById('game-container').appendChild(ob);
         let pos = -30;
-        
         const move = setInterval(() => {
             if(!isPlaying) { clearInterval(move); ob.remove(); return; }
             pos += 6;
             ob.style.right = pos + 'px';
-            
             const pRect = document.getElementById('player').getBoundingClientRect();
             const oRect = ob.getBoundingClientRect();
-
-            // Colisión precisa
             if(oRect.left < pRect.right && oRect.right > pRect.left && oRect.top < pRect.bottom && oRect.bottom > pRect.top) {
-                gameOver();
-                clearInterval(move);
+                gameOver(); clearInterval(move);
             }
-
-            if(pos > 800) { 
-                clearInterval(move); ob.remove(); score++; 
-                document.getElementById('score').innerText = score;
-            }
+            if(pos > 800) { clearInterval(move); ob.remove(); score++; document.getElementById('score').innerText = score; }
         }, 16);
-
         setTimeout(spawnObstacle, Math.random() * 1500 + 800);
     }
-
     function gameOver() {
         isPlaying = false;
-        alert("¡Game Over! Puntuación Nexo: " + score);
+        alert("¡Game Over! Puntuación: " + score);
         document.getElementById('game-container').style.display = 'none';
         document.getElementById('game-btn').style.display = 'inline-block';
-        const obs = document.querySelectorAll('.obstacle');
-        obs.forEach(o => o.remove());
+        document.querySelectorAll('.obstacle').forEach(o => o.remove());
     }
-
     window.addEventListener('keydown', (e) => { if(e.code === 'Space') { e.preventDefault(); jump(); } });
     document.getElementById('game-container').addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
 </script>
